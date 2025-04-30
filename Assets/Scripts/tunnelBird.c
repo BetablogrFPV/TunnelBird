@@ -36,50 +36,50 @@ int score = 0;
 int lastScore = 0;
 int highScore = 0;
 
-#define gridWidth 55  //54
+#define gridWidth 56  //54
 #define gridHeight 30  //30
 #define gridLayers 2
 
+int difficulty = 0;
 float mapX = 0;
 int grid[gridLayers][gridWidth][gridHeight] = {0};
 
-typedef struct {
-	char* name;
-    int x;
-    int y;
-} block_struct;
-
-const block_struct block_grass = {"grass", 0, 1}; //test
-
 
 #define block_air 0
-#define block_stone1 1
-#define block_stone2 2
 
-#define block_grassTop1 3
-#define block_grassTop2 4
-#define block_grassLeft1 5
-#define block_grassLeft2 6
-#define block_grassRight1 7
-#define block_grassRight2 8
-#define block_grassOnly1 9
-#define block_grassOnly2 10
+#define block_1111_f1 1
+#define block_1111_f2 2
 
-#define block_bottom1 11
-#define block_bottom2 12
-#define block_bottomLeft1 13
-#define block_bottomLeft2 14
-#define block_bottomRight1 15
-#define block_bottomRight2 16
-#define block_bottomOnly1 17
-#define block_bottomOnly2 18
+#define block_0111_f1 3
+#define block_0111_f2 4
 
-#define block_stoneBackground1 19
-#define block_stoneBackground2 20
+#define block_0011_f1 5
+#define block_0011_f2 6
+
+#define block_0110_f1 7
+#define block_0110_f2 8
+
+#define block_0010_f1 9
+#define block_0010_f2 10
+
+#define block_1000_f1 11
+#define block_1000_f2 12
+
+#define block_1001_f1 13
+#define block_1001_f2 14
+
+#define block_1100_f1 15
+#define block_1100_f2 16
+
+#define block_1101_f1 17
+#define block_1101_f2 18
+
+#define block_b1 23
+#define block_b2 24
 
 
 
-#ifdef _WIN32
+
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -113,16 +113,7 @@ void setWindowIcon(GLFWwindow* window) {
     }
 }
 
-#else
 
-#define CHARACTER_TILESET "character.bmp"
-#define BLOCKS_TILESET "character.bmp"
-#define FONT_TILESET "character.bmp"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stbimage.h"
-void setWindowIcon(GLFWwindow* window) {}
-#endif
 
 
 GLuint tileTexture1;
@@ -155,176 +146,18 @@ unsigned char* RGB_RGBA_convert(unsigned char* imageRGB, int texWidth, int texHe
 }
 
 
-float getIngameSpeed(float speed) {  //pps
-
-	return 1.0F / (float)refreshRate * (float)speed;
-}
-
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 
 }
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (action == GLFW_PRESS) switch (key) {
-        case GLFW_KEY_UP:
-        case GLFW_KEY_W:
-            if (playerPosY < WINDOW_HEIGHT) {
-                playerAcceleration = 300.0F;
-            }
-            break;
-		case GLFW_KEY_R:
-			playerPosY = WINDOW_HEIGHT / 2;
-			playerAcceleration = 0;
-			for (int x = 0; x < gridWidth; x++) {
-				for (int y = 0; y < gridHeight; y++) {
-					grid[1][x][y] = 0;
-				}
-			}
-            playerIsAlive = true;
-            break;
-        case GLFW_KEY_ESCAPE:
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-            break;
-        default:
-            break;
-    }
-}
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();	
-    glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
 
 
-
-void drawTexture(GLuint texture, float x, float y) {
-    int texWidth = 0, texHeight = 0;
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glBegin(GL_QUADS);
-
-#ifdef _WIN32
-    // Flip vertically if needed
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y + texHeight);
-    glTexCoord2f(1.0f, 0.0f); glVertex2f(x + texWidth, y + texHeight);
-    glTexCoord2f(1.0f, 1.0f); glVertex2f(x + texWidth, y);
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
-#else
-    // Standard OpenGL (0,0 is bottom-left)
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + texHeight);
-    glTexCoord2f(1.0f, 1.0f); glVertex2f(x + texWidth, y + texHeight);
-    glTexCoord2f(1.0f, 0.0f); glVertex2f(x + texWidth, y);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
-#endif
-
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
-bool proofCollision(float playerPosX, float playerPosY) {
-	int currentPlayerPointX = (int) floor((playerPosX - mapX) / 16);
-	int currentPlayerPointY = (int) floor(playerPosY / 16);
-	
-	if(grid[1][currentPlayerPointX][currentPlayerPointY] != block_air ||
-		grid[1][currentPlayerPointX + 1][currentPlayerPointY] != block_air ||
-		grid[1][currentPlayerPointX + 1][currentPlayerPointY + 1] != block_air ||
-		grid[1][currentPlayerPointX][currentPlayerPointY + 1] != block_air
-	) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-
-
-void drawTile(GLuint texture, int tileX, int tileY, float tileSize, float x, float y, float size) {
-	int texWidth = 0, texHeight = 0;
-	
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
-
-#ifdef _WIN32
-    float texX = tileX * tileSize / texWidth;
-    float texY = texHeight - (tileY + 1) * tileSize / texHeight;
-#else
-    float texX = tileX * tileSize / texWidth;
-    float texY = tileY * tileSize / texHeight;
-#endif
-    float texSizeX = tileSize / texWidth;
-    float texSizeY = tileSize / texHeight;
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glBegin(GL_QUADS);
-	
-#ifdef _WIN32	
-		glTexCoord2f(texX, texY); glVertex2f(x, y + size);
-        glTexCoord2f(texX + texSizeX, texY); glVertex2f(x + size, y + size);
-        glTexCoord2f(texX + texSizeX, texY + texSizeY); glVertex2f(x + size, y);
-		glTexCoord2f(texX, texY + texSizeY); glVertex2f(x, y);
-#else
-		glTexCoord2f(texX, texY); glVertex2f(x, y);
-        glTexCoord2f(texX + texSizeX, texY); glVertex2f(x + size, y);
-        glTexCoord2f(texX + texSizeX, texY + texSizeY); glVertex2f(x + size, y + size);
-        glTexCoord2f(texX, texY + texSizeY); glVertex2f(x, y + size);
-#endif
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
-
-//--------------------------------------------------------------------------------------------// player functions
-
-void updatePlayer() {
-
-	if (playerIsAlive == true) {
-		float deltaTime = 1.0f / (float)refreshRate;			
-		playerAcceleration += gravity * deltaTime;
-		float movementHeight = playerAcceleration * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
-
-		if (proofCollision(playerPosX, playerPosY - movementHeight) == true) {
-			for (int i = 0; i < fabs(movementHeight)+1; i++) {
-
-				if (proofCollision(playerPosX, playerPosY + (movementHeight > 0 ? -1 : +1)) != true) {
-					playerPosY += (movementHeight > 0 ? -1 : +1);
-				} else {
-					playerIsAlive = false;
-					break;
-				}
-			}
-		} else {
-			playerPosY -= movementHeight;
-		}
-
-	}
-}
-
-void drawPlayer() {
-	drawTile(tileTexture1,0,0,16,playerPosX,playerPosY,16); //posx, posy, size, posX, posY, size
-}
 
 //--------------------------------------------------------------------------------------------// map functions background
 
-int getBackgroundBlock() {
-	int lower = 0;
-	int upper = 100;
-	int randNum = (rand() % (upper - lower + 1)) + lower;
 
-	if (randNum <= 60) {
-		return block_stoneBackground1;
-	} else{
-		return block_stoneBackground2;
-	}
+int getBackgroundBlock() {
+	return block_b1;
 }
 
 void generateNewLineBackground(int linePosX) {
@@ -335,16 +168,47 @@ void generateNewLineBackground(int linePosX) {
 
 //--------------------------------------------------------------------------------------------// map functions foreground
 
-int getForegroundBlock(int blocK_top, int block_right, int block_bottom, int block_left) {
-	int lower = 0;
-	int upper = 100;
-	int randNum = (rand() % (upper - lower + 1)) + lower;
 
-	if (randNum <= 60) {
-		return block_stone1;
-	} else{
-		return block_stone2;
+
+int getForegroundBlock(bool block_top, bool block_right, bool block_bottom, bool block_left) {
+
+	int block = 0;
+	if (block_top)    block |= 1 << 3; // Bit 3 = oben
+	if (block_right)  block |= 1 << 2; // Bit 2 = rechts
+	if (block_bottom) block |= 1 << 1; // Bit 1 = unten
+	if (block_left)   block |= 1 << 0; // Bit 0 = links
+
+	switch (block) {
+		case 0b1111:
+		return block_1111_f1;
+		case 0b0111:
+		return block_0111_f1;
+		case 0b0011:
+		return block_0011_f1;
+		case 0b0110:
+		return block_0110_f1;
+		case 0b0010:
+		return block_0010_f1;
+		case 0b1010:
+		return block_1111_f1;
+		case 0b1011:
+		return block_1111_f1;
+		case 0b1110:
+		return block_1111_f1;
+		case 0b1101:
+		return block_1101_f1;
+		case 0b1100:
+		return block_1100_f1;
+		case 0b1001:
+		return block_1001_f1;
+		case 0b1000:
+		return block_1000_f1;
+
+		default:
+		return 6;
 	}
+
+	return block;
 }
 
 int directionSurface;
@@ -355,6 +219,8 @@ int lastSurfaceBlockY;
 
 int roofBlockY;
 int lastRoofBlockY;
+
+const int difficultyValues[3][10] = {{20, 20, 20, 16, 16, 16, 15, 15, 15, 15}, {19, 18, 17, 17, 16, 15, 14, 13, 12, 11}, {16, 15, 14, 13, 12, 12, 11, 10, 9, 8}};
 
 
 
@@ -375,7 +241,7 @@ void generateNewLineForeground(int linePosX) {
 			directionSurface = (rand() % (3 - 1 + 1)) + 1;
 		}
 
-		if (lastSurfaceBlockY < 16) {  //16 //20
+		if (lastSurfaceBlockY < difficultyValues[0][difficulty]) {  //16 //20
 			directionSurface = (rand() % (3 - 2 + 1)) + 2;
 		}
 		if (lastSurfaceBlockY > 25) {
@@ -400,9 +266,9 @@ void generateNewLineForeground(int linePosX) {
 		}
 
 
-		if (surfaceBlockY - lastRoofBlockY > 14) {  //12 //14 //18 //18
+		if (surfaceBlockY - lastRoofBlockY > difficultyValues[1][difficulty]) {  //12 //14 //18 //18
 			directionRoof = (rand() % (3 - 2 + 1)) + 2;
-		} else if (surfaceBlockY - lastRoofBlockY > 10) { //8 //10 //10 //14
+		} else if (surfaceBlockY - lastRoofBlockY > difficultyValues[2][difficulty]) { //8 //10 //10 //14
 			directionRoof = (rand() % (2 - 1 + 1)) + 1;
 		} else {
 			directionRoof = 1;
@@ -424,19 +290,160 @@ void generateNewLineForeground(int linePosX) {
 		}
 	}
 
-	grid[1][linePosX][surfaceBlockY] = block_stone1;
-	grid[1][linePosX][roofBlockY] = block_stone2;
+	for (int i = 0; i < gridHeight; i++) {
+		if (i <= roofBlockY || i >= surfaceBlockY) {
+			grid[1][linePosX][i] = block_1111_f1;
+		}
+	}
+
+	if(linePosX != 0) {
+		for (int i = 0; i < gridHeight; i++) {
+			if (i < lastRoofBlockY || i > lastSurfaceBlockY) {
+				grid[1][linePosX-1][i] = getForegroundBlock(true, grid[1][linePosX][i] != block_air ? true : false, true, grid[1][linePosX-2][i] != block_air ? true : false);
+			}
+			if (i == lastRoofBlockY) {
+				grid[1][linePosX-1][i] = getForegroundBlock(true, grid[1][linePosX][i] != block_air ? true : false, false, grid[1][linePosX-2][i] != block_air ? true : false);
+			}
+			if (i == lastSurfaceBlockY) {
+				grid[1][linePosX-1][i] = getForegroundBlock(false, grid[1][linePosX][i] != block_air ? true : false, true, grid[1][linePosX-2][i] != block_air ? true : false);
+			}
+		}
+	}
 
 
 	lastSurfaceBlockY = surfaceBlockY;
 	lastRoofBlockY = roofBlockY;
-
-	int lower = 0;
-	int upper = 100;
-	int randNum = (rand() % (upper - lower + 1)) + lower;
-
-
 }
+
+void resetGame() {
+	playerIsAlive = false;
+	playerAcceleration = 0;
+	playerPosY = WINDOW_HEIGHT / 2;
+	mapX = 0;
+	difficulty = 0;
+	score = 0;
+	
+	for (int x = 0; x < gridWidth; x++) {
+		generateNewLineBackground(x);
+		generateNewLineForeground(x);
+	}
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS) switch (key) {
+		case GLFW_KEY_UP:
+		case GLFW_KEY_W:
+		case GLFW_KEY_SPACE:
+			playerIsAlive = true;
+			if (playerPosY < WINDOW_HEIGHT) {
+				playerAcceleration = 300.0F;
+			}
+			break;
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
+			break;
+		default:
+			break;
+		
+    }
+}
+
+
+
+void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+
+    glViewport(0, 0, width, height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+
+bool proofCollision(float playerPosX, float playerPosY) {
+	int currentPlayerPointX = (int) floor((playerPosX - mapX) / 16);
+	int currentPlayerPointY = (int) floor(playerPosY / 16);
+	
+	if(grid[1][currentPlayerPointX][currentPlayerPointY] != block_air ||
+		grid[1][currentPlayerPointX + 1][currentPlayerPointY] != block_air ||
+		grid[1][currentPlayerPointX + 1][currentPlayerPointY + 1] != block_air ||
+		grid[1][currentPlayerPointX][currentPlayerPointY + 1] != block_air
+	) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+GLuint currentTexture;
+
+void drawTile(GLuint texture, int tileX, int tileY, float tileSize, float x, float y, float size) {
+	int texWidth = 0, texHeight = 0;
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	currentTexture = texture;
+    
+
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
+
+	// Texel-Offset against Sampling-Problem
+	float texelOffsetX = 0.5f / texWidth;
+	float texelOffsetY = 0.5f / texHeight;
+
+	float texSizeX = tileSize / texWidth;
+	float texSizeY = tileSize / texHeight;
+
+	float texX0 = tileX * texSizeX + texelOffsetX;
+	float texY0 = 1.0f - (tileY + 1) * texSizeY + texelOffsetY;
+	float texX1 = texX0 + texSizeX - 2 * texelOffsetX;
+	float texY1 = texY0 + texSizeY - 2 * texelOffsetY;
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(texX0, texY0); glVertex2f(x, y + size);
+		glTexCoord2f(texX1, texY0); glVertex2f(x + size, y + size);
+		glTexCoord2f(texX1, texY1); glVertex2f(x + size, y);
+		glTexCoord2f(texX0, texY1); glVertex2f(x, y);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+
+//--------------------------------------------------------------------------------------------// player functions
+
+void updatePlayer() {
+
+	if (playerIsAlive == true) {
+		float deltaTime = 1.0f / (float)refreshRate;			
+		playerAcceleration += gravity * deltaTime;
+		float movementHeight = playerAcceleration * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
+
+		if (proofCollision(playerPosX, playerPosY - movementHeight) == true) {
+			for (int i = 0; i < fabs(movementHeight)+1; i++) {
+
+				if (proofCollision(playerPosX, playerPosY + (movementHeight > 0 ? -1 : +1)) != true) {
+					playerPosY += (movementHeight > 0 ? -1 : +1);
+				} else {
+					playerIsAlive = false;
+					resetGame();
+					break;
+				}
+			}
+		} else {
+			playerPosY -= movementHeight;
+		}
+
+	}
+}
+
+void drawPlayer() {
+	drawTile(tileTexture1,0,0,16,playerPosX,playerPosY,16); //posx, posy, size, posX, posY, size
+}
+
 
 void updateWorld() {
 	if (mapX <= -16) {
@@ -457,6 +464,29 @@ void updateWorld() {
 		generateNewLineForeground(gridWidth - 1);
 		generateNewLineBackground(gridWidth - 1);
 		
+		score++;
+
+		if (score < 30) {
+			difficulty = 0;
+		} else if (score < 60) {
+			difficulty = 1;
+		} else if (score < 90) {
+			difficulty = 2;
+		} else if (score < 120) {
+			difficulty = 3;
+		} else if (score < 150) {
+			difficulty = 4;
+		} else if (score < 180) {
+			difficulty = 5;
+		} else if (score < 210) {
+			difficulty = 6;
+		} else if (score < 240) {
+			difficulty = 7;
+		} else if (score < 270) {
+			difficulty = 8;
+		} else if (score > 269) {
+			difficulty = 9;
+		}
 	}
 	float deltaTime = 1.0F / refreshRate;
 	mapX -= 60*deltaTime;
@@ -466,19 +496,48 @@ void drawWorld() {
 	
 	for (int x = 0; x < gridWidth; x++) {
 		for (int y = 0; y < gridHeight; y++) {
-			if (grid[0][x][y] == block_stoneBackground1) {
-				drawTile(tileTexture2,3,1,16,(x*16)+mapX,(y*16),16); //posx, posy, size, posX, posY, size
-			}
-			if (grid[0][x][y] == block_stoneBackground2) {
-				drawTile(tileTexture2,3,3,16,(x*16)+mapX,(y*16),16); //posx, posy, size, posX, posY, size
+
+			if (grid[1][x][y] != block_1111_f1 && grid[1][x][y] != block_1111_f2) {
+				if (grid[0][x][y] == block_b1) {
+					drawTile(tileTexture2,3,1,16,(x*16)+mapX,(y*16),16);
+				}
 			}
 
-			if (grid[1][x][y] == block_stone1) {
-				drawTile(tileTexture2,1,1,16,(x*16)+mapX,(y*16),16); //posx, posy, size, posX, posY, size
-			}
-			if (grid[1][x][y] == block_stone2) {
-				drawTile(tileTexture2,5,3,16,(x*16)+mapX,(y*16),16); //posx, posy, size, posX, posY, size
-			}
+			switch (grid[1][x][y]) {
+				case block_air:
+                    break;
+                case block_1111_f1:
+                    drawTile(tileTexture2, 1, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0111_f1:
+                    drawTile(tileTexture2, 5, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0011_f1:
+                    drawTile(tileTexture2, 9, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0110_f1:
+                    drawTile(tileTexture2, 7, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0010_f1:
+                    drawTile(tileTexture2, 11, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1101_f1:
+                    drawTile(tileTexture2, 13, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1100_f1:
+                    drawTile(tileTexture2, 15, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1001_f1:
+                    drawTile(tileTexture2, 17, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1000_f1:
+                    drawTile(tileTexture2, 19, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+			
+				default:
+					drawTile(tileTexture2, 21, 1, 16, (x*16)+mapX, (y*16), 16);
+					break;
+            }
 		}
 	}
 }
@@ -527,7 +586,9 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
 
 	glfwWindowHint(GLFW_REFRESH_RATE, refreshRate);
 
-    window = glfwCreateWindow(REAL_WINDOW_WIDTH, REAL_WINDOW_HEIGHT, "tunnelBird", primaryMonitor, NULL);
+  
+
+	window = glfwCreateWindow(REAL_WINDOW_WIDTH, REAL_WINDOW_HEIGHT, "tunnelBird", primaryMonitor, NULL);
 	
     if (!window) { glfwTerminate(); return -1; }
     glfwMakeContextCurrent(window);
@@ -539,7 +600,6 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
 	
 	// images
     
-#ifdef _WIN32
     HINSTANCE hInstance = GetModuleHandle(NULL);
 	
     unsigned char* image1;
@@ -556,19 +616,6 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
     HBITMAP bitmapFont = loadBitmapFromResource(hInstance, TILESET_FONT, &texWidth3, &texHeight3, (void**)&image3);
     if (!bitmapFont) { return -1; }
     bool isGBR3 = true;
-#else
-    unsigned char* image1 = stbi_load(CHARACTER_TILESET, &texWidth1, &texHeight1, &texChannels1, STBI_rgb);
-    if (!image) { return -1; }
-    bool isGBR1 = false;
-	
-	unsigned char* image2 = stbi_load(BLOCKS_TILESET, &texWidth2, &texHeight2, &texChannels2, STBI_rgb);
-    if (!image) { return -1; }
-    bool isGBR2 = false;
-	
-	unsigned char* image3 = stbi_load(FONT_TILESET, &texWidth3, &texHeight3, &texChannels3, STBI_rgb);
-    if (!image) { return -1; }
-    bool isGBR3 = false;
-#endif
 
 	unsigned char transparentColor[] = {255, 0, 255};
 
@@ -605,14 +652,7 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
     setWindowIcon(window);
     framebufferSizeCallback(window, REAL_WINDOW_WIDTH, REAL_WINDOW_HEIGHT);
 
-    // ?
-	for (int x = 0; x < gridWidth; x++) {
-		generateNewLineForeground(x);
-	}
-
-	for (int x = 0; x < gridWidth; x++) {
-		generateNewLineBackground(x);
-	}
+    resetGame();
 
 	
 	
@@ -620,42 +660,42 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
         glClear(GL_COLOR_BUFFER_BIT);
 		
 	
-        
-		if (1 == 1) {
+        //----------------------------------------------------// game logic
 			
-			if(playerIsAlive) {
-				score++;
-				updateWorld();
-				updatePlayer();
-				//proofCollision();
-			}
-			
-			drawWorld();
-			drawPlayer();
-			
+		drawWorld();
+		drawPlayer();
+		
+		if(playerIsAlive) {
+			updateWorld();
+			updatePlayer();
+
 			showText("SCORE", 5, 5, 9, 1);
 			showNumber(score, 65, 5, 9, 1);
 
+			showText("HIGHSCORE", 150, 5, 9, 1);
+			showNumber(highScore, 250, 5, 9, 1);
 		} else {
-			if (score != 0) {
-				lastScore = score;
-				if (lastScore > highScore) {
-					highScore = score;
-				}
+			if (score != 0 && score > highScore) {
+				showText("NEW HIGHSCORE", 300, 200, 10, 1);
+				showNumber(score, 480, 200, 10, 1);
+			} else if (score != 0) {
+				showText("SCORE", 150, 50, 10, 1);
+				showNumber(lastScore, 350, 50, 14, 1);
+
+				showText("HIGHSCORE", 150, 100, 10, 1);
+				showNumber(highScore, 350, 100, 10, 1);
 			}
-		
-			score = 0;
 			
-			showText("SCORE", 50, 50, 14, 1);
-			showNumber(lastScore, 250, 50, 14, 1);
-			
-			showText("HIGHSCORE", 50, 100, 14, 1);
-			showNumber(highScore, 250, 100, 14, 1);
+			showText("PRESS ANY KEY TO CONTINOU", 290, 450, 10, 1);	
 		}
+		
+		
+
+		//----------------------------------------------------//
 
 		glfwSwapBuffers(window);
 		
-        glfwWaitEventsTimeout(0.0001);
+        glfwPollEvents();
     }
     
     glfwTerminate();
