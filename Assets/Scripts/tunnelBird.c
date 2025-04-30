@@ -904,7 +904,7 @@ int main(int argc, char* argv[], char* envp[]) {
 				showNumber(highScore, (WINDOW_WIDTH / 2) - 90, 230, 7, 1);
 			}
 
-			showText("PRESS JUMP KEY TO CONTINOU", (WINDOW_WIDTH / 2) - 90, 337, 7, 1);
+			showText("PRESS JUMP KEY TO CONTINUE", (WINDOW_WIDTH / 2) - 90, 337, 7, 1);
 		}
 
 		

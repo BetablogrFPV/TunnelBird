@@ -3760,7 +3760,7 @@ texHeight3:
 	.asciz	"NEW HIGHSCORE"
 
 .L.str.10:                              # @.str.10
-	.asciz	"PRESS JUMP KEY TO CONTINOU"
+	.asciz	"PRESS JUMP KEY TO CONTINUE"
 
 	.bss
 	.globl	texChannels1                    # @texChannels1
