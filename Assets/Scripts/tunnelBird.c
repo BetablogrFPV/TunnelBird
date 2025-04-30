@@ -1,0 +1,711 @@
+#include <GLFW/glfw3.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <time.h>
+#include <math.h>
+
+#include <ctype.h>
+#include <sys/stat.h>
+
+#define WINDOW_WIDTH 854  //<54
+#define WINDOW_HEIGHT 480  //30
+int REAL_WINDOW_WIDTH;
+int REAL_WINDOW_HEIGHT;
+
+int refreshRate;
+
+float speedFactor;
+
+bool gameStarted = false;
+
+double lastUpdateTime = 0.0;
+double deltaTime;
+
+
+#define playerAccelerationFactor 0.009
+float playerAcceleration = 0;
+float playerPosY = WINDOW_HEIGHT / 2;
+float playerPosX = 100;
+bool playerIsAlive = true;
+float gravity = -980.0f;
+
+
+int score = 0;
+int lastScore = 0;
+int highScore = 0;
+
+#define gridWidth 56  //54
+#define gridHeight 30  //30
+#define gridLayers 2
+
+int difficulty = 0;
+float mapX = 0;
+int grid[gridLayers][gridWidth][gridHeight] = {0};
+
+
+#define block_air 0
+
+#define block_1111_f1 1
+#define block_1111_f2 2
+
+#define block_0111_f1 3
+#define block_0111_f2 4
+
+#define block_0011_f1 5
+#define block_0011_f2 6
+
+#define block_0110_f1 7
+#define block_0110_f2 8
+
+#define block_0010_f1 9
+#define block_0010_f2 10
+
+#define block_1000_f1 11
+#define block_1000_f2 12
+
+#define block_1001_f1 13
+#define block_1001_f2 14
+
+#define block_1100_f1 15
+#define block_1100_f2 16
+
+#define block_1101_f1 17
+#define block_1101_f2 18
+
+#define block_b1 23
+#define block_b2 24
+
+
+
+
+
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#include <windows.h>
+
+#define IDI_APP_ICON 101
+
+#define TILESET_CHARACTER 12
+#define TILESET_BLOCKS 13
+#define TILESET_FONT 14
+
+HBITMAP loadBitmapFromResource(HINSTANCE hInstance, int resourceID, int* width, int* height, void** pixelData) {
+    HRSRC hResource = FindResource(hInstance, MAKEINTRESOURCE(resourceID), RT_BITMAP);
+    if (!hResource) { return NULL; }
+    HGLOBAL hMemory = LoadResource(hInstance, hResource);
+    if (!hMemory) { return NULL; }
+    BITMAPINFOHEADER* bmpInfo = (BITMAPINFOHEADER*)LockResource(hMemory);
+    if (!bmpInfo) { return NULL; }
+    *width = bmpInfo->biWidth;
+    *height = abs(bmpInfo->biHeight);
+    *pixelData = (void*)((BYTE*)bmpInfo + bmpInfo->biSize + (bmpInfo->biClrUsed * sizeof(RGBQUAD)));
+    return (HBITMAP)bmpInfo;
+}
+
+void setWindowIcon(GLFWwindow* window) {
+    HWND hwnd = glfwGetWin32Window(window);
+    HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_APP_ICON));
+    if (icon) {
+        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)icon);
+        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)icon);
+    }
+}
+
+
+
+
+GLuint tileTexture1;
+GLuint tileTexture2;
+GLuint tileTexture3;
+GLuint backgroundScreen;
+
+int texWidth1, texHeight1, texChannels1;
+int texWidth2, texHeight2, texChannels2;
+int texWidth3, texHeight3, texChannels3;
+
+
+
+unsigned char* RGB_RGBA_convert(unsigned char* imageRGB, int texWidth, int texHeight, bool isGBR, unsigned char* transparentColor) {
+	unsigned char* imageRGBA = (unsigned char*)(malloc(texWidth * texHeight * 4));
+
+	for (int i = 0, j = 0; i < texWidth * texHeight * 3; i += 3, j += 4) {
+        unsigned char r = imageRGB[i];
+        unsigned char g = imageRGB[i + 1];
+        unsigned char b = imageRGB[i + 2];
+
+        imageRGBA[j] = isGBR ? b : r;
+        imageRGBA[j + 1] = g;
+        imageRGBA[j + 2] = isGBR ? r : b;
+
+        imageRGBA[j + 3] = (r == transparentColor[0] && g == transparentColor[1] && b == transparentColor[2]) ? 0 : 255;
+    }
+
+	return imageRGBA;
+}
+
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+
+}
+
+
+
+
+//--------------------------------------------------------------------------------------------// map functions background
+
+
+int getBackgroundBlock() {
+	return block_b1;
+}
+
+void generateNewLineBackground(int linePosX) {
+	for (int y = 0; y < gridHeight; y++) {
+		grid[0][linePosX][y] = getBackgroundBlock();
+	}
+}
+
+//--------------------------------------------------------------------------------------------// map functions foreground
+
+
+
+int getForegroundBlock(bool block_top, bool block_right, bool block_bottom, bool block_left) {
+
+	int block = 0;
+	if (block_top)    block |= 1 << 3; // Bit 3 = oben
+	if (block_right)  block |= 1 << 2; // Bit 2 = rechts
+	if (block_bottom) block |= 1 << 1; // Bit 1 = unten
+	if (block_left)   block |= 1 << 0; // Bit 0 = links
+
+	switch (block) {
+		case 0b1111:
+		return block_1111_f1;
+		case 0b0111:
+		return block_0111_f1;
+		case 0b0011:
+		return block_0011_f1;
+		case 0b0110:
+		return block_0110_f1;
+		case 0b0010:
+		return block_0010_f1;
+		case 0b1010:
+		return block_1111_f1;
+		case 0b1011:
+		return block_1111_f1;
+		case 0b1110:
+		return block_1111_f1;
+		case 0b1101:
+		return block_1101_f1;
+		case 0b1100:
+		return block_1100_f1;
+		case 0b1001:
+		return block_1001_f1;
+		case 0b1000:
+		return block_1000_f1;
+
+		default:
+		return 6;
+	}
+
+	return block;
+}
+
+int directionSurface;
+int directionRoof;
+
+int surfaceBlockY;
+int lastSurfaceBlockY;
+
+int roofBlockY;
+int lastRoofBlockY;
+
+const int difficultyValues[3][10] = {{20, 20, 20, 16, 16, 16, 15, 15, 15, 15}, {19, 18, 17, 17, 16, 15, 14, 13, 12, 11}, {16, 15, 14, 13, 12, 12, 11, 10, 9, 8}};
+
+
+
+void generateNewLineForeground(int linePosX) {
+
+	for (int y = 0; y < gridHeight; y++) {
+		grid[1][linePosX][y] = 0;
+	}
+
+	if (linePosX == 0) {
+		directionSurface = (rand() % (3 - 1 + 1)) + 1;  // up, straight, down
+		directionRoof = (rand() % (3 - 1 + 1)) + 1;  // up, straight, down
+		surfaceBlockY = (rand() % (29 - 24 + 1)) + 24;
+		roofBlockY = (rand() % (4 - 0 + 1)) + 0;
+	} else {
+
+		if ((rand() % (100 - 0 + 1)) + 0 > 80) {
+			directionSurface = (rand() % (3 - 1 + 1)) + 1;
+		}
+
+		if (lastSurfaceBlockY < difficultyValues[0][difficulty]) {  //16 //20
+			directionSurface = (rand() % (3 - 2 + 1)) + 2;
+		}
+		if (lastSurfaceBlockY > 25) {
+			directionSurface = (rand() % (2 - 1 + 1)) + 1;
+		}
+
+		if (lastSurfaceBlockY < 28) {
+			if (directionSurface == 1) {
+				surfaceBlockY = (rand() % (lastSurfaceBlockY - (lastSurfaceBlockY - 2) + 1)) + lastSurfaceBlockY - 2;
+			} else if (directionSurface == 2) {
+				surfaceBlockY = (rand() % ((lastSurfaceBlockY + 1) - (lastSurfaceBlockY - 1) + 1)) + lastSurfaceBlockY - 1;
+			} else if (directionSurface == 3) {
+				surfaceBlockY = (rand() % ((lastSurfaceBlockY + 2) - lastSurfaceBlockY + 1)) + lastSurfaceBlockY + 1;
+			}
+		} else {
+			surfaceBlockY = (rand() % (29 - 27 + 1)) + 27;
+		}
+
+
+		if ((rand() % (100 - 0 + 1)) + 0 > 85) {
+			directionRoof = (rand() % (3 - 1 + 1)) + 1;
+		}
+
+
+		if (surfaceBlockY - lastRoofBlockY > difficultyValues[1][difficulty]) {  //12 //14 //18 //18
+			directionRoof = (rand() % (3 - 2 + 1)) + 2;
+		} else if (surfaceBlockY - lastRoofBlockY > difficultyValues[2][difficulty]) { //8 //10 //10 //14
+			directionRoof = (rand() % (2 - 1 + 1)) + 1;
+		} else {
+			directionRoof = 1;
+		}
+		if (lastRoofBlockY < 3) {
+			directionRoof = (rand() % (3 - 2 + 1)) + 2;
+		}
+
+		if (lastRoofBlockY > 1) {
+			if (directionRoof == 1) {
+				roofBlockY = (rand() % ((lastRoofBlockY - 1) - (lastRoofBlockY - 2) + 1)) + lastRoofBlockY - 2;
+			} else if (directionRoof == 2) {
+				roofBlockY = (rand() % ((lastRoofBlockY + 1) - (lastRoofBlockY - 1) + 1)) + lastRoofBlockY - 1;
+			} else if (directionRoof == 3) {
+				roofBlockY = (rand() % ((lastRoofBlockY + 2) - lastRoofBlockY+1 + 1)) + lastRoofBlockY + 1;
+			}
+		} else {
+			roofBlockY = (rand() % (2 - 0 + 1)) + 0;
+		}
+	}
+
+	for (int i = 0; i < gridHeight; i++) {
+		if (i <= roofBlockY || i >= surfaceBlockY) {
+			grid[1][linePosX][i] = block_1111_f1;
+		}
+	}
+
+	if(linePosX != 0) {
+		for (int i = 0; i < gridHeight; i++) {
+			if (i < lastRoofBlockY || i > lastSurfaceBlockY) {
+				grid[1][linePosX-1][i] = getForegroundBlock(true, grid[1][linePosX][i] != block_air ? true : false, true, grid[1][linePosX-2][i] != block_air ? true : false);
+			}
+			if (i == lastRoofBlockY) {
+				grid[1][linePosX-1][i] = getForegroundBlock(true, grid[1][linePosX][i] != block_air ? true : false, false, grid[1][linePosX-2][i] != block_air ? true : false);
+			}
+			if (i == lastSurfaceBlockY) {
+				grid[1][linePosX-1][i] = getForegroundBlock(false, grid[1][linePosX][i] != block_air ? true : false, true, grid[1][linePosX-2][i] != block_air ? true : false);
+			}
+		}
+	}
+
+
+	lastSurfaceBlockY = surfaceBlockY;
+	lastRoofBlockY = roofBlockY;
+}
+
+void resetGame() {
+	playerIsAlive = false;
+	playerAcceleration = 0;
+	playerPosY = WINDOW_HEIGHT / 2;
+	mapX = 0;
+	difficulty = 0;
+	score = 0;
+	
+	for (int x = 0; x < gridWidth; x++) {
+		generateNewLineBackground(x);
+		generateNewLineForeground(x);
+	}
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS) switch (key) {
+		case GLFW_KEY_UP:
+		case GLFW_KEY_W:
+		case GLFW_KEY_SPACE:
+			playerIsAlive = true;
+			if (playerPosY < WINDOW_HEIGHT) {
+				playerAcceleration = 300.0F;
+			}
+			break;
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
+			break;
+		default:
+			break;
+		
+    }
+}
+
+
+
+void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+
+    glViewport(0, 0, width, height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+
+bool proofCollision(float playerPosX, float playerPosY) {
+	int currentPlayerPointX = (int) floor((playerPosX - mapX) / 16);
+	int currentPlayerPointY = (int) floor(playerPosY / 16);
+	
+	if(grid[1][currentPlayerPointX][currentPlayerPointY] != block_air ||
+		grid[1][currentPlayerPointX + 1][currentPlayerPointY] != block_air ||
+		grid[1][currentPlayerPointX + 1][currentPlayerPointY + 1] != block_air ||
+		grid[1][currentPlayerPointX][currentPlayerPointY + 1] != block_air
+	) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+GLuint currentTexture;
+
+void drawTile(GLuint texture, int tileX, int tileY, float tileSize, float x, float y, float size) {
+	int texWidth = 0, texHeight = 0;
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	currentTexture = texture;
+    
+
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
+
+	// Texel-Offset against Sampling-Problem
+	float texelOffsetX = 0.5f / texWidth;
+	float texelOffsetY = 0.5f / texHeight;
+
+	float texSizeX = tileSize / texWidth;
+	float texSizeY = tileSize / texHeight;
+
+	float texX0 = tileX * texSizeX + texelOffsetX;
+	float texY0 = 1.0f - (tileY + 1) * texSizeY + texelOffsetY;
+	float texX1 = texX0 + texSizeX - 2 * texelOffsetX;
+	float texY1 = texY0 + texSizeY - 2 * texelOffsetY;
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(texX0, texY0); glVertex2f(x, y + size);
+		glTexCoord2f(texX1, texY0); glVertex2f(x + size, y + size);
+		glTexCoord2f(texX1, texY1); glVertex2f(x + size, y);
+		glTexCoord2f(texX0, texY1); glVertex2f(x, y);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+
+//--------------------------------------------------------------------------------------------// player functions
+
+void updatePlayer() {
+
+	if (playerIsAlive == true) {
+		float deltaTime = 1.0f / (float)refreshRate;			
+		playerAcceleration += gravity * deltaTime;
+		float movementHeight = playerAcceleration * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
+
+		if (proofCollision(playerPosX, playerPosY - movementHeight) == true) {
+			for (int i = 0; i < fabs(movementHeight)+1; i++) {
+
+				if (proofCollision(playerPosX, playerPosY + (movementHeight > 0 ? -1 : +1)) != true) {
+					playerPosY += (movementHeight > 0 ? -1 : +1);
+				} else {
+					playerIsAlive = false;
+					break;
+				}
+			}
+		} else {
+			playerPosY -= movementHeight;
+		}
+
+	}
+}
+
+void drawPlayer() {
+	drawTile(tileTexture1,0,0,16,playerPosX,playerPosY,16); //posx, posy, size, posX, posY, size
+}
+
+
+void updateWorld() {
+	if (mapX <= -16) {
+		mapX = 0;
+		
+		for (int x = 1; x < gridWidth; x++) {
+			for (int y = 0; y < gridHeight; y++) {
+				grid[1][x-1][y] = grid[1][x][y];
+			}
+		}
+		
+		for (int x = 1; x < gridWidth; x++) {
+			for (int y = 0; y < gridHeight; y++) {
+				grid[0][x-1][y] = grid[0][x][y];
+			}
+		}
+		
+		generateNewLineForeground(gridWidth - 1);
+		generateNewLineBackground(gridWidth - 1);
+		
+		score++;
+
+		if (score < 30) {
+			difficulty = 0;
+		} else if (score < 60) {
+			difficulty = 1;
+		} else if (score < 90) {
+			difficulty = 2;
+		} else if (score < 120) {
+			difficulty = 3;
+		} else if (score < 150) {
+			difficulty = 4;
+		} else if (score < 180) {
+			difficulty = 5;
+		} else if (score < 210) {
+			difficulty = 6;
+		} else if (score < 240) {
+			difficulty = 7;
+		} else if (score < 270) {
+			difficulty = 8;
+		} else if (score > 269) {
+			difficulty = 9;
+		}
+	}
+	float deltaTime = 1.0F / refreshRate;
+	mapX -= 60*deltaTime;
+}
+
+void drawWorld() {
+	
+	for (int x = 0; x < gridWidth; x++) {
+		for (int y = 0; y < gridHeight; y++) {
+
+			if (grid[1][x][y] != block_1111_f1 && grid[1][x][y] != block_1111_f2) {
+				if (grid[0][x][y] == block_b1) {
+					drawTile(tileTexture2,3,1,16,(x*16)+mapX,(y*16),16);
+				}
+			}
+
+			switch (grid[1][x][y]) {
+				case block_air:
+                    break;
+                case block_1111_f1:
+                    drawTile(tileTexture2, 1, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0111_f1:
+                    drawTile(tileTexture2, 5, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0011_f1:
+                    drawTile(tileTexture2, 9, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0110_f1:
+                    drawTile(tileTexture2, 7, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0010_f1:
+                    drawTile(tileTexture2, 11, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1101_f1:
+                    drawTile(tileTexture2, 13, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1100_f1:
+                    drawTile(tileTexture2, 15, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1001_f1:
+                    drawTile(tileTexture2, 17, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1000_f1:
+                    drawTile(tileTexture2, 19, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+			
+				default:
+					drawTile(tileTexture2, 21, 1, 16, (x*16)+mapX, (y*16), 16);
+					break;
+            }
+		}
+	}
+}
+
+
+
+const char* fontOrder = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+int indexOf(const char* pool, char object) {
+    for (int i = 0; pool[i] != '\0'; i++) {
+        if (pool[i] == object) return i;
+    }
+    return -1; // Not found
+}
+
+void showText(const char* text, int x, int y, int size, int colorLine) {
+    for (int i = 0; text[i] != '\0'; i++) {
+        int index = indexOf(fontOrder, text[i]);
+        if (index != -1) {
+            drawTile(tileTexture3, index, colorLine, 8, x + i * size, y, size);
+        }
+    }
+}
+
+void showNumber(int number, int x, int y, int size, int colorLine) {
+	char numStr[12];
+	snprintf(numStr, sizeof(numStr), "%d", number);
+	showText(numStr, x, y, size, colorLine);
+}
+
+		
+
+int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
+    printf("is running");
+    fflush(stdout);
+    
+    if (!glfwInit()) { return -1; }
+	
+	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+	
+	REAL_WINDOW_WIDTH = mode->width;
+	REAL_WINDOW_HEIGHT = mode->height;
+
+	refreshRate = mode->refreshRate;
+
+	glfwWindowHint(GLFW_REFRESH_RATE, refreshRate);
+
+  
+
+	window = glfwCreateWindow(REAL_WINDOW_WIDTH, REAL_WINDOW_HEIGHT, "tunnelBird", primaryMonitor, NULL);
+	
+    if (!window) { glfwTerminate(); return -1; }
+    glfwMakeContextCurrent(window);
+	
+	glfwSwapInterval(1);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	// images
+    
+    HINSTANCE hInstance = GetModuleHandle(NULL);
+	
+    unsigned char* image1;
+    HBITMAP bitmapCharacter = loadBitmapFromResource(hInstance, TILESET_CHARACTER, &texWidth1, &texHeight1, (void**)&image1);
+    if (!bitmapCharacter) { return -1; }
+    bool isGBR1 = true;
+	
+	unsigned char* image2;
+    HBITMAP bitmapBlocks = loadBitmapFromResource(hInstance, TILESET_BLOCKS, &texWidth2, &texHeight2, (void**)&image2);
+    if (!bitmapBlocks) { return -1; }
+    bool isGBR2 = true;
+	
+	unsigned char* image3;
+    HBITMAP bitmapFont = loadBitmapFromResource(hInstance, TILESET_FONT, &texWidth3, &texHeight3, (void**)&image3);
+    if (!bitmapFont) { return -1; }
+    bool isGBR3 = true;
+
+	unsigned char transparentColor[] = {255, 0, 255};
+
+    unsigned char* image1RGBA = RGB_RGBA_convert(image1, texWidth1, texHeight1, isGBR1, transparentColor);
+	unsigned char* image2RGBA = RGB_RGBA_convert(image2, texWidth2, texHeight2, isGBR2, transparentColor);
+	unsigned char* image3RGBA = RGB_RGBA_convert(image3, texWidth3, texHeight3, isGBR3, transparentColor);
+	
+	
+    
+    glEnable(GL_TEXTURE_2D);
+	
+    glGenTextures(1, &tileTexture1);
+    glBindTexture(GL_TEXTURE_2D, tileTexture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth1, texHeight1, 0, GL_RGBA, GL_UNSIGNED_BYTE, image1RGBA);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	
+	glGenTextures(1, &tileTexture2);
+	glBindTexture(GL_TEXTURE_2D, tileTexture2);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth2, texHeight2, 0, GL_RGBA, GL_UNSIGNED_BYTE, image2RGBA);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	
+	glGenTextures(1, &tileTexture3);
+	glBindTexture(GL_TEXTURE_2D, tileTexture3);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth3, texHeight3, 0, GL_RGBA, GL_UNSIGNED_BYTE, image3RGBA);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    setWindowIcon(window);
+    framebufferSizeCallback(window, REAL_WINDOW_WIDTH, REAL_WINDOW_HEIGHT);
+
+    resetGame();
+
+	
+	
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+		
+	
+        //----------------------------------------------------// game logic
+			
+		drawWorld();
+		drawPlayer();
+		
+		if(playerIsAlive) {
+			updateWorld();
+			updatePlayer();
+
+			showText("SCORE", 5, 5, 9, 1);
+			showNumber(score, 65, 5, 9, 1);
+
+			showText("HIGHSCORE", 150, 5, 9, 1);
+			showNumber(highScore, 250, 5, 9, 1);
+		} else {
+			if (score != 0 && score > highScore) {
+				showText("NEW HIGHSCORE", 300, 200, 10, 1);
+				showNumber(score, 480, 200, 10, 1);
+			} else if (score != 0) {
+				showText("SCORE", 380, 230, 10, 1);
+				showNumber(lastScore, 480, 230, 10, 1);
+
+				showText("HIGHSCORE", 380, 260, 10, 1);
+				showNumber(highScore, 480, 260, 10, 1);
+			}
+			
+			showText("PRESS JUMP KEY TO CONTINOU", 350, 450, 10, 1);	
+		}
+		
+		
+
+		//----------------------------------------------------//
+
+		glfwSwapBuffers(window);
+		
+        glfwPollEvents();
+    }
+    
+    glfwTerminate();
+    
+    glDeleteTextures(1, &tileTexture1);
+	glDeleteTextures(1, &tileTexture2);
+	glDeleteTextures(1, &tileTexture3);
+    
+    free(image1RGBA);
+	free(image2RGBA);
+	free(image3RGBA);
+	
+    return 0;
+}
