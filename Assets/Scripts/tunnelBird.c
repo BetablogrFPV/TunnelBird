@@ -10,44 +10,6 @@
 #include <sys/stat.h>
 
 
-
-
-#define WINDOW_WIDTH 854  //<54
-#define WINDOW_HEIGHT 480  //30
-int REAL_WINDOW_WIDTH;
-int REAL_WINDOW_HEIGHT;
-
-int refreshRate;
-
-
-bool gameIsRunning = false;
-
-double updateFrameratePrint = 0.0;
-double playerDeathTime = 0.0;
-
-double lastUpdateTime = 0.0;
-
-
-#define playerAccelerationFactor 0.009
-float playerAcceleration = 0;
-float playerPosY = WINDOW_HEIGHT / 2;
-float playerPosX = 100;
-bool playerIsAlive = true;
-float gravity = -980.0f;
-
-
-int score = 0;
-int highScore = 0;
-
-#define gridWidth 56  //54
-#define gridHeight 30  //30
-#define gridLayers 2
-
-int difficulty = 0;
-float mapX = 0;
-int grid[gridLayers][gridWidth][gridHeight] = {0};
-
-
 #define block_air 0
 
 #define block_1111_f1 1
@@ -79,6 +41,61 @@ int grid[gridLayers][gridWidth][gridHeight] = {0};
 
 #define block_b1 23
 #define block_b2 24
+
+#define block_plant1_d1 25
+#define block_plant1_d2 26
+
+#define block_plant2_d1 27
+#define block_plant2_d2 28
+
+#define block_plant3_d1 29
+#define block_plant3_d2 30
+
+#define block_stonePile1_d1 31
+#define block_stonePile1_d2 32
+
+#define block_stonePile2_d1 33
+#define block_stonePile2_d2 34
+
+
+
+
+#define WINDOW_WIDTH 854  //<54
+#define WINDOW_HEIGHT 480  //30
+int REAL_WINDOW_WIDTH;
+int REAL_WINDOW_HEIGHT;
+
+int refreshRate;
+
+
+bool gameIsRunning = false;
+
+double updateFrameratePrint = 0.0;
+double playerDeathTime = 0.0;
+
+double lastUpdateTime = 0.0;
+
+
+#define playerAccelerationFactor 0.009
+float playerAcceleration = 0;
+float playerPosY = WINDOW_HEIGHT / 2;
+float playerPosX = 100;
+bool playerIsAlive = true;
+float gravity = -980.0f;
+
+
+int score = 0;
+int highScore = 0;
+
+#define gridWidth 56  //54
+#define gridHeight 30  //30
+#define gridLayers 3
+
+int difficulty = 0;
+float mapX = 0;
+int grid[gridLayers][gridWidth][gridHeight] = {0};
+
+
 
 
 
@@ -254,7 +271,8 @@ void showNumber(int number, int x, int y, int size, int colorLine) {
 
 
 int getBackgroundBlock() {
-	return block_b1;
+	int randNum = (rand() % (100 - 0 + 1)) + 0;
+	if (randNum > 50) {return block_b1; } else {return block_b2; }
 }
 
 void generateNewLineBackground(int linePosX) {
@@ -280,6 +298,8 @@ const int difficultyValues[3][10] = {{20, 20, 20, 16, 16, 16, 15, 15, 15, 14}, {
 
 int getForegroundBlock(bool block_top, bool block_right, bool block_bottom, bool block_left) {
 
+	int randNum = (rand() % (100 - 0 + 1)) + 0;
+
 	int block = 0;
 	if (block_top)    block |= 1 << 3; // Bit 3 = oben
 	if (block_right)  block |= 1 << 2; // Bit 2 = rechts
@@ -288,32 +308,32 @@ int getForegroundBlock(bool block_top, bool block_right, bool block_bottom, bool
 
 	switch (block) {
 		case 0b1111:
-		return block_1111_f1;
+		if (randNum > 50) {return block_1111_f1; } else {return block_1111_f2; }
 		case 0b0111:
-		return block_0111_f1;
+		if (randNum > 50) {return block_0111_f1; } else {return block_0111_f2; }
 		case 0b0011:
-		return block_0011_f1;
+		if (randNum > 50) {return block_0011_f1; } else {return block_0011_f2; }
 		case 0b0110:
-		return block_0110_f1;
+		if (randNum > 50) {return block_0110_f1; } else {return block_0110_f2; }
 		case 0b0010:
-		return block_0010_f1;
+		if (randNum > 50) {return block_0010_f1; } else {return block_0010_f2; }
 		case 0b1010:
-		return block_1111_f1;
+		if (randNum > 50) {return block_1111_f1; } else {return block_1111_f2; }
 		case 0b1011:
-		return block_1111_f1;
+		if (randNum > 50) {return block_1111_f1; } else {return block_1111_f2; }
 		case 0b1110:
-		return block_1111_f1;
+		if (randNum > 50) {return block_1111_f1; } else {return block_1111_f2; }
 		case 0b1101:
-		return block_1101_f1;
+		if (randNum > 50) {return block_1101_f1; } else {return block_1101_f2; }
 		case 0b1100:
-		return block_1100_f1;
+		if (randNum > 50) {return block_1100_f1; } else {return block_1100_f2; }
 		case 0b1001:
-		return block_1001_f1;
+		if (randNum > 50) {return block_1001_f1; } else {return block_1001_f2; }
 		case 0b1000:
-		return block_1000_f1;
+		if (randNum > 50) {return block_1000_f1; } else {return block_1000_f2; }
 
 		default:
-		return 6;
+		return -1;
 	}
 
 	return block;
@@ -412,6 +432,46 @@ void generateNewLineForeground(int linePosX) {
 	lastRoofBlockY = roofBlockY;
 }
 
+int getPlant() {
+	int randNum = (rand() % (14 - 0 + 1)) + 0;
+	switch(randNum) {
+		case 0:
+		return block_plant1_d1;
+		case 1:
+		return block_plant1_d2;
+		case 2:
+		return block_plant2_d1;
+		case 3:
+		return block_plant2_d2;
+		case 4:
+		return block_plant3_d1;
+		case 5:
+		return block_plant3_d2;
+		case 6:
+		return block_stonePile1_d1;
+		case 7:
+		return block_stonePile1_d2;
+		case 8:
+		return block_stonePile2_d1;
+		case 9:
+		return block_stonePile2_d2;
+
+		default:
+		return block_air;
+	}
+}
+
+void setPlants(int linePosX) {
+	for (int i = 0; i < gridHeight; i++) {
+		grid[2][linePosX][i] = block_air;
+
+		if (grid[1][linePosX][i] == block_0111_f1 || grid[1][linePosX][i] == block_0111_f2) {
+
+			grid[2][linePosX][i-1] = getPlant();
+		}
+	}
+}
+
 //--------------------------------------------------------------------------------------------// map functions general
 
 
@@ -430,9 +490,16 @@ void updateWorld() {
 				grid[0][x-1][y] = grid[0][x][y];
 			}
 		}
+
+		for (int x = 1; x < gridWidth - 1; x++) {
+			for (int y = 0; y < gridHeight; y++) {
+				grid[2][x-1][y] = grid[2][x][y];
+			}
+		}
 		
 		generateNewLineForeground(gridWidth - 1);
 		generateNewLineBackground(gridWidth - 1);
+		setPlants(gridWidth - 2);
 		
 		score++;
 
@@ -470,12 +537,15 @@ void drawWorld() {
 			if (grid[1][x][y] != block_1111_f1 && grid[1][x][y] != block_1111_f2) {
 				if (grid[0][x][y] == block_b1) {
 					drawTile(tileTexture2,3,1,16,(x*16)+mapX,(y*16),16);
+				} else if (grid[0][x][y] == block_b2) {
+					drawTile(tileTexture2,3,3,16,(x*16)+mapX,(y*16),16);
 				}
 			}
 
 			switch (grid[1][x][y]) {
 				case block_air:
                     break;
+
                 case block_1111_f1:
                     drawTile(tileTexture2, 1, 1, 16, (x*16)+mapX, (y*16), 16);
                     break;
@@ -503,9 +573,77 @@ void drawWorld() {
 				case block_1000_f1:
                     drawTile(tileTexture2, 19, 1, 16, (x*16)+mapX, (y*16), 16);
                     break;
+
+				case block_1111_f2:
+                    drawTile(tileTexture2, 1, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0111_f2:
+                    drawTile(tileTexture2, 5, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0011_f2:
+                    drawTile(tileTexture2, 9, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0110_f2:
+                    drawTile(tileTexture2, 7, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_0010_f2:
+                    drawTile(tileTexture2, 11, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1101_f2:
+                    drawTile(tileTexture2, 13, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1100_f2:
+                    drawTile(tileTexture2, 15, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1001_f2:
+                    drawTile(tileTexture2, 17, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_1000_f2:
+                    drawTile(tileTexture2, 19, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
 			
 				default:
-					drawTile(tileTexture2, 21, 1, 16, (x*16)+mapX, (y*16), 16);
+					// error
+					break;
+            }
+
+			switch (grid[2][x][y]) {
+				case block_air:
+                    break;
+
+                case block_plant1_d1:
+                    drawTile(tileTexture2, 21, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_plant1_d2:
+                    drawTile(tileTexture2, 21, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_plant2_d1:
+                    drawTile(tileTexture2, 23, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_plant2_d2:
+                    drawTile(tileTexture2, 23, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_plant3_d1:
+                    drawTile(tileTexture2, 25, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_plant3_d2:
+                    drawTile(tileTexture2, 25, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_stonePile1_d1:
+                    drawTile(tileTexture2, 27, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_stonePile1_d2:
+                    drawTile(tileTexture2, 27, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_stonePile2_d1:
+                    drawTile(tileTexture2, 29, 1, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				case block_stonePile2_d2:
+                    drawTile(tileTexture2, 29, 3, 16, (x*16)+mapX, (y*16), 16);
+                    break;
+				
+				default:
+					// error
 					break;
             }
 		}
@@ -580,6 +718,9 @@ void resetGame() {
 	for (int x = 0; x < gridWidth; x++) {
 		generateNewLineBackground(x);
 		generateNewLineForeground(x);
+		if (x > 0) {
+			setPlants(x-1);
+		}
 	}
 }
 
@@ -711,7 +852,7 @@ int main(int argc, char* argv[], char* envp[]) {
     while (!glfwWindowShouldClose(window)) {
 
 		double currentTime = glfwGetTime();
-		if (currentTime - updateFrameratePrint >= 0.5) {
+		if (currentTime - updateFrameratePrint >= 0.2) {
 			currentFramerate = 1.0F / (currentTime - lastUpdateTime);
 			updateFrameratePrint = currentTime;
 		}
@@ -724,11 +865,8 @@ int main(int argc, char* argv[], char* envp[]) {
 		drawPlayer();
 
 
-		if (currentFramerate + 1 >= refreshRate) {
-			showNumber((int)currentFramerate, WINDOW_WIDTH - 62, 5, 9, 1);
-		} else if (currentFramerate < refreshRate) {
-			showNumber((int)currentFramerate, WINDOW_WIDTH - 62, 5, 9, 2);
-		}
+		
+		showNumber((int)currentFramerate, WINDOW_WIDTH - 62, 5, 9, 1);
 		showText("FPS", WINDOW_WIDTH - 30, 5, 9, 1);
 
 
@@ -756,8 +894,8 @@ int main(int argc, char* argv[], char* envp[]) {
 			showText("GAME OVER", (WINDOW_WIDTH / 2) - 90, 110, 11, 2);
 
 			if (score != 0 && score > highScore) {
-				showText("NEW HIGHSCORE", (WINDOW_WIDTH / 2) - 90, 150, 7, 1);
-				showNumber(score, (WINDOW_WIDTH / 2) - 90, 170, 7, 1);
+				showText("NEW HIGHSCORE", (WINDOW_WIDTH / 2) - 90, 150, 7, 4);
+				showNumber(score, (WINDOW_WIDTH / 2) - 90, 170, 7, 4);
 			} else if (score != 0) {
 				showText("SCORE", (WINDOW_WIDTH / 2) - 90, 150, 7, 1);
 				showNumber(score, (WINDOW_WIDTH / 2) - 90, 170, 7, 1);
