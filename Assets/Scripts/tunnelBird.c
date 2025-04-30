@@ -9,6 +9,9 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
+
+
+
 #define WINDOW_WIDTH 854  //<54
 #define WINDOW_HEIGHT 480  //30
 int REAL_WINDOW_WIDTH;
@@ -16,12 +19,13 @@ int REAL_WINDOW_HEIGHT;
 
 int refreshRate;
 
-float speedFactor;
 
-bool gameStarted = false;
+bool gameIsRunning = false;
+
+double updateFrameratePrint = 0.0;
+double playerDeathTime = 0.0;
 
 double lastUpdateTime = 0.0;
-double deltaTime;
 
 
 #define playerAccelerationFactor 0.009
@@ -33,7 +37,6 @@ float gravity = -980.0f;
 
 
 int score = 0;
-int lastScore = 0;
 int highScore = 0;
 
 #define gridWidth 56  //54
@@ -79,8 +82,6 @@ int grid[gridLayers][gridWidth][gridHeight] = {0};
 
 
 
-
-
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 #include <windows.h>
@@ -90,6 +91,18 @@ int grid[gridLayers][gridWidth][gridHeight] = {0};
 #define TILESET_CHARACTER 12
 #define TILESET_BLOCKS 13
 #define TILESET_FONT 14
+
+GLuint tileTexture1;
+GLuint tileTexture2;
+GLuint tileTexture3;
+
+int texWidth1, texHeight1, texChannels1;
+int texWidth2, texHeight2, texChannels2;
+int texWidth3, texHeight3, texChannels3;
+
+//####################################################################################// general functions //####################################################################################//
+
+
 
 HBITMAP loadBitmapFromResource(HINSTANCE hInstance, int resourceID, int* width, int* height, void** pixelData) {
     HRSRC hResource = FindResource(hInstance, MAKEINTRESOURCE(resourceID), RT_BITMAP);
@@ -104,6 +117,8 @@ HBITMAP loadBitmapFromResource(HINSTANCE hInstance, int resourceID, int* width, 
     return (HBITMAP)bmpInfo;
 }
 
+//--------------------------------------------------------------------------------------------// window icon
+
 void setWindowIcon(GLFWwindow* window) {
     HWND hwnd = glfwGetWin32Window(window);
     HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_APP_ICON));
@@ -113,19 +128,20 @@ void setWindowIcon(GLFWwindow* window) {
     }
 }
 
+//--------------------------------------------------------------------------------------------// viewfield settings
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 
+    glViewport(0, 0, width, height);
 
-GLuint tileTexture1;
-GLuint tileTexture2;
-GLuint tileTexture3;
-GLuint backgroundScreen;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
 
-int texWidth1, texHeight1, texChannels1;
-int texWidth2, texHeight2, texChannels2;
-int texWidth3, texHeight3, texChannels3;
-
-
+//--------------------------------------------------------------------------------------------// image convert function
 
 unsigned char* RGB_RGBA_convert(unsigned char* imageRGB, int texWidth, int texHeight, bool isGBR, unsigned char* transparentColor) {
 	unsigned char* imageRGBA = (unsigned char*)(malloc(texWidth * texHeight * 4));
@@ -139,18 +155,99 @@ unsigned char* RGB_RGBA_convert(unsigned char* imageRGB, int texWidth, int texHe
         imageRGBA[j + 1] = g;
         imageRGBA[j + 2] = isGBR ? r : b;
 
-        imageRGBA[j + 3] = (r == transparentColor[0] && g == transparentColor[1] && b == transparentColor[2]) ? 0 : 255;
+        imageRGBA[j + 3] = (r == transparentColor[0] && g== transparentColor[1] && b == transparentColor[2]) ? 0 : 255;
     }
 
 	return imageRGBA;
 }
 
+//--------------------------------------------------------------------------------------------// draw tile function
 
-void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+void drawTile(GLuint texture, int tileX, int tileY, float tileSize, float x, float y, float size) {
+	int texWidth = 0, texHeight = 0;
 
+	glBindTexture(GL_TEXTURE_2D, texture);
+    
+
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
+
+	// Texel-Offset against Sampling-Problem
+	float texelOffsetX = 0.1f / texWidth;
+	float texelOffsetY = 0.1f / texHeight;
+
+	float texSizeX = tileSize / texWidth;
+	float texSizeY = tileSize / texHeight;
+
+	float texX0 = tileX * texSizeX + texelOffsetX;
+	float texY0 = 1.0f - (tileY + 1) * texSizeY + texelOffsetY;
+	float texX1 = texX0 + texSizeX - 2 * texelOffsetX;
+	float texY1 = texY0 + texSizeY - 2 * texelOffsetY;
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glBegin(GL_QUADS);
+		glTexCoord2f(texX0, texY0); glVertex2f(x, y + size);
+		glTexCoord2f(texX1, texY0); glVertex2f(x + size, y + size);
+		glTexCoord2f(texX1, texY1); glVertex2f(x + size, y);
+		glTexCoord2f(texX0, texY1); glVertex2f(x, y);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+//--------------------------------------------------------------------------------------------// rectangle draw
+
+void drawRect(float x, float y, float width, float height, unsigned char* color) {
+
+	glDisable(GL_TEXTURE_2D);
+
+	glColor4f(
+		color[0] / 255.0f,
+		color[1] / 255.0f,
+		color[2] / 255.0f,
+		color[3] / 255.0f
+	);
+
+	glBegin(GL_QUADS);
+		glVertex2f(x, y);
+		glVertex2f(x + width, y);
+		glVertex2f(x + width, y + height);
+		glVertex2f(x, y + height);
+	glEnd();
+
+	glEnable(GL_TEXTURE_2D);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+//--------------------------------------------------------------------------------------------// font rendering
+
+const char* fontOrder = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+int indexOf(const char* pool, char object) {
+    for (int i = 0; pool[i] != '\0'; i++) {
+        if (pool[i] == object) return i;
+    }
+    return -1; // Not found
+}
+
+void showText(const char* text, int x, int y, int size, int colorLine) {
+    for (int i = 0; text[i] != '\0'; i++) {
+        int index = indexOf(fontOrder, text[i]);
+        if (index != -1) {
+            drawTile(tileTexture3, index, colorLine, 8, x + i * size, y, size);
+        }
+    }
+}
+
+void showNumber(int number, int x, int y, int size, int colorLine) {
+	char numStr[12];
+	snprintf(numStr, sizeof(numStr), "%d", number);
+	showText(numStr, x, y, size, colorLine);
 }
 
 
+//####################################################################################// game functions //####################################################################################//
 
 
 //--------------------------------------------------------------------------------------------// map functions background
@@ -167,6 +264,17 @@ void generateNewLineBackground(int linePosX) {
 }
 
 //--------------------------------------------------------------------------------------------// map functions foreground
+
+int directionSurface;
+int directionRoof;
+
+int surfaceBlockY;
+int lastSurfaceBlockY;
+
+int roofBlockY;
+int lastRoofBlockY;
+
+const int difficultyValues[3][10] = {{20, 20, 20, 16, 16, 16, 15, 15, 15, 14}, {19, 18, 17, 17, 16, 15, 14, 13, 12, 11}, {16, 15, 14, 13, 12, 12, 11, 10, 9, 8}};
 
 
 
@@ -210,17 +318,6 @@ int getForegroundBlock(bool block_top, bool block_right, bool block_bottom, bool
 
 	return block;
 }
-
-int directionSurface;
-int directionRoof;
-
-int surfaceBlockY;
-int lastSurfaceBlockY;
-
-int roofBlockY;
-int lastRoofBlockY;
-
-const int difficultyValues[3][10] = {{20, 20, 20, 16, 16, 16, 15, 15, 15, 15}, {19, 18, 17, 17, 16, 15, 14, 13, 12, 11}, {16, 15, 14, 13, 12, 12, 11, 10, 9, 8}};
 
 
 
@@ -315,133 +412,7 @@ void generateNewLineForeground(int linePosX) {
 	lastRoofBlockY = roofBlockY;
 }
 
-void resetGame() {
-	playerIsAlive = false;
-	playerAcceleration = 0;
-	playerPosY = WINDOW_HEIGHT / 2;
-	mapX = 0;
-	difficulty = 0;
-	score = 0;
-	
-	for (int x = 0; x < gridWidth; x++) {
-		generateNewLineBackground(x);
-		generateNewLineForeground(x);
-	}
-}
-
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (action == GLFW_PRESS) switch (key) {
-		case GLFW_KEY_UP:
-		case GLFW_KEY_W:
-		case GLFW_KEY_SPACE:
-			playerIsAlive = true;
-			if (playerPosY < WINDOW_HEIGHT) {
-				playerAcceleration = 300.0F;
-			}
-			break;
-		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(window, GLFW_TRUE);
-			break;
-		default:
-			break;
-		
-    }
-}
-
-
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
-
-    glViewport(0, 0, width, height);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
-
-
-bool proofCollision(float playerPosX, float playerPosY) {
-	int currentPlayerPointX = (int) floor((playerPosX - mapX) / 16);
-	int currentPlayerPointY = (int) floor(playerPosY / 16);
-	
-	if(grid[1][currentPlayerPointX][currentPlayerPointY] != block_air ||
-		grid[1][currentPlayerPointX + 1][currentPlayerPointY] != block_air ||
-		grid[1][currentPlayerPointX + 1][currentPlayerPointY + 1] != block_air ||
-		grid[1][currentPlayerPointX][currentPlayerPointY + 1] != block_air
-	) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-GLuint currentTexture;
-
-void drawTile(GLuint texture, int tileX, int tileY, float tileSize, float x, float y, float size) {
-	int texWidth = 0, texHeight = 0;
-
-	glBindTexture(GL_TEXTURE_2D, texture);
-	currentTexture = texture;
-    
-
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texWidth);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texHeight);
-
-	// Texel-Offset against Sampling-Problem
-	float texelOffsetX = 0.5f / texWidth;
-	float texelOffsetY = 0.5f / texHeight;
-
-	float texSizeX = tileSize / texWidth;
-	float texSizeY = tileSize / texHeight;
-
-	float texX0 = tileX * texSizeX + texelOffsetX;
-	float texY0 = 1.0f - (tileY + 1) * texSizeY + texelOffsetY;
-	float texX1 = texX0 + texSizeX - 2 * texelOffsetX;
-	float texY1 = texY0 + texSizeY - 2 * texelOffsetY;
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glBegin(GL_QUADS);
-		glTexCoord2f(texX0, texY0); glVertex2f(x, y + size);
-		glTexCoord2f(texX1, texY0); glVertex2f(x + size, y + size);
-		glTexCoord2f(texX1, texY1); glVertex2f(x + size, y);
-		glTexCoord2f(texX0, texY1); glVertex2f(x, y);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-}
-
-
-//--------------------------------------------------------------------------------------------// player functions
-
-void updatePlayer() {
-
-	if (playerIsAlive == true) {
-		float deltaTime = 1.0f / (float)refreshRate;			
-		playerAcceleration += gravity * deltaTime;
-		float movementHeight = playerAcceleration * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
-
-		if (proofCollision(playerPosX, playerPosY - movementHeight) == true) {
-			for (int i = 0; i < fabs(movementHeight)+1; i++) {
-
-				if (proofCollision(playerPosX, playerPosY + (movementHeight > 0 ? -1 : +1)) != true) {
-					playerPosY += (movementHeight > 0 ? -1 : +1);
-				} else {
-					playerIsAlive = false;
-					break;
-				}
-			}
-		} else {
-			playerPosY -= movementHeight;
-		}
-
-	}
-}
-
-void drawPlayer() {
-	drawTile(tileTexture1,0,0,16,playerPosX,playerPosY,16); //posx, posy, size, posX, posY, size
-}
+//--------------------------------------------------------------------------------------------// map functions general
 
 
 void updateWorld() {
@@ -465,25 +436,25 @@ void updateWorld() {
 		
 		score++;
 
-		if (score < 30) {
+		if (score < 50) {
 			difficulty = 0;
-		} else if (score < 60) {
+		} else if (score < 100) {
 			difficulty = 1;
-		} else if (score < 90) {
-			difficulty = 2;
-		} else if (score < 120) {
-			difficulty = 3;
 		} else if (score < 150) {
+			difficulty = 2;
+		} else if (score < 200) {
+			difficulty = 3;
+		} else if (score < 250) {
 			difficulty = 4;
-		} else if (score < 180) {
+		} else if (score < 300) {
 			difficulty = 5;
-		} else if (score < 210) {
+		} else if (score < 350) {
 			difficulty = 6;
-		} else if (score < 240) {
+		} else if (score < 400) {
 			difficulty = 7;
-		} else if (score < 270) {
+		} else if (score < 450) {
 			difficulty = 8;
-		} else if (score > 269) {
+		} else if (score > 449) {
 			difficulty = 9;
 		}
 	}
@@ -541,38 +512,120 @@ void drawWorld() {
 	}
 }
 
+//--------------------------------------------------------------------------------------------// proof player f_block collision
 
-
-const char* fontOrder = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-int indexOf(const char* pool, char object) {
-    for (int i = 0; pool[i] != '\0'; i++) {
-        if (pool[i] == object) return i;
-    }
-    return -1; // Not found
+bool proofCollision(float playerPosX, float playerPosY) {
+	int currentPlayerPointX0 = (int) floor((playerPosX + 2 - mapX) / 16);
+	int currentPlayerPointY0 = (int) floor((playerPosY + 4) / 16);
+	int currentPlayerPointX1 = (int) floor((playerPosX + 14 - mapX) / 16);
+	int currentPlayerPointY1 = (int) floor((playerPosY + 14) / 16);
+	
+	if(grid[1][currentPlayerPointX0][currentPlayerPointY0] != block_air ||
+		grid[1][currentPlayerPointX1][currentPlayerPointY0] != block_air ||
+		grid[1][currentPlayerPointX1][currentPlayerPointY1] != block_air ||
+		grid[1][currentPlayerPointX0][currentPlayerPointY1] != block_air
+	) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
-void showText(const char* text, int x, int y, int size, int colorLine) {
-    for (int i = 0; text[i] != '\0'; i++) {
-        int index = indexOf(fontOrder, text[i]);
-        if (index != -1) {
-            drawTile(tileTexture3, index, colorLine, 8, x + i * size, y, size);
-        }
-    }
+//--------------------------------------------------------------------------------------------// player functions
+
+void updatePlayer() {
+
+	if (playerIsAlive == true) {
+		float deltaTime = 1.0f / (float)refreshRate;			
+		playerAcceleration += gravity * deltaTime;
+		float movementHeight = playerAcceleration * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
+
+		if (proofCollision(playerPosX, playerPosY - movementHeight) == true) {
+			for (int i = 0; i < fabs(movementHeight)+1; i++) {
+
+				if (proofCollision(playerPosX, playerPosY + (movementHeight > 0 ? -1 : +1)) != true) {
+					playerPosY += (movementHeight > 0 ? -1 : +1);
+				} else {
+					playerDeathTime = glfwGetTime();
+					playerIsAlive = false;
+					gameIsRunning = false;
+					break;
+				}
+			}
+		} else {
+			playerPosY -= movementHeight;
+		}
+
+	}
 }
 
-void showNumber(int number, int x, int y, int size, int colorLine) {
-	char numStr[12];
-	snprintf(numStr, sizeof(numStr), "%d", number);
-	showText(numStr, x, y, size, colorLine);
+void drawPlayer() {
+	drawTile(tileTexture1,0,0,16,playerPosX,playerPosY,16); //posx, posy, size, posX, posY, size
 }
 
+//--------------------------------------------------------------------------------------------// reset player and map
+
+void resetGame() {
+	playerAcceleration = 0;
+	playerPosY = WINDOW_HEIGHT / 2;
+	mapX = 0;
+	difficulty = 0;
+	playerIsAlive = true;
+
+	if (score > highScore) {
+		highScore = score;
+	}
+	score = 0;
+	
+	for (int x = 0; x < gridWidth; x++) {
+		generateNewLineBackground(x);
+		generateNewLineForeground(x);
+	}
+}
+
+//####################################################################################// input functions //####################################################################################//
+
+//--------------------------------------------------------------------------------------------// get keys
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS) switch (key) {
+		case GLFW_KEY_UP:
+		case GLFW_KEY_W:
+		case GLFW_KEY_SPACE:
+			if (playerIsAlive == false && gameIsRunning == false) {
+				if (glfwGetTime() - playerDeathTime >= 1) {
+					resetGame();
+				}
+			} else if (gameIsRunning == false) {
+				gameIsRunning = true;
+			}
+			if (playerIsAlive == true) {
+				playerAcceleration = 300.0F;
+			}
+			break;
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
+			break;
+		default:
+			break;
 		
+    }
+}
 
-int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
+//--------------------------------------------------------------------------------------------// get mouse keys
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+	// nothing
+}
+
+//####################################################################################// main + gameloop //####################################################################################//
+
+int main(int argc, char* argv[], char* envp[]) {
+
+	GLFWwindow* window;
     printf("is running");
     fflush(stdout);
-    
+
     if (!glfwInit()) { return -1; }
 	
 	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
@@ -596,8 +649,8 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	// images
+
+
     
     HINSTANCE hInstance = GetModuleHandle(NULL);
 	
@@ -653,45 +706,70 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
 
     resetGame();
 
-	
+	float currentFramerate = 0.0;
 	
     while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
+
+		double currentTime = glfwGetTime();
+		if (currentTime - updateFrameratePrint >= 0.5) {
+			currentFramerate = 1.0F / (currentTime - lastUpdateTime);
+			updateFrameratePrint = currentTime;
+		}
+		lastUpdateTime = currentTime;
+
 		
-	
-        //----------------------------------------------------// game logic
-			
+        glClear(GL_COLOR_BUFFER_BIT);
+					
 		drawWorld();
 		drawPlayer();
-		
-		if(playerIsAlive) {
+
+
+		if (currentFramerate + 1 >= refreshRate) {
+			showNumber((int)currentFramerate, WINDOW_WIDTH - 62, 5, 9, 1);
+		} else if (currentFramerate < refreshRate) {
+			showNumber((int)currentFramerate, WINDOW_WIDTH - 62, 5, 9, 2);
+		}
+		showText("FPS", WINDOW_WIDTH - 30, 5, 9, 1);
+
+
+		if(gameIsRunning && playerIsAlive) {
 			updateWorld();
 			updatePlayer();
 
 			showText("SCORE", 5, 5, 9, 1);
 			showNumber(score, 65, 5, 9, 1);
-
 			showText("HIGHSCORE", 150, 5, 9, 1);
 			showNumber(highScore, 250, 5, 9, 1);
+
+		} else if (playerIsAlive) {
+			showText("SCORE", 5, 5, 9, 1);
+			showNumber(score, 65, 5, 9, 1);
+			showText("HIGHSCORE", 150, 5, 9, 1);
+			showNumber(highScore, 250, 5, 9, 1);
+
+			showText("PRESS JUMP KEY TO START", (WINDOW_WIDTH / 2) - 115, 450, 10, 1);
+
 		} else {
+			unsigned char color[] = {50, 50, 50, 220};
+			drawRect((WINDOW_WIDTH / 2) - 100, 100, 200, 250, color);
+
+			showText("GAME OVER", (WINDOW_WIDTH / 2) - 90, 110, 11, 2);
+
 			if (score != 0 && score > highScore) {
-				showText("NEW HIGHSCORE", 300, 200, 10, 1);
-				showNumber(score, 480, 200, 10, 1);
+				showText("NEW HIGHSCORE", (WINDOW_WIDTH / 2) - 90, 150, 7, 1);
+				showNumber(score, (WINDOW_WIDTH / 2) - 90, 170, 7, 1);
 			} else if (score != 0) {
-				showText("SCORE", 380, 230, 10, 1);
-				showNumber(lastScore, 480, 230, 10, 1);
+				showText("SCORE", (WINDOW_WIDTH / 2) - 90, 150, 7, 1);
+				showNumber(score, (WINDOW_WIDTH / 2) - 90, 170, 7, 1);
 
-				showText("HIGHSCORE", 380, 260, 10, 1);
-				showNumber(highScore, 480, 260, 10, 1);
+				showText("HIGHSCORE", (WINDOW_WIDTH / 2) - 90, 210, 7, 1);
+				showNumber(highScore, (WINDOW_WIDTH / 2) - 90, 230, 7, 1);
 			}
-			
-			showText("PRESS JUMP KEY TO CONTINOU", 350, 450, 10, 1);	
+
+			showText("PRESS JUMP KEY TO CONTINOU", (WINDOW_WIDTH / 2) - 90, 337, 7, 1);
 		}
-		
-		
 
-		//----------------------------------------------------//
-
+		
 		glfwSwapBuffers(window);
 		
         glfwPollEvents();
@@ -706,6 +784,7 @@ int main(int argc, char* argv[], char* envp[]) { GLFWwindow* window;
     free(image1RGBA);
 	free(image2RGBA);
 	free(image3RGBA);
+
 	
     return 0;
 }

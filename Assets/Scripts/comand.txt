@@ -6,12 +6,11 @@ set manifest = 0
 set manifestfile = enemy.manifest
 set includeres = 1
 set restype = BITMAP
+
 set resname1 = character.bmp
 set resname2 = blocks.bmp
 set resname3 = font.bmp
 
-
-set linux = 0
 
 set author = jfj_games
 set description = game_tunnelBird
@@ -177,15 +176,6 @@ if $(EXITCODE) == 0 then
   if $(manifest) == 1 then
     echo Add $(manifestfile)...
     $(MinGW)\bin\rcedit-$(mybitness) "$(NAME_PART)".exe --application-manifest "$(manifestfile)"
-  endif
-  
-  if $(linux) == 1 then
-    echo Compile for Debian...
-    set local DIR = $(CURRENT_DIRECTORY)\
-    set local WSL_PATH = $(DIR:C:\=/mnt/c/)
-    set local WSL_PATH = $(WSL_PATH:\=/)
-
-    wsl gcc -Wall -o "$(WSL_PATH)$(NAME_PART).elf" "$(WSL_PATH)$(NAME_PART).c" -Wall -D_GNU_SOURCE -pthread -lm -lglfw -lGL
   endif
 
   echo  

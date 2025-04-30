@@ -4,2562 +4,3159 @@
 	.type	0;
 	.endef
 	.globl	@feat.00
-.set @feat.00, 1
+.set @feat.00, 0
 	.file	"tunnelBird.c"
-	.def	_loadBitmapFromResource;
+	.def	loadBitmapFromResource;
 	.scl	2;
 	.type	32;
 	.endef
-	.globl	_loadBitmapFromResource         # -- Begin function loadBitmapFromResource
+	.globl	loadBitmapFromResource          # -- Begin function loadBitmapFromResource
 	.p2align	4, 0x90
-_loadBitmapFromResource:                # @loadBitmapFromResource
+loadBitmapFromResource:                 # @loadBitmapFromResource
+.seh_proc loadBitmapFromResource
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$28, %esp
-	movl	24(%ebp), %eax
-	movl	20(%ebp), %eax
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	movl	8(%ebp), %edx
-	movl	12(%ebp), %eax
+	subq	$104, %rsp
+	.seh_stackalloc 104
+	.seh_endprologue
+	movq	144(%rsp), %rax
+	movq	%rcx, 88(%rsp)
+	movl	%edx, 84(%rsp)
+	movq	%r8, 72(%rsp)
+	movq	%r9, 64(%rsp)
+	movq	88(%rsp), %rcx
+	movl	84(%rsp), %eax
                                         # kill: def $ax killed $ax killed $eax
-	movzwl	%ax, %ecx
-	movl	$2, %eax
-	movl	%edx, (%esp)
-	movl	%ecx, 4(%esp)
-	movl	%eax, 8(%esp)
-	calll	*__imp__FindResourceA@12
-	subl	$12, %esp
-	movl	%eax, -8(%ebp)
-	cmpl	$0, -8(%ebp)
-	jne	LBB0_2
+	movzwl	%ax, %eax
+	movl	%eax, %edx
+	movl	$2, %r8d
+	callq	*__imp_FindResourceA(%rip)
+	movq	%rax, 56(%rsp)
+	cmpq	$0, 56(%rsp)
+	jne	.LBB0_2
 # %bb.1:
-	movl	$0, -4(%ebp)
-	jmp	LBB0_7
-LBB0_2:
-	movl	8(%ebp), %ecx
-	movl	-8(%ebp), %eax
-	movl	%ecx, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__LoadResource@8
-	subl	$8, %esp
-	movl	%eax, -12(%ebp)
-	cmpl	$0, -12(%ebp)
-	jne	LBB0_4
+	movq	$0, 96(%rsp)
+	jmp	.LBB0_7
+.LBB0_2:
+	movq	88(%rsp), %rcx
+	movq	56(%rsp), %rdx
+	callq	*__imp_LoadResource(%rip)
+	movq	%rax, 48(%rsp)
+	cmpq	$0, 48(%rsp)
+	jne	.LBB0_4
 # %bb.3:
-	movl	$0, -4(%ebp)
-	jmp	LBB0_7
-LBB0_4:
-	movl	-12(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	*__imp__LockResource@4
-	subl	$4, %esp
-	movl	%eax, -16(%ebp)
-	cmpl	$0, -16(%ebp)
-	jne	LBB0_6
+	movq	$0, 96(%rsp)
+	jmp	.LBB0_7
+.LBB0_4:
+	movq	48(%rsp), %rcx
+	callq	*__imp_LockResource(%rip)
+	movq	%rax, 40(%rsp)
+	cmpq	$0, 40(%rsp)
+	jne	.LBB0_6
 # %bb.5:
-	movl	$0, -4(%ebp)
-	jmp	LBB0_7
-LBB0_6:
-	movl	-16(%ebp), %eax
-	movl	4(%eax), %ecx
-	movl	16(%ebp), %eax
-	movl	%ecx, (%eax)
-	movl	-16(%ebp), %eax
-	movl	8(%eax), %ecx
+	movq	$0, 96(%rsp)
+	jmp	.LBB0_7
+.LBB0_6:
+	movq	40(%rsp), %rax
+	movl	4(%rax), %ecx
+	movq	72(%rsp), %rax
+	movl	%ecx, (%rax)
+	movq	40(%rsp), %rax
+	movl	8(%rax), %ecx
 	movl	%ecx, %eax
 	negl	%eax
 	cmovnsl	%eax, %ecx
-	movl	20(%ebp), %eax
-	movl	%ecx, (%eax)
-	movl	-16(%ebp), %ecx
-	movl	-16(%ebp), %eax
-	addl	(%eax), %ecx
-	movl	-16(%ebp), %eax
-	movl	32(%eax), %eax
-	shll	$2, %eax
-	addl	%eax, %ecx
-	movl	24(%ebp), %eax
-	movl	%ecx, (%eax)
-	movl	-16(%ebp), %eax
-	movl	%eax, -4(%ebp)
-LBB0_7:
-	movl	-4(%ebp), %eax
-	addl	$28, %esp
-	popl	%ebp
-	retl
+	movq	64(%rsp), %rax
+	movl	%ecx, (%rax)
+	movq	40(%rsp), %rcx
+	movq	40(%rsp), %rax
+	movl	(%rax), %eax
+                                        # kill: def $rax killed $eax
+	addq	%rax, %rcx
+	movq	40(%rsp), %rax
+	movl	32(%rax), %eax
+                                        # kill: def $rax killed $eax
+	shlq	$2, %rax
+	addq	%rax, %rcx
+	movq	144(%rsp), %rax
+	movq	%rcx, (%rax)
+	movq	40(%rsp), %rax
+	movq	%rax, 96(%rsp)
+.LBB0_7:
+	movq	96(%rsp), %rax
+	addq	$104, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_setWindowIcon;
+	.def	setWindowIcon;
 	.scl	2;
 	.type	32;
 	.endef
-	.globl	_setWindowIcon                  # -- Begin function setWindowIcon
+	.globl	setWindowIcon                   # -- Begin function setWindowIcon
 	.p2align	4, 0x90
-_setWindowIcon:                         # @setWindowIcon
+setWindowIcon:                          # @setWindowIcon
+.seh_proc setWindowIcon
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$24, %esp
-	movl	8(%ebp), %eax
-	movl	8(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_glfwGetWin32Window
-	movl	%eax, -4(%ebp)
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movq	%rcx, 48(%rsp)
+	movq	48(%rsp), %rcx
+	callq	glfwGetWin32Window
+	movq	%rax, 40(%rsp)
 	xorl	%eax, %eax
-	movl	$0, (%esp)
-	calll	*__imp__GetModuleHandleA@4
-	subl	$4, %esp
 	movl	%eax, %ecx
-	movl	$101, %eax
-	movl	%ecx, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__LoadIconA@8
-	subl	$8, %esp
-	movl	%eax, -8(%ebp)
-	cmpl	$0, -8(%ebp)
-	je	LBB1_2
+	callq	*__imp_GetModuleHandleA(%rip)
+	movq	%rax, %rcx
+	movl	$101, %edx
+	callq	*__imp_LoadIconA(%rip)
+	movq	%rax, 32(%rsp)
+	cmpq	$0, 32(%rsp)
+	je	.LBB1_2
 # %bb.1:
-	movl	-4(%ebp), %ecx
-	movl	-8(%ebp), %eax
-	xorl	%edx, %edx
-	movl	%ecx, (%esp)
-	movl	$128, 4(%esp)
-	movl	$0, 8(%esp)
-	movl	%eax, 12(%esp)
-	calll	*__imp__SendMessageA@16
-	subl	$16, %esp
-	movl	-4(%ebp), %ecx
-	movl	-8(%ebp), %eax
-	movl	%ecx, (%esp)
-	movl	$128, 4(%esp)
-	movl	$1, 8(%esp)
-	movl	%eax, 12(%esp)
-	calll	*__imp__SendMessageA@16
-	subl	$16, %esp
-LBB1_2:
-	addl	$24, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_RGB_RGBA_convert;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_RGB_RGBA_convert               # -- Begin function RGB_RGBA_convert
-	.p2align	4, 0x90
-_RGB_RGBA_convert:                      # @RGB_RGBA_convert
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$36, %esp
-	movl	24(%ebp), %eax
-	movb	20(%ebp), %al
-	movl	16(%ebp), %ecx
-	movl	12(%ebp), %ecx
-	movl	8(%ebp), %ecx
-	andb	$1, %al
-	movb	%al, -1(%ebp)
-	movl	12(%ebp), %eax
-	imull	16(%ebp), %eax
-	shll	$2, %eax
-	movl	%eax, (%esp)
-	calll	_malloc
-	movl	%eax, -8(%ebp)
-	movl	$0, -12(%ebp)
-	movl	$0, -16(%ebp)
-LBB2_1:                                 # =>This Inner Loop Header: Depth=1
-	movl	-12(%ebp), %eax
-	movl	12(%ebp), %ecx
-	imull	16(%ebp), %ecx
-	imull	$3, %ecx, %ecx
-	cmpl	%ecx, %eax
-	jge	LBB2_13
-# %bb.2:                                #   in Loop: Header=BB2_1 Depth=1
-	movl	8(%ebp), %eax
-	movl	-12(%ebp), %ecx
-	movb	(%eax,%ecx), %al
-	movb	%al, -17(%ebp)
-	movl	8(%ebp), %eax
-	movl	-12(%ebp), %ecx
-	movb	1(%eax,%ecx), %al
-	movb	%al, -18(%ebp)
-	movl	8(%ebp), %eax
-	movl	-12(%ebp), %ecx
-	movb	2(%eax,%ecx), %al
-	movb	%al, -19(%ebp)
-	testb	$1, -1(%ebp)
-	je	LBB2_4
-# %bb.3:                                #   in Loop: Header=BB2_1 Depth=1
-	movzbl	-19(%ebp), %eax
-	movl	%eax, -24(%ebp)                 # 4-byte Spill
-	jmp	LBB2_5
-LBB2_4:                                 #   in Loop: Header=BB2_1 Depth=1
-	movzbl	-17(%ebp), %eax
-	movl	%eax, -24(%ebp)                 # 4-byte Spill
-LBB2_5:                                 #   in Loop: Header=BB2_1 Depth=1
-	movl	-24(%ebp), %eax                 # 4-byte Reload
-	movb	%al, %dl
-	movl	-8(%ebp), %eax
-	movl	-16(%ebp), %ecx
-	movb	%dl, (%eax,%ecx)
-	movb	-18(%ebp), %dl
-	movl	-8(%ebp), %eax
-	movl	-16(%ebp), %ecx
-	movb	%dl, 1(%eax,%ecx)
-	testb	$1, -1(%ebp)
-	je	LBB2_7
-# %bb.6:                                #   in Loop: Header=BB2_1 Depth=1
-	movzbl	-17(%ebp), %eax
-	movl	%eax, -28(%ebp)                 # 4-byte Spill
-	jmp	LBB2_8
-LBB2_7:                                 #   in Loop: Header=BB2_1 Depth=1
-	movzbl	-19(%ebp), %eax
-	movl	%eax, -28(%ebp)                 # 4-byte Spill
-LBB2_8:                                 #   in Loop: Header=BB2_1 Depth=1
-	movl	-28(%ebp), %eax                 # 4-byte Reload
-	movb	%al, %dl
-	movl	-8(%ebp), %eax
-	movl	-16(%ebp), %ecx
-	movb	%dl, 2(%eax,%ecx)
-	movzbl	-17(%ebp), %ecx
-	movl	24(%ebp), %eax
-	movzbl	(%eax), %edx
+	movq	40(%rsp), %rcx
+	movq	32(%rsp), %r9
+	movl	$128, %edx
 	xorl	%eax, %eax
-                                        # kill: def $al killed $al killed $eax
-	cmpl	%edx, %ecx
-	movb	%al, -29(%ebp)                  # 1-byte Spill
-	jne	LBB2_11
-# %bb.9:                                #   in Loop: Header=BB2_1 Depth=1
-	movzbl	-18(%ebp), %ecx
-	movl	24(%ebp), %eax
-	movzbl	1(%eax), %edx
-	xorl	%eax, %eax
-                                        # kill: def $al killed $al killed $eax
-	cmpl	%edx, %ecx
-	movb	%al, -29(%ebp)                  # 1-byte Spill
-	jne	LBB2_11
-# %bb.10:                               #   in Loop: Header=BB2_1 Depth=1
-	movzbl	-19(%ebp), %eax
-	movl	24(%ebp), %ecx
-	movzbl	2(%ecx), %ecx
-	cmpl	%ecx, %eax
-	sete	%al
-	movb	%al, -29(%ebp)                  # 1-byte Spill
-LBB2_11:                                #   in Loop: Header=BB2_1 Depth=1
-	movb	-29(%ebp), %dl                  # 1-byte Reload
-	movl	$255, %eax
-	xorl	%ecx, %ecx
-	testb	$1, %dl
-	cmovnel	%ecx, %eax
-	movb	%al, %dl
-	movl	-8(%ebp), %eax
-	movl	-16(%ebp), %ecx
-	movb	%dl, 3(%eax,%ecx)
-# %bb.12:                               #   in Loop: Header=BB2_1 Depth=1
-	movl	-12(%ebp), %eax
-	addl	$3, %eax
-	movl	%eax, -12(%ebp)
-	movl	-16(%ebp), %eax
-	addl	$4, %eax
-	movl	%eax, -16(%ebp)
-	jmp	LBB2_1
-LBB2_13:
-	movl	-8(%ebp), %eax
-	addl	$36, %esp
-	popl	%ebp
-	retl
+	movl	%eax, %r8d
+	callq	*__imp_SendMessageA(%rip)
+	movq	40(%rsp), %rcx
+	movq	32(%rsp), %r9
+	movl	$128, %edx
+	movl	$1, %r8d
+	callq	*__imp_SendMessageA(%rip)
+.LBB1_2:
+	nop
+	addq	$56, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_getIngameSpeed;
-	.scl	2;
-	.type	32;
-	.endef
-	.section	.rdata,"dr"
-	.p2align	2, 0x0                          # -- Begin function getIngameSpeed
-LCPI3_0:
-	.long	0x3f800000                      # float 1
-	.text
-	.globl	_getIngameSpeed
-	.p2align	4, 0x90
-_getIngameSpeed:                        # @getIngameSpeed
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	pushl	%eax
-	movss	8(%ebp), %xmm0                  # xmm0 = mem[0],zero,zero,zero
-	cvtsi2ssl	_refreshRate, %xmm1
-	movss	LCPI3_0, %xmm0                  # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-	divss	%xmm1, %xmm0
-	movss	8(%ebp), %xmm1                  # xmm1 = mem[0],zero,zero,zero
-	mulss	%xmm1, %xmm0
-	movss	%xmm0, -4(%ebp)
-	flds	-4(%ebp)
-	addl	$4, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_mouseButtonCallback;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_mouseButtonCallback            # -- Begin function mouseButtonCallback
-	.p2align	4, 0x90
-_mouseButtonCallback:                   # @mouseButtonCallback
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	movl	20(%ebp), %eax
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_keyCallback;
-	.scl	2;
-	.type	32;
-	.endef
-	.section	.rdata,"dr"
-	.p2align	2, 0x0                          # -- Begin function keyCallback
-LCPI5_0:
-	.long	0x43700000                      # float 240
-LCPI5_1:
-	.long	0x43f00000                      # float 480
-LCPI5_2:
-	.long	0x43960000                      # float 300
-	.text
-	.globl	_keyCallback
-	.p2align	4, 0x90
-_keyCallback:                           # @keyCallback
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$20, %esp
-	movl	24(%ebp), %eax
-	movl	20(%ebp), %eax
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	cmpl	$1, 20(%ebp)
-	jne	LBB5_17
-# %bb.1:
-	movl	12(%ebp), %eax
-	movl	%eax, -12(%ebp)                 # 4-byte Spill
-	subl	$82, %eax
-	je	LBB5_5
-	jmp	LBB5_18
-LBB5_18:
-	movl	-12(%ebp), %eax                 # 4-byte Reload
-	subl	$87, %eax
-	je	LBB5_2
-	jmp	LBB5_19
-LBB5_19:
-	movl	-12(%ebp), %eax                 # 4-byte Reload
-	subl	$256, %eax                      # imm = 0x100
-	je	LBB5_14
-	jmp	LBB5_20
-LBB5_20:
-	movl	-12(%ebp), %eax                 # 4-byte Reload
-	subl	$265, %eax                      # imm = 0x109
-	jne	LBB5_15
-	jmp	LBB5_2
-LBB5_2:
-	movss	LCPI5_1, %xmm0                  # xmm0 = [4.8E+2,0.0E+0,0.0E+0,0.0E+0]
-	ucomiss	_playerPosY, %xmm0
-	jbe	LBB5_4
-# %bb.3:
-	movss	LCPI5_2, %xmm0                  # xmm0 = [3.0E+2,0.0E+0,0.0E+0,0.0E+0]
-	movss	%xmm0, _playerAcceleration
-LBB5_4:
-	jmp	LBB5_16
-LBB5_5:
-	movss	LCPI5_0, %xmm0                  # xmm0 = [2.4E+2,0.0E+0,0.0E+0,0.0E+0]
-	movss	%xmm0, _playerPosY
-	xorps	%xmm0, %xmm0
-	movss	%xmm0, _playerAcceleration
-	movl	$0, -4(%ebp)
-LBB5_6:                                 # =>This Loop Header: Depth=1
-                                        #     Child Loop BB5_8 Depth 2
-	cmpl	$55, -4(%ebp)
-	jge	LBB5_13
-# %bb.7:                                #   in Loop: Header=BB5_6 Depth=1
-	movl	$0, -8(%ebp)
-LBB5_8:                                 #   Parent Loop BB5_6 Depth=1
-                                        # =>  This Inner Loop Header: Depth=2
-	cmpl	$30, -8(%ebp)
-	jge	LBB5_11
-# %bb.9:                                #   in Loop: Header=BB5_8 Depth=2
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, -4(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	movl	$0, (%eax,%ecx,4)
-# %bb.10:                               #   in Loop: Header=BB5_8 Depth=2
-	movl	-8(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -8(%ebp)
-	jmp	LBB5_8
-LBB5_11:                                #   in Loop: Header=BB5_6 Depth=1
-	jmp	LBB5_12
-LBB5_12:                                #   in Loop: Header=BB5_6 Depth=1
-	movl	-4(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -4(%ebp)
-	jmp	LBB5_6
-LBB5_13:
-	movb	$1, _playerIsAlive
-	jmp	LBB5_16
-LBB5_14:
-	movl	8(%ebp), %eax
-	movl	%eax, (%esp)
-	movl	$1, 4(%esp)
-	calll	_glfwSetWindowShouldClose
-	jmp	LBB5_16
-LBB5_15:
-	jmp	LBB5_16
-LBB5_16:
-	jmp	LBB5_17
-LBB5_17:
-	addl	$20, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_framebufferSizeCallback;
+	.def	framebufferSizeCallback;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
 	.p2align	3, 0x0                          # -- Begin function framebufferSizeCallback
-LCPI6_0:
+.LCPI2_0:
 	.quad	0x408ab00000000000              # double 854
-LCPI6_1:
+.LCPI2_1:
 	.quad	0x407e000000000000              # double 480
-LCPI6_2:
+.LCPI2_2:
 	.quad	0xbff0000000000000              # double -1
-LCPI6_3:
+.LCPI2_3:
 	.quad	0x3ff0000000000000              # double 1
 	.text
-	.globl	_framebufferSizeCallback
+	.globl	framebufferSizeCallback
 	.p2align	4, 0x90
-_framebufferSizeCallback:               # @framebufferSizeCallback
+framebufferSizeCallback:                # @framebufferSizeCallback
+.seh_proc framebufferSizeCallback
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$48, %esp
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	movl	12(%ebp), %ecx
-	movl	16(%ebp), %eax
+	subq	$72, %rsp
+	.seh_stackalloc 72
+	.seh_endprologue
+	movq	%rcx, 64(%rsp)
+	movl	%edx, 60(%rsp)
+	movl	%r8d, 56(%rsp)
+	movl	60(%rsp), %r8d
+	movl	56(%rsp), %r9d
 	xorl	%edx, %edx
-	movl	$0, (%esp)
-	movl	$0, 4(%esp)
-	movl	%ecx, 8(%esp)
-	movl	%eax, 12(%esp)
-	calll	*__imp__glViewport@16
-	subl	$16, %esp
-	movl	$5889, (%esp)                   # imm = 0x1701
-	calll	*__imp__glMatrixMode@4
-	subl	$4, %esp
-	calll	*__imp__glLoadIdentity@0
-	xorps	%xmm2, %xmm2
-	movsd	LCPI6_0, %xmm4                  # xmm4 = [8.54E+2,0.0E+0]
-	movsd	LCPI6_1, %xmm3                  # xmm3 = [4.8E+2,0.0E+0]
-	movsd	LCPI6_2, %xmm1                  # xmm1 = [-1.0E+0,0.0E+0]
-	movsd	LCPI6_3, %xmm0                  # xmm0 = [1.0E+0,0.0E+0]
-	movsd	%xmm2, (%esp)
-	movsd	%xmm4, 8(%esp)
-	movsd	%xmm3, 16(%esp)
-	movsd	%xmm2, 24(%esp)
-	movsd	%xmm1, 32(%esp)
-	movsd	%xmm0, 40(%esp)
-	calll	*__imp__glOrtho@48
-	subl	$48, %esp
-	movl	$5888, (%esp)                   # imm = 0x1700
-	calll	*__imp__glMatrixMode@4
-	subl	$4, %esp
-	calll	*__imp__glLoadIdentity@0
-	addl	$48, %esp
-	popl	%ebp
-	retl
+	movl	%edx, %ecx
+	callq	*__imp_glViewport(%rip)
+	movl	$5889, %ecx                     # imm = 0x1701
+	callq	*__imp_glMatrixMode(%rip)
+	callq	*__imp_glLoadIdentity(%rip)
+	xorps	%xmm3, %xmm3
+	movsd	.LCPI2_0(%rip), %xmm1           # xmm1 = [8.54E+2,0.0E+0]
+	movsd	.LCPI2_1(%rip), %xmm2           # xmm2 = [4.8E+2,0.0E+0]
+	movsd	.LCPI2_2(%rip), %xmm5           # xmm5 = [-1.0E+0,0.0E+0]
+	movsd	.LCPI2_3(%rip), %xmm4           # xmm4 = [1.0E+0,0.0E+0]
+	movaps	%xmm3, %xmm0
+	movsd	%xmm5, 32(%rsp)
+	movsd	%xmm4, 40(%rsp)
+	callq	*__imp_glOrtho(%rip)
+	movl	$5888, %ecx                     # imm = 0x1700
+	callq	*__imp_glMatrixMode(%rip)
+	callq	*__imp_glLoadIdentity(%rip)
+	nop
+	addq	$72, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_drawTexture;
+	.def	RGB_RGBA_convert;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	RGB_RGBA_convert                # -- Begin function RGB_RGBA_convert
+	.p2align	4, 0x90
+RGB_RGBA_convert:                       # @RGB_RGBA_convert
+.seh_proc RGB_RGBA_convert
+# %bb.0:
+	subq	$88, %rsp
+	.seh_stackalloc 88
+	.seh_endprologue
+	movq	128(%rsp), %rax
+	movq	%rcx, 80(%rsp)
+	movl	%edx, 76(%rsp)
+	movl	%r8d, 72(%rsp)
+	andb	$1, %r9b
+	movb	%r9b, 71(%rsp)
+	movl	76(%rsp), %eax
+	imull	72(%rsp), %eax
+	shll	$2, %eax
+	movslq	%eax, %rcx
+	callq	malloc
+	movq	%rax, 56(%rsp)
+	movl	$0, 52(%rsp)
+	movl	$0, 48(%rsp)
+.LBB3_1:                                # =>This Inner Loop Header: Depth=1
+	movl	52(%rsp), %eax
+	movl	76(%rsp), %ecx
+	imull	72(%rsp), %ecx
+	imull	$3, %ecx, %ecx
+	cmpl	%ecx, %eax
+	jge	.LBB3_13
+# %bb.2:                                #   in Loop: Header=BB3_1 Depth=1
+	movq	80(%rsp), %rax
+	movslq	52(%rsp), %rcx
+	movb	(%rax,%rcx), %al
+	movb	%al, 47(%rsp)
+	movq	80(%rsp), %rax
+	movl	52(%rsp), %ecx
+	addl	$1, %ecx
+	movslq	%ecx, %rcx
+	movb	(%rax,%rcx), %al
+	movb	%al, 46(%rsp)
+	movq	80(%rsp), %rax
+	movl	52(%rsp), %ecx
+	addl	$2, %ecx
+	movslq	%ecx, %rcx
+	movb	(%rax,%rcx), %al
+	movb	%al, 45(%rsp)
+	testb	$1, 71(%rsp)
+	je	.LBB3_4
+# %bb.3:                                #   in Loop: Header=BB3_1 Depth=1
+	movzbl	45(%rsp), %eax
+	movl	%eax, 40(%rsp)                  # 4-byte Spill
+	jmp	.LBB3_5
+.LBB3_4:                                #   in Loop: Header=BB3_1 Depth=1
+	movzbl	47(%rsp), %eax
+	movl	%eax, 40(%rsp)                  # 4-byte Spill
+.LBB3_5:                                #   in Loop: Header=BB3_1 Depth=1
+	movl	40(%rsp), %eax                  # 4-byte Reload
+	movb	%al, %dl
+	movq	56(%rsp), %rax
+	movslq	48(%rsp), %rcx
+	movb	%dl, (%rax,%rcx)
+	movb	46(%rsp), %dl
+	movq	56(%rsp), %rax
+	movl	48(%rsp), %ecx
+	addl	$1, %ecx
+	movslq	%ecx, %rcx
+	movb	%dl, (%rax,%rcx)
+	testb	$1, 71(%rsp)
+	je	.LBB3_7
+# %bb.6:                                #   in Loop: Header=BB3_1 Depth=1
+	movzbl	47(%rsp), %eax
+	movl	%eax, 36(%rsp)                  # 4-byte Spill
+	jmp	.LBB3_8
+.LBB3_7:                                #   in Loop: Header=BB3_1 Depth=1
+	movzbl	45(%rsp), %eax
+	movl	%eax, 36(%rsp)                  # 4-byte Spill
+.LBB3_8:                                #   in Loop: Header=BB3_1 Depth=1
+	movl	36(%rsp), %eax                  # 4-byte Reload
+	movb	%al, %dl
+	movq	56(%rsp), %rax
+	movl	48(%rsp), %ecx
+	addl	$2, %ecx
+	movslq	%ecx, %rcx
+	movb	%dl, (%rax,%rcx)
+	movzbl	47(%rsp), %ecx
+	movq	128(%rsp), %rax
+	movzbl	(%rax), %edx
+	xorl	%eax, %eax
+                                        # kill: def $al killed $al killed $eax
+	cmpl	%edx, %ecx
+	movb	%al, 35(%rsp)                   # 1-byte Spill
+	jne	.LBB3_11
+# %bb.9:                                #   in Loop: Header=BB3_1 Depth=1
+	movzbl	46(%rsp), %ecx
+	movq	128(%rsp), %rax
+	movzbl	1(%rax), %edx
+	xorl	%eax, %eax
+                                        # kill: def $al killed $al killed $eax
+	cmpl	%edx, %ecx
+	movb	%al, 35(%rsp)                   # 1-byte Spill
+	jne	.LBB3_11
+# %bb.10:                               #   in Loop: Header=BB3_1 Depth=1
+	movzbl	45(%rsp), %eax
+	movq	128(%rsp), %rcx
+	movzbl	2(%rcx), %ecx
+	cmpl	%ecx, %eax
+	sete	%al
+	movb	%al, 35(%rsp)                   # 1-byte Spill
+.LBB3_11:                               #   in Loop: Header=BB3_1 Depth=1
+	movb	35(%rsp), %dl                   # 1-byte Reload
+	movl	$255, %eax
+	xorl	%ecx, %ecx
+	testb	$1, %dl
+	cmovnel	%ecx, %eax
+	movb	%al, %dl
+	movq	56(%rsp), %rax
+	movl	48(%rsp), %ecx
+	addl	$3, %ecx
+	movslq	%ecx, %rcx
+	movb	%dl, (%rax,%rcx)
+# %bb.12:                               #   in Loop: Header=BB3_1 Depth=1
+	movl	52(%rsp), %eax
+	addl	$3, %eax
+	movl	%eax, 52(%rsp)
+	movl	48(%rsp), %eax
+	addl	$4, %eax
+	movl	%eax, 48(%rsp)
+	jmp	.LBB3_1
+.LBB3_13:
+	movq	56(%rsp), %rax
+	addq	$88, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	drawTile;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
-	.p2align	2, 0x0                          # -- Begin function drawTexture
-LCPI7_0:
+	.p2align	2, 0x0                          # -- Begin function drawTile
+.LCPI4_0:
+	.long	0x3f800000                      # float 1
+.LCPI4_1:
+	.long	0x3dcccccd                      # float 0.100000001
+	.text
+	.globl	drawTile
+	.p2align	4, 0x90
+drawTile:                               # @drawTile
+.seh_proc drawTile
+# %bb.0:
+	subq	$88, %rsp
+	.seh_stackalloc 88
+	.seh_endprologue
+	movss	144(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	movss	136(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	movss	128(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	movl	%ecx, 84(%rsp)
+	movl	%edx, 80(%rsp)
+	movl	%r8d, 76(%rsp)
+	movss	%xmm3, 72(%rsp)
+	movl	$0, 68(%rsp)
+	movl	$0, 64(%rsp)
+	movl	84(%rsp), %edx
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glBindTexture(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	xorl	%edx, %edx
+	movl	$4096, %r8d                     # imm = 0x1000
+	leaq	68(%rsp), %r9
+	callq	*__imp_glGetTexLevelParameteriv(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	xorl	%edx, %edx
+	movl	$4097, %r8d                     # imm = 0x1001
+	leaq	64(%rsp), %r9
+	callq	*__imp_glGetTexLevelParameteriv(%rip)
+	cvtsi2ssl	68(%rsp), %xmm1
+	movss	.LCPI4_1(%rip), %xmm0           # xmm0 = [1.00000001E-1,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm1, %xmm0
+	movss	%xmm0, 60(%rsp)
+	cvtsi2ssl	64(%rsp), %xmm1
+	movss	.LCPI4_1(%rip), %xmm0           # xmm0 = [1.00000001E-1,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm1, %xmm0
+	movss	%xmm0, 56(%rsp)
+	movss	72(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	cvtsi2ssl	68(%rsp), %xmm1
+	divss	%xmm1, %xmm0
+	movss	%xmm0, 52(%rsp)
+	movss	72(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	cvtsi2ssl	64(%rsp), %xmm1
+	divss	%xmm1, %xmm0
+	movss	%xmm0, 48(%rsp)
+	cvtsi2ssl	80(%rsp), %xmm0
+	movss	52(%rsp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
+	movss	60(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	mulss	%xmm2, %xmm0
+	addss	%xmm1, %xmm0
+	movss	%xmm0, 44(%rsp)
+	movl	76(%rsp), %eax
+	addl	$1, %eax
+	cvtsi2ss	%eax, %xmm0
+	movss	48(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	movd	%xmm0, %eax
+	xorl	$2147483648, %eax               # imm = 0x80000000
+	movd	%eax, %xmm0
+	mulss	%xmm1, %xmm0
+	movss	.LCPI4_0(%rip), %xmm1           # xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	addss	%xmm1, %xmm0
+	addss	56(%rsp), %xmm0
+	movss	%xmm0, 40(%rsp)
+	movss	44(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	addss	52(%rsp), %xmm0
+	movss	60(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	addss	%xmm1, %xmm1
+	subss	%xmm1, %xmm0
+	movss	%xmm0, 36(%rsp)
+	movss	40(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	addss	48(%rsp), %xmm0
+	movss	56(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	addss	%xmm1, %xmm1
+	subss	%xmm1, %xmm0
+	movss	%xmm0, 32(%rsp)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glEnable(%rip)
+	movl	84(%rsp), %edx
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glBindTexture(%rip)
+	movl	$7, %ecx
+	callq	*__imp_glBegin(%rip)
+	movss	44(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	40(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glTexCoord2f(%rip)
+	movss	128(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	movss	136(%rsp), %xmm1                # xmm1 = mem[0],zero,zero,zero
+	addss	144(%rsp), %xmm1
+	callq	*__imp_glVertex2f(%rip)
+	movss	36(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	40(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glTexCoord2f(%rip)
+	movss	128(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	addss	144(%rsp), %xmm0
+	movss	136(%rsp), %xmm1                # xmm1 = mem[0],zero,zero,zero
+	addss	144(%rsp), %xmm1
+	callq	*__imp_glVertex2f(%rip)
+	movss	36(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	32(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glTexCoord2f(%rip)
+	movss	128(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	addss	144(%rsp), %xmm0
+	movss	136(%rsp), %xmm1                # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glVertex2f(%rip)
+	movss	44(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	32(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glTexCoord2f(%rip)
+	movss	128(%rsp), %xmm0                # xmm0 = mem[0],zero,zero,zero
+	movss	136(%rsp), %xmm1                # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glVertex2f(%rip)
+	callq	*__imp_glEnd(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glDisable(%rip)
+	nop
+	addq	$88, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	drawRect;
+	.scl	2;
+	.type	32;
+	.endef
+	.section	.rdata,"dr"
+	.p2align	2, 0x0                          # -- Begin function drawRect
+.LCPI5_0:
+	.long	0x3f800000                      # float 1
+.LCPI5_1:
+	.long	0x437f0000                      # float 255
+	.text
+	.globl	drawRect
+	.p2align	4, 0x90
+drawRect:                               # @drawRect
+.seh_proc drawRect
+# %bb.0:
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movq	96(%rsp), %rax
+	movss	%xmm0, 52(%rsp)
+	movss	%xmm1, 48(%rsp)
+	movss	%xmm2, 44(%rsp)
+	movss	%xmm3, 40(%rsp)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glDisable(%rip)
+	movq	96(%rsp), %rax
+	movzbl	(%rax), %eax
+	cvtsi2ss	%eax, %xmm0
+	movss	.LCPI5_1(%rip), %xmm1           # xmm1 = [2.55E+2,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm1, %xmm0
+	movq	96(%rsp), %rax
+	movzbl	1(%rax), %eax
+	cvtsi2ss	%eax, %xmm1
+	movss	.LCPI5_1(%rip), %xmm2           # xmm2 = [2.55E+2,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm2, %xmm1
+	movq	96(%rsp), %rax
+	movzbl	2(%rax), %eax
+	cvtsi2ss	%eax, %xmm2
+	movss	.LCPI5_1(%rip), %xmm3           # xmm3 = [2.55E+2,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm3, %xmm2
+	movq	96(%rsp), %rax
+	movzbl	3(%rax), %eax
+	cvtsi2ss	%eax, %xmm3
+	movss	.LCPI5_1(%rip), %xmm4           # xmm4 = [2.55E+2,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm4, %xmm3
+	callq	*__imp_glColor4f(%rip)
+	movl	$7, %ecx
+	callq	*__imp_glBegin(%rip)
+	movss	52(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	48(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glVertex2f(%rip)
+	movss	52(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	addss	44(%rsp), %xmm0
+	movss	48(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	callq	*__imp_glVertex2f(%rip)
+	movss	52(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	addss	44(%rsp), %xmm0
+	movss	48(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	addss	40(%rsp), %xmm1
+	callq	*__imp_glVertex2f(%rip)
+	movss	52(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	48(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	addss	40(%rsp), %xmm1
+	callq	*__imp_glVertex2f(%rip)
+	callq	*__imp_glEnd(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glEnable(%rip)
+	movss	.LCPI5_0(%rip), %xmm3           # xmm3 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm3, %xmm0
+	movaps	%xmm3, %xmm1
+	movaps	%xmm3, %xmm2
+	callq	*__imp_glColor4f(%rip)
+	nop
+	addq	$56, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	indexOf;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	indexOf                         # -- Begin function indexOf
+	.p2align	4, 0x90
+indexOf:                                # @indexOf
+.seh_proc indexOf
+# %bb.0:
+	subq	$24, %rsp
+	.seh_stackalloc 24
+	.seh_endprologue
+	movq	%rcx, 8(%rsp)
+	movb	%dl, 7(%rsp)
+	movl	$0, (%rsp)
+.LBB6_1:                                # =>This Inner Loop Header: Depth=1
+	movq	8(%rsp), %rax
+	movslq	(%rsp), %rcx
+	movsbl	(%rax,%rcx), %eax
+	cmpl	$0, %eax
+	je	.LBB6_6
+# %bb.2:                                #   in Loop: Header=BB6_1 Depth=1
+	movq	8(%rsp), %rax
+	movslq	(%rsp), %rcx
+	movsbl	(%rax,%rcx), %eax
+	movsbl	7(%rsp), %ecx
+	cmpl	%ecx, %eax
+	jne	.LBB6_4
+# %bb.3:
+	movl	(%rsp), %eax
+	movl	%eax, 20(%rsp)
+	jmp	.LBB6_7
+.LBB6_4:                                #   in Loop: Header=BB6_1 Depth=1
+	jmp	.LBB6_5
+.LBB6_5:                                #   in Loop: Header=BB6_1 Depth=1
+	movl	(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, (%rsp)
+	jmp	.LBB6_1
+.LBB6_6:
+	movl	$-1, 20(%rsp)
+.LBB6_7:
+	movl	20(%rsp), %eax
+	addq	$24, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	showText;
+	.scl	2;
+	.type	32;
+	.endef
+	.section	.rdata,"dr"
+	.p2align	2, 0x0                          # -- Begin function showText
+.LCPI7_0:
+	.long	0x41000000                      # float 8
+	.text
+	.globl	showText
+	.p2align	4, 0x90
+showText:                               # @showText
+.seh_proc showText
+# %bb.0:
+	subq	$88, %rsp
+	.seh_stackalloc 88
+	.seh_endprologue
+	movl	128(%rsp), %eax
+	movq	%rcx, 80(%rsp)
+	movl	%edx, 76(%rsp)
+	movl	%r8d, 72(%rsp)
+	movl	%r9d, 68(%rsp)
+	movl	$0, 64(%rsp)
+.LBB7_1:                                # =>This Inner Loop Header: Depth=1
+	movq	80(%rsp), %rax
+	movslq	64(%rsp), %rcx
+	movsbl	(%rax,%rcx), %eax
+	cmpl	$0, %eax
+	je	.LBB7_6
+# %bb.2:                                #   in Loop: Header=BB7_1 Depth=1
+	movq	fontOrder(%rip), %rcx
+	movq	80(%rsp), %rax
+	movslq	64(%rsp), %rdx
+	movb	(%rax,%rdx), %dl
+	callq	indexOf
+	movl	%eax, 60(%rsp)
+	cmpl	$-1, 60(%rsp)
+	je	.LBB7_4
+# %bb.3:                                #   in Loop: Header=BB7_1 Depth=1
+	movl	tileTexture3(%rip), %ecx
+	movl	60(%rsp), %edx
+	movl	128(%rsp), %r8d
+	movl	76(%rsp), %eax
+	movl	64(%rsp), %r9d
+	imull	68(%rsp), %r9d
+	addl	%r9d, %eax
+	cvtsi2ss	%eax, %xmm2
+	cvtsi2ssl	72(%rsp), %xmm1
+	cvtsi2ssl	68(%rsp), %xmm0
+	movss	.LCPI7_0(%rip), %xmm3           # xmm3 = [8.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+.LBB7_4:                                #   in Loop: Header=BB7_1 Depth=1
+	jmp	.LBB7_5
+.LBB7_5:                                #   in Loop: Header=BB7_1 Depth=1
+	movl	64(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 64(%rsp)
+	jmp	.LBB7_1
+.LBB7_6:
+	addq	$88, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	showNumber;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	showNumber                      # -- Begin function showNumber
+	.p2align	4, 0x90
+showNumber:                             # @showNumber
+.seh_proc showNumber
+# %bb.0:
+	subq	$72, %rsp
+	.seh_stackalloc 72
+	.seh_endprologue
+	movl	112(%rsp), %eax
+	movl	%ecx, 68(%rsp)
+	movl	%edx, 64(%rsp)
+	movl	%r8d, 60(%rsp)
+	movl	%r9d, 56(%rsp)
+	leaq	44(%rsp), %rcx
+	movl	68(%rsp), %r9d
+	leaq	.L.str.1(%rip), %r8
+	movl	$12, %edx
+	callq	snprintf
+	leaq	44(%rsp), %rcx
+	movl	64(%rsp), %edx
+	movl	60(%rsp), %r8d
+	movl	56(%rsp), %r9d
+	movl	112(%rsp), %eax
+	movl	%eax, 32(%rsp)
+	callq	showText
+	nop
+	addq	$72, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	getBackgroundBlock;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	getBackgroundBlock              # -- Begin function getBackgroundBlock
+	.p2align	4, 0x90
+getBackgroundBlock:                     # @getBackgroundBlock
+# %bb.0:
+	movl	$23, %eax
+	retq
+                                        # -- End function
+	.def	generateNewLineBackground;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	generateNewLineBackground       # -- Begin function generateNewLineBackground
+	.p2align	4, 0x90
+generateNewLineBackground:              # @generateNewLineBackground
+.seh_proc generateNewLineBackground
+# %bb.0:
+	subq	$40, %rsp
+	.seh_stackalloc 40
+	.seh_endprologue
+	movl	%ecx, 36(%rsp)
+	movl	$0, 32(%rsp)
+.LBB10_1:                               # =>This Inner Loop Header: Depth=1
+	cmpl	$30, 32(%rsp)
+	jge	.LBB10_4
+# %bb.2:                                #   in Loop: Header=BB10_1 Depth=1
+	callq	getBackgroundBlock
+	movl	%eax, %edx
+	movslq	36(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	32(%rsp), %rcx
+	movl	%edx, (%rax,%rcx,4)
+# %bb.3:                                #   in Loop: Header=BB10_1 Depth=1
+	movl	32(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 32(%rsp)
+	jmp	.LBB10_1
+.LBB10_4:
+	addq	$40, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	getForegroundBlock;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	getForegroundBlock              # -- Begin function getForegroundBlock
+	.p2align	4, 0x90
+getForegroundBlock:                     # @getForegroundBlock
+.seh_proc getForegroundBlock
+# %bb.0:
+	subq	$24, %rsp
+	.seh_stackalloc 24
+	.seh_endprologue
+	andb	$1, %cl
+	movb	%cl, 19(%rsp)
+	andb	$1, %dl
+	movb	%dl, 18(%rsp)
+	andb	$1, %r8b
+	movb	%r8b, 17(%rsp)
+	andb	$1, %r9b
+	movb	%r9b, 16(%rsp)
+	movl	$0, 12(%rsp)
+	testb	$1, 19(%rsp)
+	je	.LBB11_2
+# %bb.1:
+	movl	12(%rsp), %eax
+	orl	$8, %eax
+	movl	%eax, 12(%rsp)
+.LBB11_2:
+	testb	$1, 18(%rsp)
+	je	.LBB11_4
+# %bb.3:
+	movl	12(%rsp), %eax
+	orl	$4, %eax
+	movl	%eax, 12(%rsp)
+.LBB11_4:
+	testb	$1, 17(%rsp)
+	je	.LBB11_6
+# %bb.5:
+	movl	12(%rsp), %eax
+	orl	$2, %eax
+	movl	%eax, 12(%rsp)
+.LBB11_6:
+	testb	$1, 16(%rsp)
+	je	.LBB11_8
+# %bb.7:
+	movl	12(%rsp), %eax
+	orl	$1, %eax
+	movl	%eax, 12(%rsp)
+.LBB11_8:
+	movl	12(%rsp), %eax
+	addl	$-2, %eax
+	movl	%eax, %ecx
+	movq	%rcx, (%rsp)                    # 8-byte Spill
+	subl	$13, %eax
+	ja	.LBB11_21
+# %bb.23:
+	movq	(%rsp), %rax                    # 8-byte Reload
+	leaq	.LJTI11_0(%rip), %rcx
+	movslq	(%rcx,%rax,4), %rax
+	addq	%rcx, %rax
+	jmpq	*%rax
+.LBB11_9:
+	movl	$1, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_10:
+	movl	$3, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_11:
+	movl	$5, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_12:
+	movl	$7, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_13:
+	movl	$9, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_14:
+	movl	$1, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_15:
+	movl	$1, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_16:
+	movl	$1, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_17:
+	movl	$17, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_18:
+	movl	$15, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_19:
+	movl	$13, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_20:
+	movl	$11, 20(%rsp)
+	jmp	.LBB11_22
+.LBB11_21:
+	movl	$6, 20(%rsp)
+.LBB11_22:
+	movl	20(%rsp), %eax
+	addq	$24, %rsp
+	retq
+	.section	.rdata,"dr"
+	.p2align	2, 0x0
+.LJTI11_0:
+	.long	.LBB11_13-.LJTI11_0
+	.long	.LBB11_11-.LJTI11_0
+	.long	.LBB11_21-.LJTI11_0
+	.long	.LBB11_21-.LJTI11_0
+	.long	.LBB11_12-.LJTI11_0
+	.long	.LBB11_10-.LJTI11_0
+	.long	.LBB11_20-.LJTI11_0
+	.long	.LBB11_19-.LJTI11_0
+	.long	.LBB11_14-.LJTI11_0
+	.long	.LBB11_15-.LJTI11_0
+	.long	.LBB11_18-.LJTI11_0
+	.long	.LBB11_17-.LJTI11_0
+	.long	.LBB11_16-.LJTI11_0
+	.long	.LBB11_9-.LJTI11_0
+	.text
+	.seh_endproc
+                                        # -- End function
+	.def	generateNewLineForeground;
+	.scl	2;
+	.type	32;
+	.endef
+	.globl	generateNewLineForeground       # -- Begin function generateNewLineForeground
+	.p2align	4, 0x90
+generateNewLineForeground:              # @generateNewLineForeground
+.seh_proc generateNewLineForeground
+# %bb.0:
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movl	%ecx, 52(%rsp)
+	movl	$0, 48(%rsp)
+.LBB12_1:                               # =>This Inner Loop Header: Depth=1
+	cmpl	$30, 48(%rsp)
+	jge	.LBB12_4
+# %bb.2:                                #   in Loop: Header=BB12_1 Depth=1
+	movslq	52(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	48(%rsp), %rcx
+	movl	$0, (%rax,%rcx,4)
+# %bb.3:                                #   in Loop: Header=BB12_1 Depth=1
+	movl	48(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 48(%rsp)
+	jmp	.LBB12_1
+.LBB12_4:
+	cmpl	$0, 52(%rsp)
+	jne	.LBB12_6
+# %bb.5:
+	callq	rand
+	movl	$3, %ecx
+	cltd
+	idivl	%ecx
+	addl	$1, %edx
+	movl	%edx, directionSurface(%rip)
+	callq	rand
+	movl	$3, %ecx
+	cltd
+	idivl	%ecx
+	addl	$1, %edx
+	movl	%edx, directionRoof(%rip)
+	callq	rand
+	movl	$6, %ecx
+	cltd
+	idivl	%ecx
+	addl	$24, %edx
+	movl	%edx, surfaceBlockY(%rip)
+	callq	rand
+	movl	$5, %ecx
+	cltd
+	idivl	%ecx
+	addl	$0, %edx
+	movl	%edx, roofBlockY(%rip)
+	jmp	.LBB12_45
+.LBB12_6:
+	callq	rand
+	movl	$101, %ecx
+	cltd
+	idivl	%ecx
+	addl	$0, %edx
+	cmpl	$80, %edx
+	jle	.LBB12_8
+# %bb.7:
+	callq	rand
+	movl	$3, %ecx
+	cltd
+	idivl	%ecx
+	addl	$1, %edx
+	movl	%edx, directionSurface(%rip)
+.LBB12_8:
+	movl	lastSurfaceBlockY(%rip), %eax
+	movslq	difficulty(%rip), %rdx
+	leaq	difficultyValues(%rip), %rcx
+	cmpl	(%rcx,%rdx,4), %eax
+	jge	.LBB12_10
+# %bb.9:
+	callq	rand
+	movl	$2, %ecx
+	cltd
+	idivl	%ecx
+	addl	$2, %edx
+	movl	%edx, directionSurface(%rip)
+.LBB12_10:
+	cmpl	$25, lastSurfaceBlockY(%rip)
+	jle	.LBB12_12
+# %bb.11:
+	callq	rand
+	movl	$2, %ecx
+	cltd
+	idivl	%ecx
+	addl	$1, %edx
+	movl	%edx, directionSurface(%rip)
+.LBB12_12:
+	cmpl	$28, lastSurfaceBlockY(%rip)
+	jge	.LBB12_22
+# %bb.13:
+	cmpl	$1, directionSurface(%rip)
+	jne	.LBB12_15
+# %bb.14:
+	callq	rand
+	movl	lastSurfaceBlockY(%rip), %ecx
+	movl	lastSurfaceBlockY(%rip), %edx
+	subl	$2, %edx
+	subl	%edx, %ecx
+	addl	$1, %ecx
+	cltd
+	idivl	%ecx
+	movl	%edx, %eax
+	addl	lastSurfaceBlockY(%rip), %eax
+	subl	$2, %eax
+	movl	%eax, surfaceBlockY(%rip)
+	jmp	.LBB12_21
+.LBB12_15:
+	cmpl	$2, directionSurface(%rip)
+	jne	.LBB12_17
+# %bb.16:
+	callq	rand
+	movl	lastSurfaceBlockY(%rip), %ecx
+	addl	$1, %ecx
+	movl	lastSurfaceBlockY(%rip), %edx
+	subl	$1, %edx
+	subl	%edx, %ecx
+	addl	$1, %ecx
+	cltd
+	idivl	%ecx
+	movl	%edx, %eax
+	addl	lastSurfaceBlockY(%rip), %eax
+	subl	$1, %eax
+	movl	%eax, surfaceBlockY(%rip)
+	jmp	.LBB12_20
+.LBB12_17:
+	cmpl	$3, directionSurface(%rip)
+	jne	.LBB12_19
+# %bb.18:
+	callq	rand
+	movl	lastSurfaceBlockY(%rip), %ecx
+	addl	$2, %ecx
+	subl	lastSurfaceBlockY(%rip), %ecx
+	addl	$1, %ecx
+	cltd
+	idivl	%ecx
+	movl	%edx, %eax
+	addl	lastSurfaceBlockY(%rip), %eax
+	addl	$1, %eax
+	movl	%eax, surfaceBlockY(%rip)
+.LBB12_19:
+	jmp	.LBB12_20
+.LBB12_20:
+	jmp	.LBB12_21
+.LBB12_21:
+	jmp	.LBB12_23
+.LBB12_22:
+	callq	rand
+	movl	$3, %ecx
+	cltd
+	idivl	%ecx
+	addl	$27, %edx
+	movl	%edx, surfaceBlockY(%rip)
+.LBB12_23:
+	callq	rand
+	movl	$101, %ecx
+	cltd
+	idivl	%ecx
+	addl	$0, %edx
+	cmpl	$85, %edx
+	jle	.LBB12_25
+# %bb.24:
+	callq	rand
+	movl	$3, %ecx
+	cltd
+	idivl	%ecx
+	addl	$1, %edx
+	movl	%edx, directionRoof(%rip)
+.LBB12_25:
+	movl	surfaceBlockY(%rip), %eax
+	subl	lastRoofBlockY(%rip), %eax
+	movslq	difficulty(%rip), %rdx
+	leaq	difficultyValues(%rip), %rcx
+	cmpl	40(%rcx,%rdx,4), %eax
+	jle	.LBB12_27
+# %bb.26:
+	callq	rand
+	movl	$2, %ecx
+	cltd
+	idivl	%ecx
+	addl	$2, %edx
+	movl	%edx, directionRoof(%rip)
+	jmp	.LBB12_31
+.LBB12_27:
+	movl	surfaceBlockY(%rip), %eax
+	subl	lastRoofBlockY(%rip), %eax
+	movslq	difficulty(%rip), %rdx
+	leaq	difficultyValues(%rip), %rcx
+	cmpl	80(%rcx,%rdx,4), %eax
+	jle	.LBB12_29
+# %bb.28:
+	callq	rand
+	movl	$2, %ecx
+	cltd
+	idivl	%ecx
+	addl	$1, %edx
+	movl	%edx, directionRoof(%rip)
+	jmp	.LBB12_30
+.LBB12_29:
+	movl	$1, directionRoof(%rip)
+.LBB12_30:
+	jmp	.LBB12_31
+.LBB12_31:
+	cmpl	$3, lastRoofBlockY(%rip)
+	jge	.LBB12_33
+# %bb.32:
+	callq	rand
+	movl	$2, %ecx
+	cltd
+	idivl	%ecx
+	addl	$2, %edx
+	movl	%edx, directionRoof(%rip)
+.LBB12_33:
+	cmpl	$1, lastRoofBlockY(%rip)
+	jle	.LBB12_43
+# %bb.34:
+	cmpl	$1, directionRoof(%rip)
+	jne	.LBB12_36
+# %bb.35:
+	callq	rand
+	movl	lastRoofBlockY(%rip), %ecx
+	subl	$1, %ecx
+	movl	lastRoofBlockY(%rip), %edx
+	subl	$2, %edx
+	subl	%edx, %ecx
+	addl	$1, %ecx
+	cltd
+	idivl	%ecx
+	movl	%edx, %eax
+	addl	lastRoofBlockY(%rip), %eax
+	subl	$2, %eax
+	movl	%eax, roofBlockY(%rip)
+	jmp	.LBB12_42
+.LBB12_36:
+	cmpl	$2, directionRoof(%rip)
+	jne	.LBB12_38
+# %bb.37:
+	callq	rand
+	movl	lastRoofBlockY(%rip), %ecx
+	addl	$1, %ecx
+	movl	lastRoofBlockY(%rip), %edx
+	subl	$1, %edx
+	subl	%edx, %ecx
+	addl	$1, %ecx
+	cltd
+	idivl	%ecx
+	movl	%edx, %eax
+	addl	lastRoofBlockY(%rip), %eax
+	subl	$1, %eax
+	movl	%eax, roofBlockY(%rip)
+	jmp	.LBB12_41
+.LBB12_38:
+	cmpl	$3, directionRoof(%rip)
+	jne	.LBB12_40
+# %bb.39:
+	callq	rand
+	movl	lastRoofBlockY(%rip), %ecx
+	addl	$2, %ecx
+	subl	lastRoofBlockY(%rip), %ecx
+	addl	$1, %ecx
+	addl	$1, %ecx
+	cltd
+	idivl	%ecx
+	movl	%edx, %eax
+	addl	lastRoofBlockY(%rip), %eax
+	addl	$1, %eax
+	movl	%eax, roofBlockY(%rip)
+.LBB12_40:
+	jmp	.LBB12_41
+.LBB12_41:
+	jmp	.LBB12_42
+.LBB12_42:
+	jmp	.LBB12_44
+.LBB12_43:
+	callq	rand
+	movl	$3, %ecx
+	cltd
+	idivl	%ecx
+	addl	$0, %edx
+	movl	%edx, roofBlockY(%rip)
+.LBB12_44:
+	jmp	.LBB12_45
+.LBB12_45:
+	movl	$0, 44(%rsp)
+.LBB12_46:                              # =>This Inner Loop Header: Depth=1
+	cmpl	$30, 44(%rsp)
+	jge	.LBB12_52
+# %bb.47:                               #   in Loop: Header=BB12_46 Depth=1
+	movl	44(%rsp), %eax
+	cmpl	roofBlockY(%rip), %eax
+	jle	.LBB12_49
+# %bb.48:                               #   in Loop: Header=BB12_46 Depth=1
+	movl	44(%rsp), %eax
+	cmpl	surfaceBlockY(%rip), %eax
+	jl	.LBB12_50
+.LBB12_49:                              #   in Loop: Header=BB12_46 Depth=1
+	movslq	52(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	44(%rsp), %rcx
+	movl	$1, (%rax,%rcx,4)
+.LBB12_50:                              #   in Loop: Header=BB12_46 Depth=1
+	jmp	.LBB12_51
+.LBB12_51:                              #   in Loop: Header=BB12_46 Depth=1
+	movl	44(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 44(%rsp)
+	jmp	.LBB12_46
+.LBB12_52:
+	cmpl	$0, 52(%rsp)
+	je	.LBB12_65
+# %bb.53:
+	movl	$0, 40(%rsp)
+.LBB12_54:                              # =>This Inner Loop Header: Depth=1
+	cmpl	$30, 40(%rsp)
+	jge	.LBB12_64
+# %bb.55:                               #   in Loop: Header=BB12_54 Depth=1
+	movl	40(%rsp), %eax
+	cmpl	lastRoofBlockY(%rip), %eax
+	jl	.LBB12_57
+# %bb.56:                               #   in Loop: Header=BB12_54 Depth=1
+	movl	40(%rsp), %eax
+	cmpl	lastSurfaceBlockY(%rip), %eax
+	jle	.LBB12_58
+.LBB12_57:                              #   in Loop: Header=BB12_54 Depth=1
+	movslq	52(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %edx
+	xorl	%eax, %eax
+	movl	$1, %ecx
+	cmpl	$0, %edx
+	cmovnel	%ecx, %eax
+	cmpl	$0, %eax
+	setne	%dl
+	movl	52(%rsp), %eax
+	subl	$2, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %r8d
+	xorl	%eax, %eax
+	movl	$1, %ecx
+	cmpl	$0, %r8d
+	cmovnel	%ecx, %eax
+	cmpl	$0, %eax
+	setne	%r9b
+	andb	$1, %dl
+	andb	$1, %r9b
+	movb	$1, %r8b
+	movb	%r8b, %cl
+	callq	getForegroundBlock
+	movl	%eax, %edx
+	movl	52(%rsp), %eax
+	subl	$1, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	%edx, (%rax,%rcx,4)
+.LBB12_58:                              #   in Loop: Header=BB12_54 Depth=1
+	movl	40(%rsp), %eax
+	cmpl	lastRoofBlockY(%rip), %eax
+	jne	.LBB12_60
+# %bb.59:                               #   in Loop: Header=BB12_54 Depth=1
+	movslq	52(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %edx
+	xorl	%eax, %eax
+	movl	$1, %ecx
+	cmpl	$0, %edx
+	cmovnel	%ecx, %eax
+	cmpl	$0, %eax
+	setne	%dl
+	movl	52(%rsp), %eax
+	subl	$2, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %r8d
+	xorl	%eax, %eax
+	movl	$1, %ecx
+	cmpl	$0, %r8d
+	cmovnel	%ecx, %eax
+	cmpl	$0, %eax
+	setne	%r9b
+	andb	$1, %dl
+	andb	$1, %r9b
+	xorl	%eax, %eax
+	movb	%al, %r8b
+	movb	$1, %cl
+	callq	getForegroundBlock
+	movl	%eax, %edx
+	movl	52(%rsp), %eax
+	subl	$1, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	%edx, (%rax,%rcx,4)
+.LBB12_60:                              #   in Loop: Header=BB12_54 Depth=1
+	movl	40(%rsp), %eax
+	cmpl	lastSurfaceBlockY(%rip), %eax
+	jne	.LBB12_62
+# %bb.61:                               #   in Loop: Header=BB12_54 Depth=1
+	movslq	52(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %edx
+	xorl	%eax, %eax
+	movl	$1, %ecx
+	cmpl	$0, %edx
+	cmovnel	%ecx, %eax
+	cmpl	$0, %eax
+	setne	%dl
+	movl	52(%rsp), %eax
+	subl	$2, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %r8d
+	xorl	%eax, %eax
+	movl	$1, %ecx
+	cmpl	$0, %r8d
+	cmovnel	%ecx, %eax
+	cmpl	$0, %eax
+	setne	%r9b
+	xorl	%eax, %eax
+	andb	$1, %dl
+	andb	$1, %r9b
+	xorl	%eax, %eax
+	movb	%al, %cl
+	movb	$1, %r8b
+	callq	getForegroundBlock
+	movl	%eax, %edx
+	movl	52(%rsp), %eax
+	subl	$1, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	%edx, (%rax,%rcx,4)
+.LBB12_62:                              #   in Loop: Header=BB12_54 Depth=1
+	jmp	.LBB12_63
+.LBB12_63:                              #   in Loop: Header=BB12_54 Depth=1
+	movl	40(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 40(%rsp)
+	jmp	.LBB12_54
+.LBB12_64:
+	jmp	.LBB12_65
+.LBB12_65:
+	movl	surfaceBlockY(%rip), %eax
+	movl	%eax, lastSurfaceBlockY(%rip)
+	movl	roofBlockY(%rip), %eax
+	movl	%eax, lastRoofBlockY(%rip)
+	addq	$56, %rsp
+	retq
+	.seh_endproc
+                                        # -- End function
+	.def	updateWorld;
+	.scl	2;
+	.type	32;
+	.endef
+	.section	.rdata,"dr"
+	.p2align	2, 0x0                          # -- Begin function updateWorld
+.LCPI13_0:
+	.long	0xc1800000                      # float -16
+.LCPI13_1:
+	.long	0xc2700000                      # float -60
+.LCPI13_2:
 	.long	0x3f800000                      # float 1
 	.text
-	.globl	_drawTexture
+	.globl	updateWorld
 	.p2align	4, 0x90
-_drawTexture:                           # @drawTexture
+updateWorld:                            # @updateWorld
+.seh_proc updateWorld
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$24, %esp
-	movss	16(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	12(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movl	8(%ebp), %eax
-	movl	$0, -4(%ebp)
-	movl	$0, -8(%ebp)
-	movl	8(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	xorl	%eax, %eax
-	leal	-4(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$4096, 8(%esp)                  # imm = 0x1000
-	movl	%eax, 12(%esp)
-	calll	*__imp__glGetTexLevelParameteriv@16
-	subl	$16, %esp
-	xorl	%eax, %eax
-	leal	-8(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$4097, 8(%esp)                  # imm = 0x1001
-	movl	%eax, 12(%esp)
-	calll	*__imp__glGetTexLevelParameteriv@16
-	subl	$16, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	calll	*__imp__glEnable@4
-	subl	$4, %esp
-	movl	8(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	movl	$7, (%esp)
-	calll	*__imp__glBegin@4
-	subl	$4, %esp
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movss	.LCPI13_0(%rip), %xmm0          # xmm0 = [-1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	ucomiss	mapX(%rip), %xmm0
+	jb	.LBB13_47
+# %bb.1:
 	xorps	%xmm0, %xmm0
-	movss	%xmm0, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	12(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	movss	16(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	cvtsi2ssl	-8(%ebp), %xmm2
-	addss	%xmm2, %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	movss	LCPI7_0, %xmm1                  # xmm1 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-	xorps	%xmm0, %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	12(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	cvtsi2ssl	-4(%ebp), %xmm0
-	addss	%xmm0, %xmm1
-	movss	16(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	cvtsi2ssl	-8(%ebp), %xmm2
-	addss	%xmm2, %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	movss	LCPI7_0, %xmm0                  # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-	movss	%xmm0, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	12(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	cvtsi2ssl	-4(%ebp), %xmm0
-	addss	%xmm0, %xmm1
-	movss	16(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	xorps	%xmm1, %xmm1
-	movss	LCPI7_0, %xmm0                  # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	12(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	movss	16(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	calll	*__imp__glEnd@0
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	calll	*__imp__glDisable@4
-	addl	$20, %esp
-	popl	%ebp
-	retl
+	movss	%xmm0, mapX(%rip)
+	movl	$1, 52(%rsp)
+.LBB13_2:                               # =>This Loop Header: Depth=1
+                                        #     Child Loop BB13_4 Depth 2
+	cmpl	$56, 52(%rsp)
+	jge	.LBB13_9
+# %bb.3:                                #   in Loop: Header=BB13_2 Depth=1
+	movl	$0, 48(%rsp)
+.LBB13_4:                               #   Parent Loop BB13_2 Depth=1
+                                        # =>  This Inner Loop Header: Depth=2
+	cmpl	$30, 48(%rsp)
+	jge	.LBB13_7
+# %bb.5:                                #   in Loop: Header=BB13_4 Depth=2
+	movslq	52(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	48(%rsp), %rcx
+	movl	(%rax,%rcx,4), %edx
+	movl	52(%rsp), %eax
+	subl	$1, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	48(%rsp), %rcx
+	movl	%edx, (%rax,%rcx,4)
+# %bb.6:                                #   in Loop: Header=BB13_4 Depth=2
+	movl	48(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 48(%rsp)
+	jmp	.LBB13_4
+.LBB13_7:                               #   in Loop: Header=BB13_2 Depth=1
+	jmp	.LBB13_8
+.LBB13_8:                               #   in Loop: Header=BB13_2 Depth=1
+	movl	52(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 52(%rsp)
+	jmp	.LBB13_2
+.LBB13_9:
+	movl	$1, 44(%rsp)
+.LBB13_10:                              # =>This Loop Header: Depth=1
+                                        #     Child Loop BB13_12 Depth 2
+	cmpl	$56, 44(%rsp)
+	jge	.LBB13_17
+# %bb.11:                               #   in Loop: Header=BB13_10 Depth=1
+	movl	$0, 40(%rsp)
+.LBB13_12:                              #   Parent Loop BB13_10 Depth=1
+                                        # =>  This Inner Loop Header: Depth=2
+	cmpl	$30, 40(%rsp)
+	jge	.LBB13_15
+# %bb.13:                               #   in Loop: Header=BB13_12 Depth=2
+	movslq	44(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	(%rax,%rcx,4), %edx
+	movl	44(%rsp), %eax
+	subl	$1, %eax
+	movslq	%eax, %rcx
+	leaq	grid(%rip), %rax
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	40(%rsp), %rcx
+	movl	%edx, (%rax,%rcx,4)
+# %bb.14:                               #   in Loop: Header=BB13_12 Depth=2
+	movl	40(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 40(%rsp)
+	jmp	.LBB13_12
+.LBB13_15:                              #   in Loop: Header=BB13_10 Depth=1
+	jmp	.LBB13_16
+.LBB13_16:                              #   in Loop: Header=BB13_10 Depth=1
+	movl	44(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 44(%rsp)
+	jmp	.LBB13_10
+.LBB13_17:
+	movl	$55, %ecx
+	callq	generateNewLineForeground
+	movl	$55, %ecx
+	callq	generateNewLineBackground
+	movl	score(%rip), %eax
+	addl	$1, %eax
+	movl	%eax, score(%rip)
+	cmpl	$50, score(%rip)
+	jge	.LBB13_19
+# %bb.18:
+	movl	$0, difficulty(%rip)
+	jmp	.LBB13_46
+.LBB13_19:
+	cmpl	$100, score(%rip)
+	jge	.LBB13_21
+# %bb.20:
+	movl	$1, difficulty(%rip)
+	jmp	.LBB13_45
+.LBB13_21:
+	cmpl	$150, score(%rip)
+	jge	.LBB13_23
+# %bb.22:
+	movl	$2, difficulty(%rip)
+	jmp	.LBB13_44
+.LBB13_23:
+	cmpl	$200, score(%rip)
+	jge	.LBB13_25
+# %bb.24:
+	movl	$3, difficulty(%rip)
+	jmp	.LBB13_43
+.LBB13_25:
+	cmpl	$250, score(%rip)
+	jge	.LBB13_27
+# %bb.26:
+	movl	$4, difficulty(%rip)
+	jmp	.LBB13_42
+.LBB13_27:
+	cmpl	$300, score(%rip)               # imm = 0x12C
+	jge	.LBB13_29
+# %bb.28:
+	movl	$5, difficulty(%rip)
+	jmp	.LBB13_41
+.LBB13_29:
+	cmpl	$350, score(%rip)               # imm = 0x15E
+	jge	.LBB13_31
+# %bb.30:
+	movl	$6, difficulty(%rip)
+	jmp	.LBB13_40
+.LBB13_31:
+	cmpl	$400, score(%rip)               # imm = 0x190
+	jge	.LBB13_33
+# %bb.32:
+	movl	$7, difficulty(%rip)
+	jmp	.LBB13_39
+.LBB13_33:
+	cmpl	$450, score(%rip)               # imm = 0x1C2
+	jge	.LBB13_35
+# %bb.34:
+	movl	$8, difficulty(%rip)
+	jmp	.LBB13_38
+.LBB13_35:
+	cmpl	$449, score(%rip)               # imm = 0x1C1
+	jle	.LBB13_37
+# %bb.36:
+	movl	$9, difficulty(%rip)
+.LBB13_37:
+	jmp	.LBB13_38
+.LBB13_38:
+	jmp	.LBB13_39
+.LBB13_39:
+	jmp	.LBB13_40
+.LBB13_40:
+	jmp	.LBB13_41
+.LBB13_41:
+	jmp	.LBB13_42
+.LBB13_42:
+	jmp	.LBB13_43
+.LBB13_43:
+	jmp	.LBB13_44
+.LBB13_44:
+	jmp	.LBB13_45
+.LBB13_45:
+	jmp	.LBB13_46
+.LBB13_46:
+	jmp	.LBB13_47
+.LBB13_47:
+	cvtsi2ssl	refreshRate(%rip), %xmm1
+	movss	.LCPI13_2(%rip), %xmm0          # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm1, %xmm0
+	movss	%xmm0, 36(%rsp)
+	movss	36(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movss	mapX(%rip), %xmm1               # xmm1 = mem[0],zero,zero,zero
+	movss	.LCPI13_1(%rip), %xmm2          # xmm2 = [-6.0E+1,0.0E+0,0.0E+0,0.0E+0]
+	mulss	%xmm2, %xmm0
+	addss	%xmm1, %xmm0
+	movss	%xmm0, mapX(%rip)
+	addq	$56, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_proofCollision;
+	.def	drawWorld;
+	.scl	2;
+	.type	32;
+	.endef
+	.section	.rdata,"dr"
+	.p2align	2, 0x0                          # -- Begin function drawWorld
+.LCPI14_0:
+	.long	0x41800000                      # float 16
+	.text
+	.globl	drawWorld
+	.p2align	4, 0x90
+drawWorld:                              # @drawWorld
+.seh_proc drawWorld
+# %bb.0:
+	subq	$72, %rsp
+	.seh_stackalloc 72
+	.seh_endprologue
+	movl	$0, 68(%rsp)
+.LBB14_1:                               # =>This Loop Header: Depth=1
+                                        #     Child Loop BB14_3 Depth 2
+	cmpl	$56, 68(%rsp)
+	jge	.LBB14_25
+# %bb.2:                                #   in Loop: Header=BB14_1 Depth=1
+	movl	$0, 64(%rsp)
+.LBB14_3:                               #   Parent Loop BB14_1 Depth=1
+                                        # =>  This Inner Loop Header: Depth=2
+	cmpl	$30, 64(%rsp)
+	jge	.LBB14_23
+# %bb.4:                                #   in Loop: Header=BB14_3 Depth=2
+	movslq	68(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	64(%rsp), %rcx
+	cmpl	$1, (%rax,%rcx,4)
+	je	.LBB14_9
+# %bb.5:                                #   in Loop: Header=BB14_3 Depth=2
+	movslq	68(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	64(%rsp), %rcx
+	cmpl	$2, (%rax,%rcx,4)
+	je	.LBB14_9
+# %bb.6:                                #   in Loop: Header=BB14_3 Depth=2
+	movslq	68(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	64(%rsp), %rcx
+	cmpl	$23, (%rax,%rcx,4)
+	jne	.LBB14_8
+# %bb.7:                                #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$3, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+.LBB14_8:                               #   in Loop: Header=BB14_3 Depth=2
+	jmp	.LBB14_9
+.LBB14_9:                               #   in Loop: Header=BB14_3 Depth=2
+	movslq	68(%rsp), %rax
+	imulq	$120, %rax, %rcx
+	leaq	grid(%rip), %rax
+	addq	%rcx, %rax
+	movslq	64(%rsp), %rcx
+	movl	6720(%rax,%rcx,4), %eax
+                                        # kill: def $rax killed $eax
+	movq	%rax, 56(%rsp)                  # 8-byte Spill
+	subq	$17, %rax
+	ja	.LBB14_20
+# %bb.26:                               #   in Loop: Header=BB14_3 Depth=2
+	movq	56(%rsp), %rax                  # 8-byte Reload
+	leaq	.LJTI14_0(%rip), %rcx
+	movslq	(%rcx,%rax,4), %rax
+	addq	%rcx, %rax
+	jmpq	*%rax
+.LBB14_10:                              #   in Loop: Header=BB14_3 Depth=2
+	jmp	.LBB14_21
+.LBB14_11:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movl	%r8d, %edx
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_12:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$5, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_13:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$9, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_14:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$7, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_15:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$11, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_16:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$13, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_17:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$15, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_18:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$17, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_19:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$19, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	jmp	.LBB14_21
+.LBB14_20:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	tileTexture2(%rip), %ecx
+	movl	68(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm2
+	addss	mapX(%rip), %xmm2
+	movl	64(%rsp), %eax
+	shll	$4, %eax
+	cvtsi2ss	%eax, %xmm1
+	movl	$21, %edx
+	movl	$1, %r8d
+	movss	.LCPI14_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+.LBB14_21:                              #   in Loop: Header=BB14_3 Depth=2
+	jmp	.LBB14_22
+.LBB14_22:                              #   in Loop: Header=BB14_3 Depth=2
+	movl	64(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 64(%rsp)
+	jmp	.LBB14_3
+.LBB14_23:                              #   in Loop: Header=BB14_1 Depth=1
+	jmp	.LBB14_24
+.LBB14_24:                              #   in Loop: Header=BB14_1 Depth=1
+	movl	68(%rsp), %eax
+	addl	$1, %eax
+	movl	%eax, 68(%rsp)
+	jmp	.LBB14_1
+.LBB14_25:
+	addq	$72, %rsp
+	retq
+	.section	.rdata,"dr"
+	.p2align	2, 0x0
+.LJTI14_0:
+	.long	.LBB14_10-.LJTI14_0
+	.long	.LBB14_11-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_12-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_13-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_14-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_15-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_19-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_18-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_17-.LJTI14_0
+	.long	.LBB14_20-.LJTI14_0
+	.long	.LBB14_16-.LJTI14_0
+	.text
+	.seh_endproc
+                                        # -- End function
+	.def	proofCollision;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
 	.p2align	2, 0x0                          # -- Begin function proofCollision
-LCPI8_0:
+.LCPI15_0:
 	.long	0x41800000                      # float 16
+.LCPI15_1:
+	.long	0x41600000                      # float 14
+.LCPI15_2:
+	.long	0x40800000                      # float 4
+.LCPI15_3:
+	.long	0x40000000                      # float 2
 	.text
-	.globl	_proofCollision
+	.globl	proofCollision
 	.p2align	4, 0x90
-_proofCollision:                        # @proofCollision
+proofCollision:                         # @proofCollision
+.seh_proc proofCollision
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	andl	$-8, %esp
-	subl	$40, %esp
-	movss	12(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	8(%ebp), %xmm0                  # xmm0 = mem[0],zero,zero,zero
-	movss	8(%ebp), %xmm0                  # xmm0 = mem[0],zero,zero,zero
-	subss	_mapX, %xmm0
-	movss	LCPI8_0, %xmm1                  # xmm1 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	subq	$72, %rsp
+	.seh_stackalloc 72
+	.seh_endprologue
+	movss	%xmm0, 64(%rsp)
+	movss	%xmm1, 60(%rsp)
+	movss	.LCPI15_3(%rip), %xmm0          # xmm0 = [2.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	addss	64(%rsp), %xmm0
+	subss	mapX(%rip), %xmm0
+	movss	.LCPI15_0(%rip), %xmm1          # xmm1 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
 	divss	%xmm1, %xmm0
 	cvtss2sd	%xmm0, %xmm0
-	movl	%esp, %eax
-	movsd	%xmm0, (%eax)
-	calll	_floor
-	fstpl	8(%esp)
-	movsd	8(%esp), %xmm0                  # xmm0 = mem[0],zero
+	callq	floor
 	cvttsd2si	%xmm0, %eax
-	movl	%eax, 32(%esp)
-	movss	12(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	LCPI8_0, %xmm1                  # xmm1 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movl	%eax, 56(%rsp)
+	movss	.LCPI15_2(%rip), %xmm0          # xmm0 = [4.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	addss	60(%rsp), %xmm0
+	movss	.LCPI15_0(%rip), %xmm1          # xmm1 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
 	divss	%xmm1, %xmm0
 	cvtss2sd	%xmm0, %xmm0
-	movl	%esp, %eax
-	movsd	%xmm0, (%eax)
-	calll	_floor
-	fstpl	16(%esp)
-	movsd	16(%esp), %xmm0                 # xmm0 = mem[0],zero
+	callq	floor
 	cvttsd2si	%xmm0, %eax
-	movl	%eax, 28(%esp)
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, 32(%esp), %ecx
-	addl	%ecx, %eax
-	movl	28(%esp), %ecx
-	cmpl	$0, (%eax,%ecx,4)
-	jne	LBB8_4
+	movl	%eax, 52(%rsp)
+	movss	.LCPI15_1(%rip), %xmm0          # xmm0 = [1.4E+1,0.0E+0,0.0E+0,0.0E+0]
+	addss	64(%rsp), %xmm0
+	subss	mapX(%rip), %xmm0
+	movss	.LCPI15_0(%rip), %xmm1          # xmm1 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm1, %xmm0
+	cvtss2sd	%xmm0, %xmm0
+	callq	floor
+	cvttsd2si	%xmm0, %eax
+	movl	%eax, 48(%rsp)
+	movss	.LCPI15_1(%rip), %xmm0          # xmm0 = [1.4E+1,0.0E+0,0.0E+0,0.0E+0]
+	addss	60(%rsp), %xmm0
+	movss	.LCPI15_0(%rip), %xmm1          # xmm1 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	divss	%xmm1, %xmm0
+	cvtss2sd	%xmm0, %xmm0
+	callq	floor
+	cvttsd2si	%xmm0, %eax
+	movl	%eax, 44(%rsp)
+	movslq	56(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	52(%rsp), %rcx
+	cmpl	$0, (%rax,%rcx,4)
+	jne	.LBB15_4
 # %bb.1:
-	movl	32(%esp), %ecx
-	addl	$1, %ecx
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, %ecx, %ecx
-	addl	%ecx, %eax
-	movl	28(%esp), %ecx
-	cmpl	$0, (%eax,%ecx,4)
-	jne	LBB8_4
+	movslq	48(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	52(%rsp), %rcx
+	cmpl	$0, (%rax,%rcx,4)
+	jne	.LBB15_4
 # %bb.2:
-	movl	32(%esp), %ecx
-	addl	$1, %ecx
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, %ecx, %ecx
-	addl	%ecx, %eax
-	movl	28(%esp), %ecx
-	cmpl	$0, 4(%eax,%ecx,4)
-	jne	LBB8_4
+	movslq	48(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	44(%rsp), %rcx
+	cmpl	$0, (%rax,%rcx,4)
+	jne	.LBB15_4
 # %bb.3:
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, 32(%esp), %ecx
-	addl	%ecx, %eax
-	movl	28(%esp), %ecx
-	cmpl	$0, 4(%eax,%ecx,4)
-	je	LBB8_5
-LBB8_4:
-	movb	$1, 39(%esp)
-	jmp	LBB8_6
-LBB8_5:
-	movb	$0, 39(%esp)
-LBB8_6:
-	movb	39(%esp), %al
+	movslq	56(%rsp), %rcx
+	leaq	grid(%rip), %rax
+	addq	$6720, %rax                     # imm = 0x1A40
+	imulq	$120, %rcx, %rcx
+	addq	%rcx, %rax
+	movslq	44(%rsp), %rcx
+	cmpl	$0, (%rax,%rcx,4)
+	je	.LBB15_5
+.LBB15_4:
+	movb	$1, 71(%rsp)
+	jmp	.LBB15_6
+.LBB15_5:
+	movb	$0, 71(%rsp)
+.LBB15_6:
+	movb	71(%rsp), %al
 	andb	$1, %al
 	movzbl	%al, %eax
-	movl	%ebp, %esp
-	popl	%ebp
-	retl
+	addq	$72, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_drawTile;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_drawTile                       # -- Begin function drawTile
-	.p2align	4, 0x90
-_drawTile:                              # @drawTile
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$40, %esp
-	movss	32(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	28(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	24(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	20(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	movl	$0, -4(%ebp)
-	movl	$0, -8(%ebp)
-	movl	8(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	xorl	%eax, %eax
-	leal	-4(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$4096, 8(%esp)                  # imm = 0x1000
-	movl	%eax, 12(%esp)
-	calll	*__imp__glGetTexLevelParameteriv@16
-	subl	$16, %esp
-	xorl	%eax, %eax
-	leal	-8(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$4097, 8(%esp)                  # imm = 0x1001
-	movl	%eax, 12(%esp)
-	calll	*__imp__glGetTexLevelParameteriv@16
-	subl	$16, %esp
-	cvtsi2ssl	12(%ebp), %xmm0
-	mulss	20(%ebp), %xmm0
-	cvtsi2ssl	-4(%ebp), %xmm1
-	divss	%xmm1, %xmm0
-	movss	%xmm0, -12(%ebp)
-	cvtsi2ssl	-8(%ebp), %xmm0
-	movl	16(%ebp), %eax
-	addl	$1, %eax
-	cvtsi2ss	%eax, %xmm1
-	mulss	20(%ebp), %xmm1
-	cvtsi2ssl	-8(%ebp), %xmm2
-	divss	%xmm2, %xmm1
-	subss	%xmm1, %xmm0
-	movss	%xmm0, -16(%ebp)
-	movss	20(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	cvtsi2ssl	-4(%ebp), %xmm1
-	divss	%xmm1, %xmm0
-	movss	%xmm0, -20(%ebp)
-	movss	20(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	cvtsi2ssl	-8(%ebp), %xmm1
-	divss	%xmm1, %xmm0
-	movss	%xmm0, -24(%ebp)
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	calll	*__imp__glEnable@4
-	subl	$4, %esp
-	movl	8(%ebp), %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	movl	$7, (%esp)
-	calll	*__imp__glBegin@4
-	subl	$4, %esp
-	movss	-12(%ebp), %xmm1                # xmm1 = mem[0],zero,zero,zero
-	movss	-16(%ebp), %xmm0                # xmm0 = mem[0],zero,zero,zero
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	24(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	movss	28(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	addss	32(%ebp), %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	movss	-12(%ebp), %xmm1                # xmm1 = mem[0],zero,zero,zero
-	addss	-20(%ebp), %xmm1
-	movss	-16(%ebp), %xmm0                # xmm0 = mem[0],zero,zero,zero
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	24(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	addss	32(%ebp), %xmm1
-	movss	28(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	addss	32(%ebp), %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	movss	-12(%ebp), %xmm1                # xmm1 = mem[0],zero,zero,zero
-	addss	-20(%ebp), %xmm1
-	movss	-16(%ebp), %xmm0                # xmm0 = mem[0],zero,zero,zero
-	addss	-24(%ebp), %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	24(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	addss	32(%ebp), %xmm1
-	movss	28(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	movss	-12(%ebp), %xmm1                # xmm1 = mem[0],zero,zero,zero
-	movss	-16(%ebp), %xmm0                # xmm0 = mem[0],zero,zero,zero
-	addss	-24(%ebp), %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glTexCoord2f@8
-	subl	$8, %esp
-	movss	24(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	movss	28(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	*__imp__glVertex2f@8
-	subl	$8, %esp
-	calll	*__imp__glEnd@0
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	calll	*__imp__glDisable@4
-	addl	$36, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_updatePlayer;
+	.def	updatePlayer;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
 	.p2align	4, 0x0                          # -- Begin function updatePlayer
-LCPI10_0:
+.LCPI16_0:
 	.long	0x3f000000                      # float 0.5
-LCPI10_1:
+.LCPI16_1:
 	.long	0x3f800000                      # float 1
-LCPI10_2:
+.LCPI16_2:
 	.quad	0x3ff0000000000000              # double 1
-LCPI10_3:
+.LCPI16_3:
 	.quad	0x7fffffffffffffff              # double NaN
 	.quad	0x7fffffffffffffff              # double NaN
 	.text
-	.globl	_updatePlayer
+	.globl	updatePlayer
 	.p2align	4, 0x90
-_updatePlayer:                          # @updatePlayer
+updatePlayer:                           # @updatePlayer
+.seh_proc updatePlayer
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$20, %esp
-	movb	_playerIsAlive, %al
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movb	playerIsAlive(%rip), %al
 	andb	$1, %al
 	movzbl	%al, %eax
 	cmpl	$1, %eax
-	jne	LBB10_12
+	jne	.LBB16_12
 # %bb.1:
-	cvtsi2ssl	_refreshRate, %xmm1
-	movss	LCPI10_1, %xmm0                 # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	cvtsi2ssl	refreshRate(%rip), %xmm1
+	movss	.LCPI16_1(%rip), %xmm0          # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
 	divss	%xmm1, %xmm0
-	movss	%xmm0, -4(%ebp)
-	movss	_gravity, %xmm0                 # xmm0 = mem[0],zero,zero,zero
-	movss	-4(%ebp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
-	movss	_playerAcceleration, %xmm1      # xmm1 = mem[0],zero,zero,zero
+	movss	%xmm0, 52(%rsp)
+	movss	gravity(%rip), %xmm0            # xmm0 = mem[0],zero,zero,zero
+	movss	52(%rsp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
+	movss	playerAcceleration(%rip), %xmm1 # xmm1 = mem[0],zero,zero,zero
 	mulss	%xmm2, %xmm0
 	addss	%xmm1, %xmm0
-	movss	%xmm0, _playerAcceleration
-	movss	_playerAcceleration, %xmm0      # xmm0 = mem[0],zero,zero,zero
-	movss	-4(%ebp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
-	movss	LCPI10_0, %xmm1                 # xmm1 = [5.0E-1,0.0E+0,0.0E+0,0.0E+0]
-	mulss	_gravity, %xmm1
-	mulss	-4(%ebp), %xmm1
-	mulss	-4(%ebp), %xmm1
+	movss	%xmm0, playerAcceleration(%rip)
+	movss	playerAcceleration(%rip), %xmm0 # xmm0 = mem[0],zero,zero,zero
+	movss	52(%rsp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
+	movss	.LCPI16_0(%rip), %xmm1          # xmm1 = [5.0E-1,0.0E+0,0.0E+0,0.0E+0]
+	mulss	gravity(%rip), %xmm1
+	mulss	52(%rsp), %xmm1
+	mulss	52(%rsp), %xmm1
 	mulss	%xmm2, %xmm0
 	addss	%xmm1, %xmm0
-	movss	%xmm0, -8(%ebp)
-	movss	_playerPosX, %xmm1              # xmm1 = mem[0],zero,zero,zero
-	movss	_playerPosY, %xmm0              # xmm0 = mem[0],zero,zero,zero
-	subss	-8(%ebp), %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	_proofCollision
+	movss	%xmm0, 48(%rsp)
+	movss	playerPosX(%rip), %xmm0         # xmm0 = mem[0],zero,zero,zero
+	movss	playerPosY(%rip), %xmm1         # xmm1 = mem[0],zero,zero,zero
+	subss	48(%rsp), %xmm1
+	callq	proofCollision
 	andb	$1, %al
 	movzbl	%al, %eax
 	cmpl	$1, %eax
-	jne	LBB10_10
+	jne	.LBB16_10
 # %bb.2:
-	movl	$0, -12(%ebp)
-LBB10_3:                                # =>This Inner Loop Header: Depth=1
-	cvtsi2sdl	-12(%ebp), %xmm1
-	movss	-8(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	movl	$0, 44(%rsp)
+.LBB16_3:                               # =>This Inner Loop Header: Depth=1
+	cvtsi2sdl	44(%rsp), %xmm1
+	movss	48(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
 	cvtss2sd	%xmm0, %xmm0
-	movaps	LCPI10_3, %xmm2                 # xmm2 = [NaN,NaN]
+	movaps	.LCPI16_3(%rip), %xmm2          # xmm2 = [NaN,NaN]
 	pand	%xmm2, %xmm0
-	movsd	LCPI10_2, %xmm2                 # xmm2 = [1.0E+0,0.0E+0]
+	movsd	.LCPI16_2(%rip), %xmm2          # xmm2 = [1.0E+0,0.0E+0]
 	addsd	%xmm2, %xmm0
 	ucomisd	%xmm1, %xmm0
-	jbe	LBB10_9
-# %bb.4:                                #   in Loop: Header=BB10_3 Depth=1
-	movss	_playerPosX, %xmm1              # xmm1 = mem[0],zero,zero,zero
-	movss	_playerPosY, %xmm0              # xmm0 = mem[0],zero,zero,zero
-	movss	-8(%ebp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
+	jbe	.LBB16_9
+# %bb.4:                                #   in Loop: Header=BB16_3 Depth=1
+	movss	playerPosX(%rip), %xmm0         # xmm0 = mem[0],zero,zero,zero
+	movss	playerPosY(%rip), %xmm1         # xmm1 = mem[0],zero,zero,zero
+	movss	48(%rsp), %xmm2                 # xmm2 = mem[0],zero,zero,zero
 	xorps	%xmm3, %xmm3
 	movl	$1, %eax
 	movl	$4294967295, %ecx               # imm = 0xFFFFFFFF
 	ucomiss	%xmm3, %xmm2
 	cmoval	%ecx, %eax
 	cvtsi2ss	%eax, %xmm2
-	addss	%xmm2, %xmm0
-	movss	%xmm1, (%esp)
-	movss	%xmm0, 4(%esp)
-	calll	_proofCollision
+	addss	%xmm2, %xmm1
+	callq	proofCollision
 	andb	$1, %al
 	movzbl	%al, %eax
 	cmpl	$1, %eax
-	je	LBB10_6
-# %bb.5:                                #   in Loop: Header=BB10_3 Depth=1
-	movss	-8(%ebp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
+	je	.LBB16_6
+# %bb.5:                                #   in Loop: Header=BB16_3 Depth=1
+	movss	48(%rsp), %xmm0                 # xmm0 = mem[0],zero,zero,zero
 	xorps	%xmm1, %xmm1
 	movl	$1, %eax
 	movl	$4294967295, %ecx               # imm = 0xFFFFFFFF
 	ucomiss	%xmm1, %xmm0
 	cmoval	%ecx, %eax
 	cvtsi2ss	%eax, %xmm0
-	addss	_playerPosY, %xmm0
-	movss	%xmm0, _playerPosY
-	jmp	LBB10_7
-LBB10_6:
-	movb	$0, _playerIsAlive
-	jmp	LBB10_9
-LBB10_7:                                #   in Loop: Header=BB10_3 Depth=1
-	jmp	LBB10_8
-LBB10_8:                                #   in Loop: Header=BB10_3 Depth=1
-	movl	-12(%ebp), %eax
+	addss	playerPosY(%rip), %xmm0
+	movss	%xmm0, playerPosY(%rip)
+	jmp	.LBB16_7
+.LBB16_6:
+	callq	glfwGetTime
+	movsd	%xmm0, playerDeathTime(%rip)
+	movb	$0, playerIsAlive(%rip)
+	movb	$0, gameIsRunning(%rip)
+	jmp	.LBB16_9
+.LBB16_7:                               #   in Loop: Header=BB16_3 Depth=1
+	jmp	.LBB16_8
+.LBB16_8:                               #   in Loop: Header=BB16_3 Depth=1
+	movl	44(%rsp), %eax
 	addl	$1, %eax
-	movl	%eax, -12(%ebp)
-	jmp	LBB10_3
-LBB10_9:
-	jmp	LBB10_11
-LBB10_10:
-	movss	-8(%ebp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
-	movss	_playerPosY, %xmm0              # xmm0 = mem[0],zero,zero,zero
+	movl	%eax, 44(%rsp)
+	jmp	.LBB16_3
+.LBB16_9:
+	jmp	.LBB16_11
+.LBB16_10:
+	movss	48(%rsp), %xmm1                 # xmm1 = mem[0],zero,zero,zero
+	movss	playerPosY(%rip), %xmm0         # xmm0 = mem[0],zero,zero,zero
 	subss	%xmm1, %xmm0
-	movss	%xmm0, _playerPosY
-LBB10_11:
-	jmp	LBB10_12
-LBB10_12:
-	addl	$20, %esp
-	popl	%ebp
-	retl
+	movss	%xmm0, playerPosY(%rip)
+.LBB16_11:
+	jmp	.LBB16_12
+.LBB16_12:
+	addq	$56, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_drawPlayer;
+	.def	drawPlayer;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
 	.p2align	2, 0x0                          # -- Begin function drawPlayer
-LCPI11_0:
+.LCPI17_0:
 	.long	0x41800000                      # float 16
 	.text
-	.globl	_drawPlayer
+	.globl	drawPlayer
 	.p2align	4, 0x90
-_drawPlayer:                            # @drawPlayer
+drawPlayer:                             # @drawPlayer
+.seh_proc drawPlayer
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$28, %esp
-	movl	_tileTexture1, %eax
-	movss	_playerPosX, %xmm2              # xmm2 = mem[0],zero,zero,zero
-	movss	_playerPosY, %xmm1              # xmm1 = mem[0],zero,zero,zero
-	xorl	%ecx, %ecx
-	movss	LCPI11_0, %xmm0                 # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
-	movl	%eax, (%esp)
-	movl	$0, 4(%esp)
-	movl	$0, 8(%esp)
-	movss	%xmm0, 12(%esp)
-	movss	%xmm2, 16(%esp)
-	movss	%xmm1, 20(%esp)
-	movss	%xmm0, 24(%esp)
-	calll	_drawTile
-	addl	$28, %esp
-	popl	%ebp
-	retl
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movl	tileTexture1(%rip), %ecx
+	movss	playerPosX(%rip), %xmm2         # xmm2 = mem[0],zero,zero,zero
+	movss	playerPosY(%rip), %xmm1         # xmm1 = mem[0],zero,zero,zero
+	xorl	%r8d, %r8d
+	movss	.LCPI17_0(%rip), %xmm0          # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
+	movl	%r8d, %edx
+	movaps	%xmm0, %xmm3
+	movss	%xmm2, 32(%rsp)
+	movss	%xmm1, 40(%rsp)
+	movss	%xmm0, 48(%rsp)
+	callq	drawTile
+	nop
+	addq	$56, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_getBackgroundBlock;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_getBackgroundBlock             # -- Begin function getBackgroundBlock
-	.p2align	4, 0x90
-_getBackgroundBlock:                    # @getBackgroundBlock
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$16, %esp
-	movl	$0, -8(%ebp)
-	movl	$100, -12(%ebp)
-	calll	_rand
-	movl	-12(%ebp), %ecx
-	subl	-8(%ebp), %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	addl	-8(%ebp), %edx
-	movl	%edx, -16(%ebp)
-	cmpl	$60, -16(%ebp)
-	jg	LBB12_2
-# %bb.1:
-	movl	$19, -4(%ebp)
-	jmp	LBB12_3
-LBB12_2:
-	movl	$20, -4(%ebp)
-LBB12_3:
-	movl	-4(%ebp), %eax
-	addl	$16, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_generateNewLineBackground;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_generateNewLineBackground      # -- Begin function generateNewLineBackground
-	.p2align	4, 0x90
-_generateNewLineBackground:             # @generateNewLineBackground
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	pushl	%eax
-	movl	8(%ebp), %eax
-	movl	$0, -4(%ebp)
-LBB13_1:                                # =>This Inner Loop Header: Depth=1
-	cmpl	$30, -4(%ebp)
-	jge	LBB13_4
-# %bb.2:                                #   in Loop: Header=BB13_1 Depth=1
-	calll	_getBackgroundBlock
-	movl	%eax, %edx
-	leal	_grid, %eax
-	imull	$120, 8(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-4(%ebp), %ecx
-	movl	%edx, (%eax,%ecx,4)
-# %bb.3:                                #   in Loop: Header=BB13_1 Depth=1
-	movl	-4(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -4(%ebp)
-	jmp	LBB13_1
-LBB13_4:
-	addl	$4, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_getForegroundBlock;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_getForegroundBlock             # -- Begin function getForegroundBlock
-	.p2align	4, 0x90
-_getForegroundBlock:                    # @getForegroundBlock
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$16, %esp
-	movl	20(%ebp), %eax
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	movl	$0, -8(%ebp)
-	movl	$100, -12(%ebp)
-	calll	_rand
-	movl	-12(%ebp), %ecx
-	subl	-8(%ebp), %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	addl	-8(%ebp), %edx
-	movl	%edx, -16(%ebp)
-	cmpl	$60, -16(%ebp)
-	jg	LBB14_2
-# %bb.1:
-	movl	$1, -4(%ebp)
-	jmp	LBB14_3
-LBB14_2:
-	movl	$2, -4(%ebp)
-LBB14_3:
-	movl	-4(%ebp), %eax
-	addl	$16, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_generateNewLineForeground;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_generateNewLineForeground      # -- Begin function generateNewLineForeground
-	.p2align	4, 0x90
-_generateNewLineForeground:             # @generateNewLineForeground
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$16, %esp
-	movl	8(%ebp), %eax
-	movl	$0, -4(%ebp)
-LBB15_1:                                # =>This Inner Loop Header: Depth=1
-	cmpl	$30, -4(%ebp)
-	jge	LBB15_4
-# %bb.2:                                #   in Loop: Header=BB15_1 Depth=1
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, 8(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-4(%ebp), %ecx
-	movl	$0, (%eax,%ecx,4)
-# %bb.3:                                #   in Loop: Header=BB15_1 Depth=1
-	movl	-4(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -4(%ebp)
-	jmp	LBB15_1
-LBB15_4:
-	cmpl	$0, 8(%ebp)
-	jne	LBB15_6
-# %bb.5:
-	calll	_rand
-	movl	$3, %ecx
-	cltd
-	idivl	%ecx
-	addl	$1, %edx
-	movl	%edx, _directionSurface
-	calll	_rand
-	movl	$3, %ecx
-	cltd
-	idivl	%ecx
-	addl	$1, %edx
-	movl	%edx, _directionRoof
-	calll	_rand
-	movl	$6, %ecx
-	cltd
-	idivl	%ecx
-	addl	$24, %edx
-	movl	%edx, _surfaceBlockY
-	calll	_rand
-	movl	$5, %ecx
-	cltd
-	idivl	%ecx
-	addl	$0, %edx
-	movl	%edx, _roofBlockY
-	jmp	LBB15_45
-LBB15_6:
-	calll	_rand
-	movl	$101, %ecx
-	cltd
-	idivl	%ecx
-	addl	$0, %edx
-	cmpl	$80, %edx
-	jle	LBB15_8
-# %bb.7:
-	calll	_rand
-	movl	$3, %ecx
-	cltd
-	idivl	%ecx
-	addl	$1, %edx
-	movl	%edx, _directionSurface
-LBB15_8:
-	cmpl	$16, _lastSurfaceBlockY
-	jge	LBB15_10
-# %bb.9:
-	calll	_rand
-	movl	$2, %ecx
-	cltd
-	idivl	%ecx
-	addl	$2, %edx
-	movl	%edx, _directionSurface
-LBB15_10:
-	cmpl	$25, _lastSurfaceBlockY
-	jle	LBB15_12
-# %bb.11:
-	calll	_rand
-	movl	$2, %ecx
-	cltd
-	idivl	%ecx
-	addl	$1, %edx
-	movl	%edx, _directionSurface
-LBB15_12:
-	cmpl	$28, _lastSurfaceBlockY
-	jge	LBB15_22
-# %bb.13:
-	cmpl	$1, _directionSurface
-	jne	LBB15_15
-# %bb.14:
-	calll	_rand
-	movl	_lastSurfaceBlockY, %ecx
-	movl	_lastSurfaceBlockY, %edx
-	subl	$2, %edx
-	subl	%edx, %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	movl	%edx, %eax
-	addl	_lastSurfaceBlockY, %eax
-	subl	$2, %eax
-	movl	%eax, _surfaceBlockY
-	jmp	LBB15_21
-LBB15_15:
-	cmpl	$2, _directionSurface
-	jne	LBB15_17
-# %bb.16:
-	calll	_rand
-	movl	_lastSurfaceBlockY, %ecx
-	addl	$1, %ecx
-	movl	_lastSurfaceBlockY, %edx
-	subl	$1, %edx
-	subl	%edx, %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	movl	%edx, %eax
-	addl	_lastSurfaceBlockY, %eax
-	subl	$1, %eax
-	movl	%eax, _surfaceBlockY
-	jmp	LBB15_20
-LBB15_17:
-	cmpl	$3, _directionSurface
-	jne	LBB15_19
-# %bb.18:
-	calll	_rand
-	movl	_lastSurfaceBlockY, %ecx
-	addl	$2, %ecx
-	subl	_lastSurfaceBlockY, %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	movl	%edx, %eax
-	addl	_lastSurfaceBlockY, %eax
-	addl	$1, %eax
-	movl	%eax, _surfaceBlockY
-LBB15_19:
-	jmp	LBB15_20
-LBB15_20:
-	jmp	LBB15_21
-LBB15_21:
-	jmp	LBB15_23
-LBB15_22:
-	calll	_rand
-	movl	$3, %ecx
-	cltd
-	idivl	%ecx
-	addl	$27, %edx
-	movl	%edx, _surfaceBlockY
-LBB15_23:
-	calll	_rand
-	movl	$101, %ecx
-	cltd
-	idivl	%ecx
-	addl	$0, %edx
-	cmpl	$85, %edx
-	jle	LBB15_25
-# %bb.24:
-	calll	_rand
-	movl	$3, %ecx
-	cltd
-	idivl	%ecx
-	addl	$1, %edx
-	movl	%edx, _directionRoof
-LBB15_25:
-	movl	_surfaceBlockY, %eax
-	subl	_lastRoofBlockY, %eax
-	cmpl	$14, %eax
-	jle	LBB15_27
-# %bb.26:
-	calll	_rand
-	movl	$2, %ecx
-	cltd
-	idivl	%ecx
-	addl	$2, %edx
-	movl	%edx, _directionRoof
-	jmp	LBB15_31
-LBB15_27:
-	movl	_surfaceBlockY, %eax
-	subl	_lastRoofBlockY, %eax
-	cmpl	$10, %eax
-	jle	LBB15_29
-# %bb.28:
-	calll	_rand
-	movl	$2, %ecx
-	cltd
-	idivl	%ecx
-	addl	$1, %edx
-	movl	%edx, _directionRoof
-	jmp	LBB15_30
-LBB15_29:
-	movl	$1, _directionRoof
-LBB15_30:
-	jmp	LBB15_31
-LBB15_31:
-	cmpl	$3, _lastRoofBlockY
-	jge	LBB15_33
-# %bb.32:
-	calll	_rand
-	movl	$2, %ecx
-	cltd
-	idivl	%ecx
-	addl	$2, %edx
-	movl	%edx, _directionRoof
-LBB15_33:
-	cmpl	$1, _lastRoofBlockY
-	jle	LBB15_43
-# %bb.34:
-	cmpl	$1, _directionRoof
-	jne	LBB15_36
-# %bb.35:
-	calll	_rand
-	movl	_lastRoofBlockY, %ecx
-	subl	$1, %ecx
-	movl	_lastRoofBlockY, %edx
-	subl	$2, %edx
-	subl	%edx, %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	movl	%edx, %eax
-	addl	_lastRoofBlockY, %eax
-	subl	$2, %eax
-	movl	%eax, _roofBlockY
-	jmp	LBB15_42
-LBB15_36:
-	cmpl	$2, _directionRoof
-	jne	LBB15_38
-# %bb.37:
-	calll	_rand
-	movl	_lastRoofBlockY, %ecx
-	addl	$1, %ecx
-	movl	_lastRoofBlockY, %edx
-	subl	$1, %edx
-	subl	%edx, %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	movl	%edx, %eax
-	addl	_lastRoofBlockY, %eax
-	subl	$1, %eax
-	movl	%eax, _roofBlockY
-	jmp	LBB15_41
-LBB15_38:
-	cmpl	$3, _directionRoof
-	jne	LBB15_40
-# %bb.39:
-	calll	_rand
-	movl	_lastRoofBlockY, %ecx
-	addl	$2, %ecx
-	subl	_lastRoofBlockY, %ecx
-	addl	$1, %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	movl	%edx, %eax
-	addl	_lastRoofBlockY, %eax
-	addl	$1, %eax
-	movl	%eax, _roofBlockY
-LBB15_40:
-	jmp	LBB15_41
-LBB15_41:
-	jmp	LBB15_42
-LBB15_42:
-	jmp	LBB15_44
-LBB15_43:
-	calll	_rand
-	movl	$3, %ecx
-	cltd
-	idivl	%ecx
-	addl	$0, %edx
-	movl	%edx, _roofBlockY
-LBB15_44:
-	jmp	LBB15_45
-LBB15_45:
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, 8(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	_surfaceBlockY, %ecx
-	movl	$1, (%eax,%ecx,4)
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, 8(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	_roofBlockY, %ecx
-	movl	$2, (%eax,%ecx,4)
-	movl	_surfaceBlockY, %eax
-	movl	%eax, _lastSurfaceBlockY
-	movl	_roofBlockY, %eax
-	movl	%eax, _lastRoofBlockY
-	movl	$0, -8(%ebp)
-	movl	$100, -12(%ebp)
-	calll	_rand
-	movl	-12(%ebp), %ecx
-	subl	-8(%ebp), %ecx
-	addl	$1, %ecx
-	cltd
-	idivl	%ecx
-	addl	-8(%ebp), %edx
-	movl	%edx, -16(%ebp)
-	addl	$16, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_updateWorld;
+	.def	resetGame;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
-	.p2align	2, 0x0                          # -- Begin function updateWorld
-LCPI16_0:
-	.long	0xc1800000                      # float -16
-LCPI16_1:
-	.long	0xc2700000                      # float -60
-LCPI16_2:
-	.long	0x3f800000                      # float 1
+	.p2align	2, 0x0                          # -- Begin function resetGame
+.LCPI18_0:
+	.long	0x43700000                      # float 240
 	.text
-	.globl	_updateWorld
+	.globl	resetGame
 	.p2align	4, 0x90
-_updateWorld:                           # @updateWorld
+resetGame:                              # @resetGame
+.seh_proc resetGame
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$24, %esp
-	movss	LCPI16_0, %xmm0                 # xmm0 = [-1.6E+1,0.0E+0,0.0E+0,0.0E+0]
-	ucomiss	_mapX, %xmm0
-	jb	LBB16_18
-# %bb.1:
+	subq	$40, %rsp
+	.seh_stackalloc 40
+	.seh_endprologue
 	xorps	%xmm0, %xmm0
-	movss	%xmm0, _mapX
-	movl	$1, -4(%ebp)
-LBB16_2:                                # =>This Loop Header: Depth=1
-                                        #     Child Loop BB16_4 Depth 2
-	cmpl	$55, -4(%ebp)
-	jge	LBB16_9
-# %bb.3:                                #   in Loop: Header=BB16_2 Depth=1
-	movl	$0, -8(%ebp)
-LBB16_4:                                #   Parent Loop BB16_2 Depth=1
-                                        # =>  This Inner Loop Header: Depth=2
-	cmpl	$30, -8(%ebp)
-	jge	LBB16_7
-# %bb.5:                                #   in Loop: Header=BB16_4 Depth=2
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, -4(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	movl	(%eax,%ecx,4), %edx
-	movl	-4(%ebp), %ecx
-	subl	$1, %ecx
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, %ecx, %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	movl	%edx, (%eax,%ecx,4)
-# %bb.6:                                #   in Loop: Header=BB16_4 Depth=2
-	movl	-8(%ebp), %eax
+	movss	%xmm0, playerAcceleration(%rip)
+	movss	.LCPI18_0(%rip), %xmm0          # xmm0 = [2.4E+2,0.0E+0,0.0E+0,0.0E+0]
+	movss	%xmm0, playerPosY(%rip)
+	xorps	%xmm0, %xmm0
+	movss	%xmm0, mapX(%rip)
+	movl	$0, difficulty(%rip)
+	movb	$1, playerIsAlive(%rip)
+	movl	score(%rip), %eax
+	cmpl	highScore(%rip), %eax
+	jle	.LBB18_2
+# %bb.1:
+	movl	score(%rip), %eax
+	movl	%eax, highScore(%rip)
+.LBB18_2:
+	movl	$0, score(%rip)
+	movl	$0, 36(%rsp)
+.LBB18_3:                               # =>This Inner Loop Header: Depth=1
+	cmpl	$56, 36(%rsp)
+	jge	.LBB18_6
+# %bb.4:                                #   in Loop: Header=BB18_3 Depth=1
+	movl	36(%rsp), %ecx
+	callq	generateNewLineBackground
+	movl	36(%rsp), %ecx
+	callq	generateNewLineForeground
+# %bb.5:                                #   in Loop: Header=BB18_3 Depth=1
+	movl	36(%rsp), %eax
 	addl	$1, %eax
-	movl	%eax, -8(%ebp)
-	jmp	LBB16_4
-LBB16_7:                                #   in Loop: Header=BB16_2 Depth=1
-	jmp	LBB16_8
-LBB16_8:                                #   in Loop: Header=BB16_2 Depth=1
-	movl	-4(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -4(%ebp)
-	jmp	LBB16_2
-LBB16_9:
-	movl	$1, -12(%ebp)
-LBB16_10:                               # =>This Loop Header: Depth=1
-                                        #     Child Loop BB16_12 Depth 2
-	cmpl	$55, -12(%ebp)
-	jge	LBB16_17
-# %bb.11:                               #   in Loop: Header=BB16_10 Depth=1
-	movl	$0, -16(%ebp)
-LBB16_12:                               #   Parent Loop BB16_10 Depth=1
-                                        # =>  This Inner Loop Header: Depth=2
-	cmpl	$30, -16(%ebp)
-	jge	LBB16_15
-# %bb.13:                               #   in Loop: Header=BB16_12 Depth=2
-	leal	_grid, %eax
-	imull	$120, -12(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-16(%ebp), %ecx
-	movl	(%eax,%ecx,4), %edx
-	movl	-12(%ebp), %ecx
-	subl	$1, %ecx
-	leal	_grid, %eax
-	imull	$120, %ecx, %ecx
-	addl	%ecx, %eax
-	movl	-16(%ebp), %ecx
-	movl	%edx, (%eax,%ecx,4)
-# %bb.14:                               #   in Loop: Header=BB16_12 Depth=2
-	movl	-16(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -16(%ebp)
-	jmp	LBB16_12
-LBB16_15:                               #   in Loop: Header=BB16_10 Depth=1
-	jmp	LBB16_16
-LBB16_16:                               #   in Loop: Header=BB16_10 Depth=1
-	movl	-12(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -12(%ebp)
-	jmp	LBB16_10
-LBB16_17:
-	movl	$54, (%esp)
-	calll	_generateNewLineForeground
-	movl	$54, (%esp)
-	calll	_generateNewLineBackground
-LBB16_18:
-	cvtsi2ssl	_refreshRate, %xmm1
-	movss	LCPI16_2, %xmm0                 # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
-	divss	%xmm1, %xmm0
-	movss	%xmm0, -20(%ebp)
-	movss	-20(%ebp), %xmm0                # xmm0 = mem[0],zero,zero,zero
-	movss	_mapX, %xmm1                    # xmm1 = mem[0],zero,zero,zero
-	movss	LCPI16_1, %xmm2                 # xmm2 = [-6.0E+1,0.0E+0,0.0E+0,0.0E+0]
-	mulss	%xmm2, %xmm0
-	addss	%xmm1, %xmm0
-	movss	%xmm0, _mapX
-	addl	$24, %esp
-	popl	%ebp
-	retl
+	movl	%eax, 36(%rsp)
+	jmp	.LBB18_3
+.LBB18_6:
+	addq	$40, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_drawWorld;
+	.def	keyCallback;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
-	.p2align	2, 0x0                          # -- Begin function drawWorld
-LCPI17_0:
-	.long	0x41800000                      # float 16
+	.p2align	3, 0x0                          # -- Begin function keyCallback
+.LCPI19_0:
+	.quad	0x3ff0000000000000              # double 1
+.LCPI19_1:
+	.long	0x43960000                      # float 300
 	.text
-	.globl	_drawWorld
+	.globl	keyCallback
 	.p2align	4, 0x90
-_drawWorld:                             # @drawWorld
+keyCallback:                            # @keyCallback
+.seh_proc keyCallback
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$36, %esp
-	movl	$0, -4(%ebp)
-LBB17_1:                                # =>This Loop Header: Depth=1
-                                        #     Child Loop BB17_3 Depth 2
-	cmpl	$55, -4(%ebp)
-	jge	LBB17_16
-# %bb.2:                                #   in Loop: Header=BB17_1 Depth=1
-	movl	$0, -8(%ebp)
-LBB17_3:                                #   Parent Loop BB17_1 Depth=1
-                                        # =>  This Inner Loop Header: Depth=2
-	cmpl	$30, -8(%ebp)
-	jge	LBB17_14
-# %bb.4:                                #   in Loop: Header=BB17_3 Depth=2
-	leal	_grid, %eax
-	imull	$120, -4(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	cmpl	$19, (%eax,%ecx,4)
-	jne	LBB17_6
-# %bb.5:                                #   in Loop: Header=BB17_3 Depth=2
-	movl	_tileTexture2, %eax
-	movl	-4(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm2
-	addss	_mapX, %xmm2
-	movl	-8(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm1
-	movss	LCPI17_0, %xmm0                 # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
-	movl	%eax, (%esp)
-	movl	$3, 4(%esp)
-	movl	$1, 8(%esp)
-	movss	%xmm0, 12(%esp)
-	movss	%xmm2, 16(%esp)
-	movss	%xmm1, 20(%esp)
-	movss	%xmm0, 24(%esp)
-	calll	_drawTile
-LBB17_6:                                #   in Loop: Header=BB17_3 Depth=2
-	leal	_grid, %eax
-	imull	$120, -4(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	cmpl	$20, (%eax,%ecx,4)
-	jne	LBB17_8
-# %bb.7:                                #   in Loop: Header=BB17_3 Depth=2
-	movl	_tileTexture2, %eax
-	movl	-4(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm2
-	addss	_mapX, %xmm2
-	movl	-8(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm1
-	movss	LCPI17_0, %xmm0                 # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
-	movl	%eax, (%esp)
-	movl	$3, 4(%esp)
-	movl	$3, 8(%esp)
-	movss	%xmm0, 12(%esp)
-	movss	%xmm2, 16(%esp)
-	movss	%xmm1, 20(%esp)
-	movss	%xmm0, 24(%esp)
-	calll	_drawTile
-LBB17_8:                                #   in Loop: Header=BB17_3 Depth=2
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, -4(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	cmpl	$1, (%eax,%ecx,4)
-	jne	LBB17_10
-# %bb.9:                                #   in Loop: Header=BB17_3 Depth=2
-	movl	_tileTexture2, %eax
-	movl	-4(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm2
-	addss	_mapX, %xmm2
-	movl	-8(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm1
-	movss	LCPI17_0, %xmm0                 # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
-	movl	%eax, (%esp)
-	movl	$1, 4(%esp)
-	movl	$1, 8(%esp)
-	movss	%xmm0, 12(%esp)
-	movss	%xmm2, 16(%esp)
-	movss	%xmm1, 20(%esp)
-	movss	%xmm0, 24(%esp)
-	calll	_drawTile
-LBB17_10:                               #   in Loop: Header=BB17_3 Depth=2
-	leal	_grid, %eax
-	addl	$6600, %eax                     # imm = 0x19C8
-	imull	$120, -4(%ebp), %ecx
-	addl	%ecx, %eax
-	movl	-8(%ebp), %ecx
-	cmpl	$2, (%eax,%ecx,4)
-	jne	LBB17_12
-# %bb.11:                               #   in Loop: Header=BB17_3 Depth=2
-	movl	_tileTexture2, %eax
-	movl	-4(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm2
-	addss	_mapX, %xmm2
-	movl	-8(%ebp), %ecx
-	shll	$4, %ecx
-	cvtsi2ss	%ecx, %xmm1
-	movss	LCPI17_0, %xmm0                 # xmm0 = [1.6E+1,0.0E+0,0.0E+0,0.0E+0]
-	movl	%eax, (%esp)
-	movl	$5, 4(%esp)
-	movl	$3, 8(%esp)
-	movss	%xmm0, 12(%esp)
-	movss	%xmm2, 16(%esp)
-	movss	%xmm1, 20(%esp)
-	movss	%xmm0, 24(%esp)
-	calll	_drawTile
-LBB17_12:                               #   in Loop: Header=BB17_3 Depth=2
-	jmp	LBB17_13
-LBB17_13:                               #   in Loop: Header=BB17_3 Depth=2
-	movl	-8(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -8(%ebp)
-	jmp	LBB17_3
-LBB17_14:                               #   in Loop: Header=BB17_1 Depth=1
-	jmp	LBB17_15
-LBB17_15:                               #   in Loop: Header=BB17_1 Depth=1
-	movl	-4(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -4(%ebp)
-	jmp	LBB17_1
-LBB17_16:
-	addl	$36, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_indexOf;
-	.scl	2;
-	.type	32;
-	.endef
-	.globl	_indexOf                        # -- Begin function indexOf
-	.p2align	4, 0x90
-_indexOf:                               # @indexOf
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	subl	$8, %esp
-	movb	12(%ebp), %al
-	movl	8(%ebp), %eax
-	movl	$0, -8(%ebp)
-LBB18_1:                                # =>This Inner Loop Header: Depth=1
-	movl	8(%ebp), %eax
-	movl	-8(%ebp), %ecx
-	movsbl	(%eax,%ecx), %eax
+	subq	$56, %rsp
+	.seh_stackalloc 56
+	.seh_endprologue
+	movl	96(%rsp), %eax
+	movq	%rcx, 48(%rsp)
+	movl	%edx, 44(%rsp)
+	movl	%r8d, 40(%rsp)
+	movl	%r9d, 36(%rsp)
+	cmpl	$1, 36(%rsp)
+	jne	.LBB19_16
+# %bb.1:
+	movl	44(%rsp), %eax
+	movl	%eax, 32(%rsp)                  # 4-byte Spill
+	subl	$32, %eax
+	je	.LBB19_2
+	jmp	.LBB19_17
+.LBB19_17:
+	movl	32(%rsp), %eax                  # 4-byte Reload
+	subl	$87, %eax
+	je	.LBB19_2
+	jmp	.LBB19_18
+.LBB19_18:
+	movl	32(%rsp), %eax                  # 4-byte Reload
+	subl	$256, %eax                      # imm = 0x100
+	je	.LBB19_13
+	jmp	.LBB19_19
+.LBB19_19:
+	movl	32(%rsp), %eax                  # 4-byte Reload
+	subl	$265, %eax                      # imm = 0x109
+	jne	.LBB19_14
+	jmp	.LBB19_2
+.LBB19_2:
+	movb	playerIsAlive(%rip), %al
+	andb	$1, %al
+	movzbl	%al, %eax
 	cmpl	$0, %eax
-	je	LBB18_6
-# %bb.2:                                #   in Loop: Header=BB18_1 Depth=1
-	movl	8(%ebp), %eax
-	movl	-8(%ebp), %ecx
-	movsbl	(%eax,%ecx), %eax
-	movsbl	12(%ebp), %ecx
-	cmpl	%ecx, %eax
-	jne	LBB18_4
+	jne	.LBB19_7
 # %bb.3:
-	movl	-8(%ebp), %eax
-	movl	%eax, -4(%ebp)
-	jmp	LBB18_7
-LBB18_4:                                #   in Loop: Header=BB18_1 Depth=1
-	jmp	LBB18_5
-LBB18_5:                                #   in Loop: Header=BB18_1 Depth=1
-	movl	-8(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -8(%ebp)
-	jmp	LBB18_1
-LBB18_6:
-	movl	$-1, -4(%ebp)
-LBB18_7:
-	movl	-4(%ebp), %eax
-	addl	$8, %esp
-	popl	%ebp
-	retl
-                                        # -- End function
-	.def	_showText;
-	.scl	2;
-	.type	32;
-	.endef
-	.section	.rdata,"dr"
-	.p2align	2, 0x0                          # -- Begin function showText
-LCPI19_0:
-	.long	0x41000000                      # float 8
-	.text
-	.globl	_showText
-	.p2align	4, 0x90
-_showText:                              # @showText
-# %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	pushl	%edi
-	pushl	%esi
-	subl	$36, %esp
-	movl	24(%ebp), %eax
-	movl	20(%ebp), %eax
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	movl	$0, -12(%ebp)
-LBB19_1:                                # =>This Inner Loop Header: Depth=1
-	movl	8(%ebp), %eax
-	movl	-12(%ebp), %ecx
-	movsbl	(%eax,%ecx), %eax
+	movb	gameIsRunning(%rip), %al
+	andb	$1, %al
+	movzbl	%al, %eax
 	cmpl	$0, %eax
-	je	LBB19_6
-# %bb.2:                                #   in Loop: Header=BB19_1 Depth=1
-	movl	_fontOrder, %edx
-	movl	8(%ebp), %eax
-	movl	-12(%ebp), %ecx
-	movl	%edx, (%esp)
-	movsbl	(%eax,%ecx), %eax
-	movl	%eax, 4(%esp)
-	calll	_indexOf
-	movl	%eax, -16(%ebp)
-	cmpl	$-1, -16(%ebp)
-	je	LBB19_4
-# %bb.3:                                #   in Loop: Header=BB19_1 Depth=1
-	movl	_tileTexture3, %edx
-	movl	-16(%ebp), %ecx
-	movl	24(%ebp), %eax
-	movl	12(%ebp), %esi
-	movl	-12(%ebp), %edi
-	imull	20(%ebp), %edi
-	addl	%edi, %esi
-	cvtsi2ss	%esi, %xmm2
-	cvtsi2ssl	16(%ebp), %xmm1
-	cvtsi2ssl	20(%ebp), %xmm0
-	movss	LCPI19_0, %xmm3                 # xmm3 = [8.0E+0,0.0E+0,0.0E+0,0.0E+0]
-	movl	%edx, (%esp)
-	movl	%ecx, 4(%esp)
-	movl	%eax, 8(%esp)
-	movss	%xmm3, 12(%esp)
-	movss	%xmm2, 16(%esp)
-	movss	%xmm1, 20(%esp)
-	movss	%xmm0, 24(%esp)
-	calll	_drawTile
-LBB19_4:                                #   in Loop: Header=BB19_1 Depth=1
-	jmp	LBB19_5
-LBB19_5:                                #   in Loop: Header=BB19_1 Depth=1
-	movl	-12(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -12(%ebp)
-	jmp	LBB19_1
-LBB19_6:
-	addl	$36, %esp
-	popl	%esi
-	popl	%edi
-	popl	%ebp
-	retl
+	jne	.LBB19_7
+# %bb.4:
+	callq	glfwGetTime
+	subsd	playerDeathTime(%rip), %xmm0
+	movsd	.LCPI19_0(%rip), %xmm1          # xmm1 = [1.0E+0,0.0E+0]
+	ucomisd	%xmm1, %xmm0
+	jb	.LBB19_6
+# %bb.5:
+	callq	resetGame
+.LBB19_6:
+	jmp	.LBB19_10
+.LBB19_7:
+	movb	gameIsRunning(%rip), %al
+	andb	$1, %al
+	movzbl	%al, %eax
+	cmpl	$0, %eax
+	jne	.LBB19_9
+# %bb.8:
+	movb	$1, gameIsRunning(%rip)
+.LBB19_9:
+	jmp	.LBB19_10
+.LBB19_10:
+	movb	playerIsAlive(%rip), %al
+	andb	$1, %al
+	movzbl	%al, %eax
+	cmpl	$1, %eax
+	jne	.LBB19_12
+# %bb.11:
+	movss	.LCPI19_1(%rip), %xmm0          # xmm0 = [3.0E+2,0.0E+0,0.0E+0,0.0E+0]
+	movss	%xmm0, playerAcceleration(%rip)
+.LBB19_12:
+	jmp	.LBB19_15
+.LBB19_13:
+	movq	48(%rsp), %rcx
+	movl	$1, %edx
+	callq	glfwSetWindowShouldClose
+	jmp	.LBB19_15
+.LBB19_14:
+	jmp	.LBB19_15
+.LBB19_15:
+	jmp	.LBB19_16
+.LBB19_16:
+	addq	$56, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_showNumber;
+	.def	mouseButtonCallback;
 	.scl	2;
 	.type	32;
 	.endef
-	.globl	_showNumber                     # -- Begin function showNumber
+	.globl	mouseButtonCallback             # -- Begin function mouseButtonCallback
 	.p2align	4, 0x90
-_showNumber:                            # @showNumber
+mouseButtonCallback:                    # @mouseButtonCallback
+.seh_proc mouseButtonCallback
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	pushl	%edi
-	pushl	%esi
-	subl	$32, %esp
-	movl	24(%ebp), %eax
-	movl	20(%ebp), %eax
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	leal	-20(%ebp), %edx
-	movl	8(%ebp), %eax
-	leal	L_.str.2, %ecx
-	movl	%edx, (%esp)
-	movl	$12, 4(%esp)
-	movl	%ecx, 8(%esp)
-	movl	%eax, 12(%esp)
-	calll	_snprintf
-	leal	-20(%ebp), %edi
-	movl	12(%ebp), %esi
-	movl	16(%ebp), %edx
-	movl	20(%ebp), %ecx
-	movl	24(%ebp), %eax
-	movl	%edi, (%esp)
-	movl	%esi, 4(%esp)
-	movl	%edx, 8(%esp)
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_showText
-	addl	$32, %esp
-	popl	%esi
-	popl	%edi
-	popl	%ebp
-	retl
+	subq	$24, %rsp
+	.seh_stackalloc 24
+	.seh_endprologue
+	movq	%rcx, 16(%rsp)
+	movl	%edx, 12(%rsp)
+	movl	%r8d, 8(%rsp)
+	movl	%r9d, 4(%rsp)
+	addq	$24, %rsp
+	retq
+	.seh_endproc
                                         # -- End function
-	.def	_main;
+	.def	main;
 	.scl	2;
 	.type	32;
 	.endef
 	.section	.rdata,"dr"
 	.p2align	3, 0x0                          # -- Begin function main
-LCPI21_0:
-	.quad	0x3f1a36e2eb1c432d              # double 1.0E-4
+.LCPI21_0:
+	.quad	0x3fe0000000000000              # double 0.5
+.LCPI21_1:
+	.quad	0x3ff0000000000000              # double 1
+.LCPI21_2:
+	.long	0x3f800000                      # float 1
+.LCPI21_3:
+	.long	0x43a38000                      # float 327
+.LCPI21_4:
+	.long	0x42c80000                      # float 100
+.LCPI21_5:
+	.long	0x43480000                      # float 200
+.LCPI21_6:
+	.long	0x437a0000                      # float 250
 	.text
-	.globl	_main
+	.globl	main
 	.p2align	4, 0x90
-_main:                                  # @main
+main:                                   # @main
+.seh_proc main
 # %bb.0:
-	pushl	%ebp
-	movl	%esp, %ebp
-	pushl	%edi
-	pushl	%esi
-	subl	$112, %esp
-	movl	16(%ebp), %eax
-	movl	12(%ebp), %eax
-	movl	8(%ebp), %eax
-	calll	___main
-	movl	$0, -12(%ebp)
-	leal	L_.str.3, %eax
-	movl	%eax, (%esp)
-	calll	_printf
-	movl	$1, (%esp)
-	calll	*__imp____acrt_iob_func
-	movl	%eax, (%esp)
-	calll	_fflush
-	calll	_glfwInit
+	pushq	%rbp
+	.seh_pushreg %rbp
+	subq	$272, %rsp                      # imm = 0x110
+	.seh_stackalloc 272
+	leaq	128(%rsp), %rbp
+	.seh_setframe %rbp, 128
+	.seh_endprologue
+	movq	%r8, -40(%rbp)                  # 8-byte Spill
+	movq	%rdx, -48(%rbp)                 # 8-byte Spill
+	movl	%ecx, -52(%rbp)                 # 4-byte Spill
+	callq	__main
+	movl	-52(%rbp), %ecx                 # 4-byte Reload
+	movq	-48(%rbp), %rdx                 # 8-byte Reload
+	movq	-40(%rbp), %r8                  # 8-byte Reload
+	movl	$0, 140(%rbp)
+	movl	%ecx, 136(%rbp)
+	movq	%rdx, 128(%rbp)
+	movq	%r8, 120(%rbp)
+	leaq	.L.str.2(%rip), %rcx
+	callq	printf
+	movl	$1, %ecx
+	callq	*__imp___acrt_iob_func(%rip)
+	movq	%rax, %rcx
+	callq	fflush
+	callq	glfwInit
 	cmpl	$0, %eax
-	jne	LBB21_2
+	jne	.LBB21_2
 # %bb.1:
-	movl	$-1, -12(%ebp)
-	jmp	LBB21_24
-LBB21_2:
-	calll	_glfwGetPrimaryMonitor
-	movl	%eax, -20(%ebp)
-	movl	-20(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_glfwGetVideoMode
-	movl	%eax, -24(%ebp)
-	movl	-24(%ebp), %eax
-	movl	(%eax), %eax
-	movl	%eax, _REAL_WINDOW_WIDTH
-	movl	-24(%ebp), %eax
-	movl	4(%eax), %eax
-	movl	%eax, _REAL_WINDOW_HEIGHT
-	movl	-24(%ebp), %eax
-	movl	20(%eax), %eax
-	movl	%eax, _refreshRate
-	movl	_refreshRate, %eax
-	movl	$135183, (%esp)                 # imm = 0x2100F
-	movl	%eax, 4(%esp)
-	calll	_glfwWindowHint
-	movl	_REAL_WINDOW_WIDTH, %esi
-	movl	_REAL_WINDOW_HEIGHT, %edx
-	movl	-20(%ebp), %eax
-	leal	L_.str.4, %ecx
-	xorl	%edi, %edi
-	movl	%esi, (%esp)
-	movl	%edx, 4(%esp)
-	movl	%ecx, 8(%esp)
-	movl	%eax, 12(%esp)
-	movl	$0, 16(%esp)
-	calll	_glfwCreateWindow
-	movl	%eax, -16(%ebp)
-	cmpl	$0, -16(%ebp)
-	jne	LBB21_4
-# %bb.3:
-	calll	_glfwTerminate
-	movl	$-1, -12(%ebp)
-	jmp	LBB21_24
-LBB21_4:
-	movl	-16(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_glfwMakeContextCurrent
-	movl	$1, (%esp)
-	calll	_glfwSwapInterval
-	movl	$3042, (%esp)                   # imm = 0xBE2
-	calll	*__imp__glEnable@4
-	subl	$4, %esp
-	movl	$770, (%esp)                    # imm = 0x302
-	movl	$771, 4(%esp)                   # imm = 0x303
-	calll	*__imp__glBlendFunc@8
-	subl	$8, %esp
+	movl	$-1, 140(%rbp)
+	jmp	.LBB21_34
+.LBB21_2:
+	callq	glfwGetPrimaryMonitor
+	movq	%rax, 104(%rbp)
+	movq	104(%rbp), %rcx
+	callq	glfwGetVideoMode
+	movq	%rax, 96(%rbp)
+	movq	96(%rbp), %rax
+	movl	(%rax), %eax
+	movl	%eax, REAL_WINDOW_WIDTH(%rip)
+	movq	96(%rbp), %rax
+	movl	4(%rax), %eax
+	movl	%eax, REAL_WINDOW_HEIGHT(%rip)
+	movq	96(%rbp), %rax
+	movl	20(%rax), %eax
+	movl	%eax, refreshRate(%rip)
+	movl	refreshRate(%rip), %edx
+	movl	$135183, %ecx                   # imm = 0x2100F
+	callq	glfwWindowHint
+	movl	REAL_WINDOW_WIDTH(%rip), %ecx
+	movl	REAL_WINDOW_HEIGHT(%rip), %edx
+	movq	104(%rbp), %r9
+	leaq	.L.str.3(%rip), %r8
 	xorl	%eax, %eax
-	movl	$0, (%esp)
-	calll	*__imp__GetModuleHandleA@4
-	subl	$4, %esp
-	movl	%eax, -28(%ebp)
-	movl	-28(%ebp), %esi
-	leal	_texWidth1, %edx
-	leal	_texHeight1, %ecx
-	leal	-32(%ebp), %eax
-	movl	%esi, (%esp)
-	movl	$12, 4(%esp)
-	movl	%edx, 8(%esp)
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_loadBitmapFromResource
-	movl	%eax, -36(%ebp)
-	cmpl	$0, -36(%ebp)
-	jne	LBB21_6
+                                        # kill: def $rax killed $eax
+	movq	$0, 32(%rsp)
+	callq	glfwCreateWindow
+	movq	%rax, 112(%rbp)
+	cmpq	$0, 112(%rbp)
+	jne	.LBB21_4
+# %bb.3:
+	callq	glfwTerminate
+	movl	$-1, 140(%rbp)
+	jmp	.LBB21_34
+.LBB21_4:
+	movq	112(%rbp), %rcx
+	callq	glfwMakeContextCurrent
+	movl	$1, %ecx
+	callq	glfwSwapInterval
+	movl	$3042, %ecx                     # imm = 0xBE2
+	callq	*__imp_glEnable(%rip)
+	movl	$770, %ecx                      # imm = 0x302
+	movl	$771, %edx                      # imm = 0x303
+	callq	*__imp_glBlendFunc(%rip)
+	xorl	%eax, %eax
+	movl	%eax, %ecx
+	callq	*__imp_GetModuleHandleA(%rip)
+	movq	%rax, 88(%rbp)
+	movq	88(%rbp), %rcx
+	movl	$12, %edx
+	leaq	texWidth1(%rip), %r8
+	leaq	texHeight1(%rip), %r9
+	leaq	80(%rbp), %rax
+	movq	%rax, 32(%rsp)
+	callq	loadBitmapFromResource
+	movq	%rax, 72(%rbp)
+	cmpq	$0, 72(%rbp)
+	jne	.LBB21_6
 # %bb.5:
-	movl	$-1, -12(%ebp)
-	jmp	LBB21_24
-LBB21_6:
-	movb	$1, -37(%ebp)
-	movl	-28(%ebp), %esi
-	leal	_texWidth2, %edx
-	leal	_texHeight2, %ecx
-	leal	-44(%ebp), %eax
-	movl	%esi, (%esp)
-	movl	$13, 4(%esp)
-	movl	%edx, 8(%esp)
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_loadBitmapFromResource
-	movl	%eax, -48(%ebp)
-	cmpl	$0, -48(%ebp)
-	jne	LBB21_8
+	movl	$-1, 140(%rbp)
+	jmp	.LBB21_34
+.LBB21_6:
+	movb	$1, 71(%rbp)
+	movq	88(%rbp), %rcx
+	movl	$13, %edx
+	leaq	texWidth2(%rip), %r8
+	leaq	texHeight2(%rip), %r9
+	leaq	56(%rbp), %rax
+	movq	%rax, 32(%rsp)
+	callq	loadBitmapFromResource
+	movq	%rax, 48(%rbp)
+	cmpq	$0, 48(%rbp)
+	jne	.LBB21_8
 # %bb.7:
-	movl	$-1, -12(%ebp)
-	jmp	LBB21_24
-LBB21_8:
-	movb	$1, -49(%ebp)
-	movl	-28(%ebp), %esi
-	leal	_texWidth3, %edx
-	leal	_texHeight3, %ecx
-	leal	-56(%ebp), %eax
-	movl	%esi, (%esp)
-	movl	$14, 4(%esp)
-	movl	%edx, 8(%esp)
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_loadBitmapFromResource
-	movl	%eax, -60(%ebp)
-	cmpl	$0, -60(%ebp)
-	jne	LBB21_10
+	movl	$-1, 140(%rbp)
+	jmp	.LBB21_34
+.LBB21_8:
+	movb	$1, 47(%rbp)
+	movq	88(%rbp), %rcx
+	movl	$14, %edx
+	leaq	texWidth3(%rip), %r8
+	leaq	texHeight3(%rip), %r9
+	leaq	32(%rbp), %rax
+	movq	%rax, 32(%rsp)
+	callq	loadBitmapFromResource
+	movq	%rax, 24(%rbp)
+	cmpq	$0, 24(%rbp)
+	jne	.LBB21_10
 # %bb.9:
-	movl	$-1, -12(%ebp)
-	jmp	LBB21_24
-LBB21_10:
-	movb	$1, -61(%ebp)
-	movw	L___const.main.transparentColor, %ax
-	movw	%ax, -64(%ebp)
-	movb	L___const.main.transparentColor+2, %al
-	movb	%al, -62(%ebp)
-	movl	-32(%ebp), %edi
-	movl	_texWidth1, %esi
-	movl	_texHeight1, %edx
-	movb	-37(%ebp), %cl
-	leal	-64(%ebp), %eax
-	andb	$1, %cl
-	movl	%edi, (%esp)
-	movl	%esi, 4(%esp)
-	movl	%edx, 8(%esp)
-	movzbl	%cl, %ecx
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_RGB_RGBA_convert
-	movl	%eax, -68(%ebp)
-	movl	-44(%ebp), %edi
-	movl	_texWidth2, %esi
-	movl	_texHeight2, %edx
-	movb	-49(%ebp), %cl
-	leal	-64(%ebp), %eax
-	andb	$1, %cl
-	movl	%edi, (%esp)
-	movl	%esi, 4(%esp)
-	movl	%edx, 8(%esp)
-	movzbl	%cl, %ecx
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_RGB_RGBA_convert
-	movl	%eax, -72(%ebp)
-	movl	-56(%ebp), %edi
-	movl	_texWidth3, %esi
-	movl	_texHeight3, %edx
-	movb	-61(%ebp), %cl
-	leal	-64(%ebp), %eax
-	andb	$1, %cl
-	movl	%edi, (%esp)
-	movl	%esi, 4(%esp)
-	movl	%edx, 8(%esp)
-	movzbl	%cl, %ecx
-	movl	%ecx, 12(%esp)
-	movl	%eax, 16(%esp)
-	calll	_RGB_RGBA_convert
-	movl	%eax, -76(%ebp)
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	calll	*__imp__glEnable@4
-	subl	$4, %esp
-	leal	_tileTexture1, %eax
-	movl	$1, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__glGenTextures@8
-	subl	$8, %esp
-	movl	_tileTexture1, %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	movl	_texWidth1, %edx
-	movl	_texHeight1, %ecx
-	movl	-68(%ebp), %eax
-	xorl	%esi, %esi
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$6408, 8(%esp)                  # imm = 0x1908
-	movl	%edx, 12(%esp)
-	movl	%ecx, 16(%esp)
-	movl	$0, 20(%esp)
-	movl	$6408, 24(%esp)                 # imm = 0x1908
-	movl	$5121, 28(%esp)                 # imm = 0x1401
-	movl	%eax, 32(%esp)
-	calll	*__imp__glTexImage2D@36
-	subl	$36, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$10241, 4(%esp)                 # imm = 0x2801
-	movl	$9728, 8(%esp)                  # imm = 0x2600
-	calll	*__imp__glTexParameteri@12
-	subl	$12, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$10240, 4(%esp)                 # imm = 0x2800
-	movl	$9728, 8(%esp)                  # imm = 0x2600
-	calll	*__imp__glTexParameteri@12
-	subl	$12, %esp
-	leal	_tileTexture2, %eax
-	movl	$1, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__glGenTextures@8
-	subl	$8, %esp
-	movl	_tileTexture2, %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	movl	_texWidth2, %edx
-	movl	_texHeight2, %ecx
-	movl	-72(%ebp), %eax
-	xorl	%esi, %esi
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$6408, 8(%esp)                  # imm = 0x1908
-	movl	%edx, 12(%esp)
-	movl	%ecx, 16(%esp)
-	movl	$0, 20(%esp)
-	movl	$6408, 24(%esp)                 # imm = 0x1908
-	movl	$5121, 28(%esp)                 # imm = 0x1401
-	movl	%eax, 32(%esp)
-	calll	*__imp__glTexImage2D@36
-	subl	$36, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$10241, 4(%esp)                 # imm = 0x2801
-	movl	$9728, 8(%esp)                  # imm = 0x2600
-	calll	*__imp__glTexParameteri@12
-	subl	$12, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$10240, 4(%esp)                 # imm = 0x2800
-	movl	$9728, 8(%esp)                  # imm = 0x2600
-	calll	*__imp__glTexParameteri@12
-	subl	$12, %esp
-	leal	_tileTexture3, %eax
-	movl	$1, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__glGenTextures@8
-	subl	$8, %esp
-	movl	_tileTexture3, %eax
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	%eax, 4(%esp)
-	calll	*__imp__glBindTexture@8
-	subl	$8, %esp
-	movl	_texWidth3, %edx
-	movl	_texHeight3, %ecx
-	movl	-76(%ebp), %eax
-	xorl	%esi, %esi
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$0, 4(%esp)
-	movl	$6408, 8(%esp)                  # imm = 0x1908
-	movl	%edx, 12(%esp)
-	movl	%ecx, 16(%esp)
-	movl	$0, 20(%esp)
-	movl	$6408, 24(%esp)                 # imm = 0x1908
-	movl	$5121, 28(%esp)                 # imm = 0x1401
-	movl	%eax, 32(%esp)
-	calll	*__imp__glTexImage2D@36
-	subl	$36, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$10241, 4(%esp)                 # imm = 0x2801
-	movl	$9728, 8(%esp)                  # imm = 0x2600
-	calll	*__imp__glTexParameteri@12
-	subl	$12, %esp
-	movl	$3553, (%esp)                   # imm = 0xDE1
-	movl	$10240, 4(%esp)                 # imm = 0x2800
-	movl	$9728, 8(%esp)                  # imm = 0x2600
-	calll	*__imp__glTexParameteri@12
-	subl	$12, %esp
-	movl	-16(%ebp), %ecx
-	leal	_framebufferSizeCallback, %eax
-	movl	%ecx, (%esp)
-	movl	%eax, 4(%esp)
-	calll	_glfwSetFramebufferSizeCallback
-	movl	-16(%ebp), %ecx
-	leal	_keyCallback, %eax
-	movl	%ecx, (%esp)
-	movl	%eax, 4(%esp)
-	calll	_glfwSetKeyCallback
-	movl	-16(%ebp), %ecx
-	leal	_mouseButtonCallback, %eax
-	movl	%ecx, (%esp)
-	movl	%eax, 4(%esp)
-	calll	_glfwSetMouseButtonCallback
-	movl	-16(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_setWindowIcon
-	movl	-16(%ebp), %edx
-	movl	_REAL_WINDOW_WIDTH, %ecx
-	movl	_REAL_WINDOW_HEIGHT, %eax
-	movl	%edx, (%esp)
-	movl	%ecx, 4(%esp)
-	movl	%eax, 8(%esp)
-	calll	_framebufferSizeCallback
-	movl	$0, -80(%ebp)
-LBB21_11:                               # =>This Inner Loop Header: Depth=1
-	cmpl	$55, -80(%ebp)
-	jge	LBB21_14
-# %bb.12:                               #   in Loop: Header=BB21_11 Depth=1
-	movl	-80(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_generateNewLineForeground
-# %bb.13:                               #   in Loop: Header=BB21_11 Depth=1
-	movl	-80(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -80(%ebp)
-	jmp	LBB21_11
-LBB21_14:
-	movl	$0, -84(%ebp)
-LBB21_15:                               # =>This Inner Loop Header: Depth=1
-	cmpl	$55, -84(%ebp)
-	jge	LBB21_18
-# %bb.16:                               #   in Loop: Header=BB21_15 Depth=1
-	movl	-84(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_generateNewLineBackground
-# %bb.17:                               #   in Loop: Header=BB21_15 Depth=1
-	movl	-84(%ebp), %eax
-	addl	$1, %eax
-	movl	%eax, -84(%ebp)
-	jmp	LBB21_15
-LBB21_18:
-	jmp	LBB21_19
-LBB21_19:                               # =>This Inner Loop Header: Depth=1
-	movl	-16(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_glfwWindowShouldClose
+	movl	$-1, 140(%rbp)
+	jmp	.LBB21_34
+.LBB21_10:
+	movb	$1, 23(%rbp)
+	movw	.L__const.main.transparentColor(%rip), %ax
+	movw	%ax, 20(%rbp)
+	movb	.L__const.main.transparentColor+2(%rip), %al
+	movb	%al, 22(%rbp)
+	movq	80(%rbp), %rcx
+	movl	texWidth1(%rip), %edx
+	movl	texHeight1(%rip), %r8d
+	movb	71(%rbp), %r9b
+	leaq	20(%rbp), %rax
+	andb	$1, %r9b
+	movq	%rax, 32(%rsp)
+	callq	RGB_RGBA_convert
+	movq	%rax, 8(%rbp)
+	movq	56(%rbp), %rcx
+	movl	texWidth2(%rip), %edx
+	movl	texHeight2(%rip), %r8d
+	movb	47(%rbp), %r9b
+	leaq	20(%rbp), %rax
+	andb	$1, %r9b
+	movq	%rax, 32(%rsp)
+	callq	RGB_RGBA_convert
+	movq	%rax, (%rbp)
+	movq	32(%rbp), %rcx
+	movl	texWidth3(%rip), %edx
+	movl	texHeight3(%rip), %r8d
+	movb	23(%rbp), %r9b
+	leaq	20(%rbp), %rax
+	andb	$1, %r9b
+	movq	%rax, 32(%rsp)
+	callq	RGB_RGBA_convert
+	movq	%rax, -8(%rbp)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glEnable(%rip)
+	movl	$1, %ecx
+	leaq	tileTexture1(%rip), %rdx
+	callq	*__imp_glGenTextures(%rip)
+	movl	tileTexture1(%rip), %edx
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glBindTexture(%rip)
+	movl	texWidth1(%rip), %r9d
+	movl	texHeight1(%rip), %r10d
+	movq	8(%rbp), %rax
+	movl	$3553, %ecx                     # imm = 0xDE1
+	xorl	%edx, %edx
+	movl	$6408, %r8d                     # imm = 0x1908
+	movl	%r10d, 32(%rsp)
+	movl	$0, 40(%rsp)
+	movl	$6408, 48(%rsp)                 # imm = 0x1908
+	movl	$5121, 56(%rsp)                 # imm = 0x1401
+	movq	%rax, 64(%rsp)
+	callq	*__imp_glTexImage2D(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	movl	$10241, %edx                    # imm = 0x2801
+	movl	$9728, %r8d                     # imm = 0x2600
+	callq	*__imp_glTexParameteri(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	movl	$10240, %edx                    # imm = 0x2800
+	movl	$9728, %r8d                     # imm = 0x2600
+	callq	*__imp_glTexParameteri(%rip)
+	movl	$1, %ecx
+	leaq	tileTexture2(%rip), %rdx
+	callq	*__imp_glGenTextures(%rip)
+	movl	tileTexture2(%rip), %edx
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glBindTexture(%rip)
+	movl	texWidth2(%rip), %r9d
+	movl	texHeight2(%rip), %r10d
+	movq	(%rbp), %rax
+	movl	$3553, %ecx                     # imm = 0xDE1
+	xorl	%edx, %edx
+	movl	$6408, %r8d                     # imm = 0x1908
+	movl	%r10d, 32(%rsp)
+	movl	$0, 40(%rsp)
+	movl	$6408, 48(%rsp)                 # imm = 0x1908
+	movl	$5121, 56(%rsp)                 # imm = 0x1401
+	movq	%rax, 64(%rsp)
+	callq	*__imp_glTexImage2D(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	movl	$10241, %edx                    # imm = 0x2801
+	movl	$9728, %r8d                     # imm = 0x2600
+	callq	*__imp_glTexParameteri(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	movl	$10240, %edx                    # imm = 0x2800
+	movl	$9728, %r8d                     # imm = 0x2600
+	callq	*__imp_glTexParameteri(%rip)
+	movl	$1, %ecx
+	leaq	tileTexture3(%rip), %rdx
+	callq	*__imp_glGenTextures(%rip)
+	movl	tileTexture3(%rip), %edx
+	movl	$3553, %ecx                     # imm = 0xDE1
+	callq	*__imp_glBindTexture(%rip)
+	movl	texWidth3(%rip), %r9d
+	movl	texHeight3(%rip), %r10d
+	movq	-8(%rbp), %rax
+	movl	$3553, %ecx                     # imm = 0xDE1
+	xorl	%edx, %edx
+	movl	$6408, %r8d                     # imm = 0x1908
+	movl	%r10d, 32(%rsp)
+	movl	$0, 40(%rsp)
+	movl	$6408, 48(%rsp)                 # imm = 0x1908
+	movl	$5121, 56(%rsp)                 # imm = 0x1401
+	movq	%rax, 64(%rsp)
+	callq	*__imp_glTexImage2D(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	movl	$10241, %edx                    # imm = 0x2801
+	movl	$9728, %r8d                     # imm = 0x2600
+	callq	*__imp_glTexParameteri(%rip)
+	movl	$3553, %ecx                     # imm = 0xDE1
+	movl	$10240, %edx                    # imm = 0x2800
+	movl	$9728, %r8d                     # imm = 0x2600
+	callq	*__imp_glTexParameteri(%rip)
+	movq	112(%rbp), %rcx
+	leaq	framebufferSizeCallback(%rip), %rdx
+	callq	glfwSetFramebufferSizeCallback
+	movq	112(%rbp), %rcx
+	leaq	keyCallback(%rip), %rdx
+	callq	glfwSetKeyCallback
+	movq	112(%rbp), %rcx
+	leaq	mouseButtonCallback(%rip), %rdx
+	callq	glfwSetMouseButtonCallback
+	movq	112(%rbp), %rcx
+	callq	setWindowIcon
+	movq	112(%rbp), %rcx
+	movl	REAL_WINDOW_WIDTH(%rip), %edx
+	movl	REAL_WINDOW_HEIGHT(%rip), %r8d
+	callq	framebufferSizeCallback
+	callq	resetGame
+	xorps	%xmm0, %xmm0
+	movss	%xmm0, -12(%rbp)
+.LBB21_11:                              # =>This Inner Loop Header: Depth=1
+	movq	112(%rbp), %rcx
+	callq	glfwWindowShouldClose
 	cmpl	$0, %eax
 	setne	%al
 	xorb	$-1, %al
 	testb	$1, %al
-	jne	LBB21_20
-	jmp	LBB21_23
-LBB21_20:                               #   in Loop: Header=BB21_19 Depth=1
-	movl	$16384, (%esp)                  # imm = 0x4000
-	calll	*__imp__glClear@4
-	subl	$4, %esp
-	testb	$1, _playerIsAlive
-	je	LBB21_22
-# %bb.21:                               #   in Loop: Header=BB21_19 Depth=1
-	movl	_score, %eax
-	addl	$1, %eax
-	movl	%eax, _score
-	calll	_updateWorld
-	calll	_updatePlayer
-LBB21_22:                               #   in Loop: Header=BB21_19 Depth=1
-	calll	_drawWorld
-	calll	_drawPlayer
-	leal	L_.str.5, %eax
-	movl	%eax, (%esp)
-	movl	$5, 4(%esp)
-	movl	$5, 8(%esp)
-	movl	$9, 12(%esp)
-	movl	$1, 16(%esp)
-	calll	_showText
-	movl	_score, %eax
-	movl	%eax, (%esp)
-	movl	$65, 4(%esp)
-	movl	$5, 8(%esp)
-	movl	$9, 12(%esp)
-	movl	$1, 16(%esp)
-	calll	_showNumber
-	movl	-16(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_glfwSwapBuffers
-	movsd	LCPI21_0, %xmm0                 # xmm0 = [1.0E-4,0.0E+0]
-	movsd	%xmm0, (%esp)
-	calll	_glfwWaitEventsTimeout
-	jmp	LBB21_19
-LBB21_23:
-	calll	_glfwTerminate
-	leal	_tileTexture1, %eax
-	movl	$1, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__glDeleteTextures@8
-	subl	$8, %esp
-	leal	_tileTexture2, %eax
-	movl	$1, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__glDeleteTextures@8
-	subl	$8, %esp
-	leal	_tileTexture3, %eax
-	movl	$1, (%esp)
-	movl	%eax, 4(%esp)
-	calll	*__imp__glDeleteTextures@8
-	subl	$8, %esp
-	movl	-68(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_free
-	movl	-72(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_free
-	movl	-76(%ebp), %eax
-	movl	%eax, (%esp)
-	calll	_free
-	movl	$0, -12(%ebp)
-LBB21_24:
-	movl	-12(%ebp), %eax
-	addl	$112, %esp
-	popl	%esi
-	popl	%edi
-	popl	%ebp
-	retl
+	jne	.LBB21_12
+	jmp	.LBB21_33
+.LBB21_12:                              #   in Loop: Header=BB21_11 Depth=1
+	callq	glfwGetTime
+	movsd	%xmm0, -24(%rbp)
+	movsd	-24(%rbp), %xmm0                # xmm0 = mem[0],zero
+	subsd	updateFrameratePrint(%rip), %xmm0
+	movsd	.LCPI21_0(%rip), %xmm1          # xmm1 = [5.0E-1,0.0E+0]
+	ucomisd	%xmm1, %xmm0
+	jb	.LBB21_14
+# %bb.13:                               #   in Loop: Header=BB21_11 Depth=1
+	movsd	-24(%rbp), %xmm1                # xmm1 = mem[0],zero
+	subsd	lastUpdateTime(%rip), %xmm1
+	movsd	.LCPI21_1(%rip), %xmm0          # xmm0 = [1.0E+0,0.0E+0]
+	divsd	%xmm1, %xmm0
+	cvtsd2ss	%xmm0, %xmm0
+	movss	%xmm0, -12(%rbp)
+	movsd	-24(%rbp), %xmm0                # xmm0 = mem[0],zero
+	movsd	%xmm0, updateFrameratePrint(%rip)
+.LBB21_14:                              #   in Loop: Header=BB21_11 Depth=1
+	movsd	-24(%rbp), %xmm0                # xmm0 = mem[0],zero
+	movsd	%xmm0, lastUpdateTime(%rip)
+	movl	$16384, %ecx                    # imm = 0x4000
+	callq	*__imp_glClear(%rip)
+	callq	drawWorld
+	callq	drawPlayer
+	movss	.LCPI21_2(%rip), %xmm0          # xmm0 = [1.0E+0,0.0E+0,0.0E+0,0.0E+0]
+	addss	-12(%rbp), %xmm0
+	cvtsi2ssl	refreshRate(%rip), %xmm1
+	ucomiss	%xmm1, %xmm0
+	jb	.LBB21_16
+# %bb.15:                               #   in Loop: Header=BB21_11 Depth=1
+	cvttss2si	-12(%rbp), %ecx
+	movl	$792, %edx                      # imm = 0x318
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	jmp	.LBB21_19
+.LBB21_16:                              #   in Loop: Header=BB21_11 Depth=1
+	movss	-12(%rbp), %xmm1                # xmm1 = mem[0],zero,zero,zero
+	cvtsi2ssl	refreshRate(%rip), %xmm0
+	ucomiss	%xmm1, %xmm0
+	jbe	.LBB21_18
+# %bb.17:                               #   in Loop: Header=BB21_11 Depth=1
+	cvttss2si	-12(%rbp), %ecx
+	movl	$792, %edx                      # imm = 0x318
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$2, 32(%rsp)
+	callq	showNumber
+.LBB21_18:                              #   in Loop: Header=BB21_11 Depth=1
+	jmp	.LBB21_19
+.LBB21_19:                              #   in Loop: Header=BB21_11 Depth=1
+	leaq	.L.str.4(%rip), %rcx
+	movl	$824, %edx                      # imm = 0x338
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	testb	$1, gameIsRunning(%rip)
+	je	.LBB21_22
+# %bb.20:                               #   in Loop: Header=BB21_11 Depth=1
+	testb	$1, playerIsAlive(%rip)
+	je	.LBB21_22
+# %bb.21:                               #   in Loop: Header=BB21_11 Depth=1
+	callq	updateWorld
+	callq	updatePlayer
+	leaq	.L.str.5(%rip), %rcx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	%r8d, %edx
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	score(%rip), %ecx
+	movl	$65, %edx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	leaq	.L.str.6(%rip), %rcx
+	movl	$150, %edx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	highScore(%rip), %ecx
+	movl	$250, %edx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	jmp	.LBB21_32
+.LBB21_22:                              #   in Loop: Header=BB21_11 Depth=1
+	testb	$1, playerIsAlive(%rip)
+	je	.LBB21_24
+# %bb.23:                               #   in Loop: Header=BB21_11 Depth=1
+	leaq	.L.str.5(%rip), %rcx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	%r8d, %edx
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	score(%rip), %ecx
+	movl	$65, %edx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	leaq	.L.str.6(%rip), %rcx
+	movl	$150, %edx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	highScore(%rip), %ecx
+	movl	$250, %edx
+	movl	$5, %r8d
+	movl	$9, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	leaq	.L.str.7(%rip), %rcx
+	movl	$312, %edx                      # imm = 0x138
+	movl	$450, %r8d                      # imm = 0x1C2
+	movl	$10, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	jmp	.LBB21_31
+.LBB21_24:                              #   in Loop: Header=BB21_11 Depth=1
+	movl	.L__const.main.color(%rip), %eax
+	movl	%eax, -28(%rbp)
+	leaq	-28(%rbp), %rax
+	movss	.LCPI21_3(%rip), %xmm0          # xmm0 = [3.27E+2,0.0E+0,0.0E+0,0.0E+0]
+	movss	.LCPI21_4(%rip), %xmm1          # xmm1 = [1.0E+2,0.0E+0,0.0E+0,0.0E+0]
+	movss	.LCPI21_5(%rip), %xmm2          # xmm2 = [2.0E+2,0.0E+0,0.0E+0,0.0E+0]
+	movss	.LCPI21_6(%rip), %xmm3          # xmm3 = [2.5E+2,0.0E+0,0.0E+0,0.0E+0]
+	movq	%rax, 32(%rsp)
+	callq	drawRect
+	leaq	.L.str.8(%rip), %rcx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$110, %r8d
+	movl	$11, %r9d
+	movl	$2, 32(%rsp)
+	callq	showText
+	cmpl	$0, score(%rip)
+	je	.LBB21_27
+# %bb.25:                               #   in Loop: Header=BB21_11 Depth=1
+	movl	score(%rip), %eax
+	cmpl	highScore(%rip), %eax
+	jle	.LBB21_27
+# %bb.26:                               #   in Loop: Header=BB21_11 Depth=1
+	leaq	.L.str.9(%rip), %rcx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$150, %r8d
+	movl	$7, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	score(%rip), %ecx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$170, %r8d
+	movl	$7, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	jmp	.LBB21_30
+.LBB21_27:                              #   in Loop: Header=BB21_11 Depth=1
+	cmpl	$0, score(%rip)
+	je	.LBB21_29
+# %bb.28:                               #   in Loop: Header=BB21_11 Depth=1
+	leaq	.L.str.5(%rip), %rcx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$150, %r8d
+	movl	$7, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	score(%rip), %ecx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$170, %r8d
+	movl	$7, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+	leaq	.L.str.6(%rip), %rcx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$210, %r8d
+	movl	$7, %r9d
+	movl	$1, 32(%rsp)
+	callq	showText
+	movl	highScore(%rip), %ecx
+	movl	$337, %edx                      # imm = 0x151
+	movl	$230, %r8d
+	movl	$7, %r9d
+	movl	$1, 32(%rsp)
+	callq	showNumber
+.LBB21_29:                              #   in Loop: Header=BB21_11 Depth=1
+	jmp	.LBB21_30
+.LBB21_30:                              #   in Loop: Header=BB21_11 Depth=1
+	leaq	.L.str.10(%rip), %rcx
+	movl	$337, %r8d                      # imm = 0x151
+	movl	$7, %r9d
+	movl	%r8d, %edx
+	movl	$1, 32(%rsp)
+	callq	showText
+.LBB21_31:                              #   in Loop: Header=BB21_11 Depth=1
+	jmp	.LBB21_32
+.LBB21_32:                              #   in Loop: Header=BB21_11 Depth=1
+	movq	112(%rbp), %rcx
+	callq	glfwSwapBuffers
+	callq	glfwPollEvents
+	jmp	.LBB21_11
+.LBB21_33:
+	callq	glfwTerminate
+	movl	$1, %ecx
+	leaq	tileTexture1(%rip), %rdx
+	callq	*__imp_glDeleteTextures(%rip)
+	movl	$1, %ecx
+	leaq	tileTexture2(%rip), %rdx
+	callq	*__imp_glDeleteTextures(%rip)
+	movl	$1, %ecx
+	leaq	tileTexture3(%rip), %rdx
+	callq	*__imp_glDeleteTextures(%rip)
+	movq	8(%rbp), %rcx
+	callq	free
+	movq	(%rbp), %rcx
+	callq	free
+	movq	-8(%rbp), %rcx
+	callq	free
+	movl	$0, 140(%rbp)
+.LBB21_34:
+	movl	140(%rbp), %eax
+	addq	$272, %rsp                      # imm = 0x110
+	popq	%rbp
+	retq
+	.seh_endproc
                                         # -- End function
 	.bss
-	.globl	_gameStarted                    # @gameStarted
-_gameStarted:
+	.globl	gameIsRunning                   # @gameIsRunning
+gameIsRunning:
 	.byte	0                               # 0x0
 
-	.globl	_lastUpdateTime                 # @lastUpdateTime
+	.globl	updateFrameratePrint            # @updateFrameratePrint
 	.p2align	3, 0x0
-_lastUpdateTime:
+updateFrameratePrint:
 	.quad	0x0000000000000000              # double 0
 
-	.globl	_playerAcceleration             # @playerAcceleration
+	.globl	playerDeathTime                 # @playerDeathTime
+	.p2align	3, 0x0
+playerDeathTime:
+	.quad	0x0000000000000000              # double 0
+
+	.globl	lastUpdateTime                  # @lastUpdateTime
+	.p2align	3, 0x0
+lastUpdateTime:
+	.quad	0x0000000000000000              # double 0
+
+	.globl	playerAcceleration              # @playerAcceleration
 	.p2align	2, 0x0
-_playerAcceleration:
+playerAcceleration:
 	.long	0x00000000                      # float 0
 
 	.data
-	.globl	_playerPosY                     # @playerPosY
+	.globl	playerPosY                      # @playerPosY
 	.p2align	2, 0x0
-_playerPosY:
+playerPosY:
 	.long	0x43700000                      # float 240
 
-	.globl	_playerPosX                     # @playerPosX
+	.globl	playerPosX                      # @playerPosX
 	.p2align	2, 0x0
-_playerPosX:
+playerPosX:
 	.long	0x42c80000                      # float 100
 
-	.globl	_playerIsAlive                  # @playerIsAlive
-_playerIsAlive:
+	.globl	playerIsAlive                   # @playerIsAlive
+playerIsAlive:
 	.byte	1                               # 0x1
 
-	.globl	_gravity                        # @gravity
+	.globl	gravity                         # @gravity
 	.p2align	2, 0x0
-_gravity:
+gravity:
 	.long	0xc4750000                      # float -980
 
 	.bss
-	.globl	_score                          # @score
+	.globl	score                           # @score
 	.p2align	2, 0x0
-_score:
+score:
 	.long	0                               # 0x0
 
-	.globl	_lastScore                      # @lastScore
+	.globl	highScore                       # @highScore
 	.p2align	2, 0x0
-_lastScore:
+highScore:
 	.long	0                               # 0x0
 
-	.globl	_highScore                      # @highScore
+	.globl	difficulty                      # @difficulty
 	.p2align	2, 0x0
-_highScore:
+difficulty:
 	.long	0                               # 0x0
 
-	.globl	_mapX                           # @mapX
+	.globl	mapX                            # @mapX
 	.p2align	2, 0x0
-_mapX:
+mapX:
 	.long	0x00000000                      # float 0
 
-	.globl	_grid                           # @grid
-	.p2align	2, 0x0
-_grid:
-	.zero	13200
+	.globl	grid                            # @grid
+	.p2align	4, 0x0
+grid:
+	.zero	13440
 
 	.section	.rdata,"dr"
-L_.str:                                 # @.str
-	.asciz	"grass"
-
-	.globl	_block_grass                    # @block_grass
-	.p2align	2, 0x0
-_block_grass:
-	.long	L_.str
-	.long	0                               # 0x0
-	.long	1                               # 0x1
-
-	.bss
-	.globl	_refreshRate                    # @refreshRate
-	.p2align	2, 0x0
-_refreshRate:
-	.long	0                               # 0x0
-
-	.globl	_tileTexture1                   # @tileTexture1
-	.p2align	2, 0x0
-_tileTexture1:
-	.long	0                               # 0x0
-
-	.globl	_directionSurface               # @directionSurface
-	.p2align	2, 0x0
-_directionSurface:
-	.long	0                               # 0x0
-
-	.globl	_directionRoof                  # @directionRoof
-	.p2align	2, 0x0
-_directionRoof:
-	.long	0                               # 0x0
-
-	.globl	_surfaceBlockY                  # @surfaceBlockY
-	.p2align	2, 0x0
-_surfaceBlockY:
-	.long	0                               # 0x0
-
-	.globl	_roofBlockY                     # @roofBlockY
-	.p2align	2, 0x0
-_roofBlockY:
-	.long	0                               # 0x0
-
-	.globl	_lastSurfaceBlockY              # @lastSurfaceBlockY
-	.p2align	2, 0x0
-_lastSurfaceBlockY:
-	.long	0                               # 0x0
-
-	.globl	_lastRoofBlockY                 # @lastRoofBlockY
-	.p2align	2, 0x0
-_lastRoofBlockY:
-	.long	0                               # 0x0
-
-	.globl	_tileTexture2                   # @tileTexture2
-	.p2align	2, 0x0
-_tileTexture2:
-	.long	0                               # 0x0
-
-	.section	.rdata,"dr"
-L_.str.1:                               # @.str.1
+.L.str:                                 # @.str
 	.asciz	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	.data
-	.globl	_fontOrder                      # @fontOrder
-	.p2align	2, 0x0
-_fontOrder:
-	.long	L_.str.1
+	.globl	fontOrder                       # @fontOrder
+	.p2align	3, 0x0
+fontOrder:
+	.quad	.L.str
 
 	.bss
-	.globl	_tileTexture3                   # @tileTexture3
+	.globl	tileTexture3                    # @tileTexture3
 	.p2align	2, 0x0
-_tileTexture3:
+tileTexture3:
 	.long	0                               # 0x0
 
 	.section	.rdata,"dr"
-L_.str.2:                               # @.str.2
+.L.str.1:                               # @.str.1
 	.asciz	"%d"
 
-L_.str.3:                               # @.str.3
+	.globl	difficultyValues                # @difficultyValues
+	.p2align	4, 0x0
+difficultyValues:
+	.long	20                              # 0x14
+	.long	20                              # 0x14
+	.long	20                              # 0x14
+	.long	16                              # 0x10
+	.long	16                              # 0x10
+	.long	16                              # 0x10
+	.long	15                              # 0xf
+	.long	15                              # 0xf
+	.long	15                              # 0xf
+	.long	14                              # 0xe
+	.long	19                              # 0x13
+	.long	18                              # 0x12
+	.long	17                              # 0x11
+	.long	17                              # 0x11
+	.long	16                              # 0x10
+	.long	15                              # 0xf
+	.long	14                              # 0xe
+	.long	13                              # 0xd
+	.long	12                              # 0xc
+	.long	11                              # 0xb
+	.long	16                              # 0x10
+	.long	15                              # 0xf
+	.long	14                              # 0xe
+	.long	13                              # 0xd
+	.long	12                              # 0xc
+	.long	12                              # 0xc
+	.long	11                              # 0xb
+	.long	10                              # 0xa
+	.long	9                               # 0x9
+	.long	8                               # 0x8
+
+	.bss
+	.globl	directionSurface                # @directionSurface
+	.p2align	2, 0x0
+directionSurface:
+	.long	0                               # 0x0
+
+	.globl	directionRoof                   # @directionRoof
+	.p2align	2, 0x0
+directionRoof:
+	.long	0                               # 0x0
+
+	.globl	surfaceBlockY                   # @surfaceBlockY
+	.p2align	2, 0x0
+surfaceBlockY:
+	.long	0                               # 0x0
+
+	.globl	roofBlockY                      # @roofBlockY
+	.p2align	2, 0x0
+roofBlockY:
+	.long	0                               # 0x0
+
+	.globl	lastSurfaceBlockY               # @lastSurfaceBlockY
+	.p2align	2, 0x0
+lastSurfaceBlockY:
+	.long	0                               # 0x0
+
+	.globl	lastRoofBlockY                  # @lastRoofBlockY
+	.p2align	2, 0x0
+lastRoofBlockY:
+	.long	0                               # 0x0
+
+	.globl	refreshRate                     # @refreshRate
+	.p2align	2, 0x0
+refreshRate:
+	.long	0                               # 0x0
+
+	.globl	tileTexture2                    # @tileTexture2
+	.p2align	2, 0x0
+tileTexture2:
+	.long	0                               # 0x0
+
+	.globl	tileTexture1                    # @tileTexture1
+	.p2align	2, 0x0
+tileTexture1:
+	.long	0                               # 0x0
+
+	.section	.rdata,"dr"
+.L.str.2:                               # @.str.2
 	.asciz	"is running"
 
 	.bss
-	.globl	_REAL_WINDOW_WIDTH              # @REAL_WINDOW_WIDTH
+	.globl	REAL_WINDOW_WIDTH               # @REAL_WINDOW_WIDTH
 	.p2align	2, 0x0
-_REAL_WINDOW_WIDTH:
+REAL_WINDOW_WIDTH:
 	.long	0                               # 0x0
 
-	.globl	_REAL_WINDOW_HEIGHT             # @REAL_WINDOW_HEIGHT
+	.globl	REAL_WINDOW_HEIGHT              # @REAL_WINDOW_HEIGHT
 	.p2align	2, 0x0
-_REAL_WINDOW_HEIGHT:
+REAL_WINDOW_HEIGHT:
 	.long	0                               # 0x0
 
 	.section	.rdata,"dr"
-L_.str.4:                               # @.str.4
+.L.str.3:                               # @.str.3
 	.asciz	"tunnelBird"
 
 	.bss
-	.globl	_texWidth1                      # @texWidth1
+	.globl	texWidth1                       # @texWidth1
 	.p2align	2, 0x0
-_texWidth1:
+texWidth1:
 	.long	0                               # 0x0
 
-	.globl	_texHeight1                     # @texHeight1
+	.globl	texHeight1                      # @texHeight1
 	.p2align	2, 0x0
-_texHeight1:
+texHeight1:
 	.long	0                               # 0x0
 
-	.globl	_texWidth2                      # @texWidth2
+	.globl	texWidth2                       # @texWidth2
 	.p2align	2, 0x0
-_texWidth2:
+texWidth2:
 	.long	0                               # 0x0
 
-	.globl	_texHeight2                     # @texHeight2
+	.globl	texHeight2                      # @texHeight2
 	.p2align	2, 0x0
-_texHeight2:
+texHeight2:
 	.long	0                               # 0x0
 
-	.globl	_texWidth3                      # @texWidth3
+	.globl	texWidth3                       # @texWidth3
 	.p2align	2, 0x0
-_texWidth3:
+texWidth3:
 	.long	0                               # 0x0
 
-	.globl	_texHeight3                     # @texHeight3
+	.globl	texHeight3                      # @texHeight3
 	.p2align	2, 0x0
-_texHeight3:
+texHeight3:
 	.long	0                               # 0x0
 
 	.section	.rdata,"dr"
-L___const.main.transparentColor:        # @__const.main.transparentColor
+.L__const.main.transparentColor:        # @__const.main.transparentColor
 	.ascii	"\377\000\377"
 
-L_.str.5:                               # @.str.5
+.L.str.4:                               # @.str.4
+	.asciz	"FPS"
+
+.L.str.5:                               # @.str.5
 	.asciz	"SCORE"
 
+.L.str.6:                               # @.str.6
+	.asciz	"HIGHSCORE"
+
+.L.str.7:                               # @.str.7
+	.asciz	"PRESS JUMP KEY TO START"
+
+.L__const.main.color:                   # @__const.main.color
+	.ascii	"222\334"
+
+.L.str.8:                               # @.str.8
+	.asciz	"GAME OVER"
+
+.L.str.9:                               # @.str.9
+	.asciz	"NEW HIGHSCORE"
+
+.L.str.10:                              # @.str.10
+	.asciz	"PRESS JUMP KEY TO CONTINOU"
+
 	.bss
-	.globl	_speedFactor                    # @speedFactor
+	.globl	texChannels1                    # @texChannels1
 	.p2align	2, 0x0
-_speedFactor:
-	.long	0x00000000                      # float 0
-
-	.globl	_deltaTime                      # @deltaTime
-	.p2align	3, 0x0
-_deltaTime:
-	.quad	0x0000000000000000              # double 0
-
-	.globl	_backgroundScreen               # @backgroundScreen
-	.p2align	2, 0x0
-_backgroundScreen:
+texChannels1:
 	.long	0                               # 0x0
 
-	.globl	_texChannels1                   # @texChannels1
+	.globl	texChannels2                    # @texChannels2
 	.p2align	2, 0x0
-_texChannels1:
+texChannels2:
 	.long	0                               # 0x0
 
-	.globl	_texChannels2                   # @texChannels2
+	.globl	texChannels3                    # @texChannels3
 	.p2align	2, 0x0
-_texChannels2:
-	.long	0                               # 0x0
-
-	.globl	_texChannels3                   # @texChannels3
-	.p2align	2, 0x0
-_texChannels3:
+texChannels3:
 	.long	0                               # 0x0
 
 	.addrsig
-	.addrsig_sym _loadBitmapFromResource
-	.addrsig_sym _setWindowIcon
-	.addrsig_sym _glfwGetWin32Window
-	.addrsig_sym _RGB_RGBA_convert
-	.addrsig_sym _malloc
-	.addrsig_sym _mouseButtonCallback
-	.addrsig_sym _keyCallback
-	.addrsig_sym _glfwSetWindowShouldClose
-	.addrsig_sym _framebufferSizeCallback
-	.addrsig_sym _proofCollision
-	.addrsig_sym _drawTile
-	.addrsig_sym _updatePlayer
-	.addrsig_sym _drawPlayer
-	.addrsig_sym _getBackgroundBlock
-	.addrsig_sym _rand
-	.addrsig_sym _generateNewLineBackground
-	.addrsig_sym _generateNewLineForeground
-	.addrsig_sym _updateWorld
-	.addrsig_sym _drawWorld
-	.addrsig_sym _indexOf
-	.addrsig_sym _showText
-	.addrsig_sym _showNumber
-	.addrsig_sym _snprintf
-	.addrsig_sym _printf
-	.addrsig_sym _fflush
-	.addrsig_sym _glfwInit
-	.addrsig_sym _glfwGetPrimaryMonitor
-	.addrsig_sym _glfwGetVideoMode
-	.addrsig_sym _glfwWindowHint
-	.addrsig_sym _glfwCreateWindow
-	.addrsig_sym _glfwTerminate
-	.addrsig_sym _glfwMakeContextCurrent
-	.addrsig_sym _glfwSwapInterval
-	.addrsig_sym _glfwSetFramebufferSizeCallback
-	.addrsig_sym _glfwSetKeyCallback
-	.addrsig_sym _glfwSetMouseButtonCallback
-	.addrsig_sym _glfwWindowShouldClose
-	.addrsig_sym _glfwSwapBuffers
-	.addrsig_sym _glfwWaitEventsTimeout
-	.addrsig_sym _free
-	.addrsig_sym _playerAcceleration
-	.addrsig_sym _playerPosY
-	.addrsig_sym _playerPosX
-	.addrsig_sym _playerIsAlive
-	.addrsig_sym _gravity
-	.addrsig_sym _score
-	.addrsig_sym _mapX
-	.addrsig_sym _grid
-	.addrsig_sym _refreshRate
-	.addrsig_sym _tileTexture1
-	.addrsig_sym _directionSurface
-	.addrsig_sym _directionRoof
-	.addrsig_sym _surfaceBlockY
-	.addrsig_sym _roofBlockY
-	.addrsig_sym _lastSurfaceBlockY
-	.addrsig_sym _lastRoofBlockY
-	.addrsig_sym _tileTexture2
-	.addrsig_sym _fontOrder
-	.addrsig_sym _tileTexture3
-	.addrsig_sym _REAL_WINDOW_WIDTH
-	.addrsig_sym _REAL_WINDOW_HEIGHT
-	.addrsig_sym _texWidth1
-	.addrsig_sym _texHeight1
-	.addrsig_sym _texWidth2
-	.addrsig_sym _texHeight2
-	.addrsig_sym _texWidth3
-	.addrsig_sym _texHeight3
+	.addrsig_sym loadBitmapFromResource
+	.addrsig_sym setWindowIcon
+	.addrsig_sym glfwGetWin32Window
+	.addrsig_sym framebufferSizeCallback
+	.addrsig_sym RGB_RGBA_convert
+	.addrsig_sym malloc
+	.addrsig_sym drawTile
+	.addrsig_sym drawRect
+	.addrsig_sym indexOf
+	.addrsig_sym showText
+	.addrsig_sym showNumber
+	.addrsig_sym snprintf
+	.addrsig_sym getBackgroundBlock
+	.addrsig_sym generateNewLineBackground
+	.addrsig_sym getForegroundBlock
+	.addrsig_sym generateNewLineForeground
+	.addrsig_sym rand
+	.addrsig_sym updateWorld
+	.addrsig_sym drawWorld
+	.addrsig_sym proofCollision
+	.addrsig_sym updatePlayer
+	.addrsig_sym glfwGetTime
+	.addrsig_sym drawPlayer
+	.addrsig_sym resetGame
+	.addrsig_sym keyCallback
+	.addrsig_sym glfwSetWindowShouldClose
+	.addrsig_sym mouseButtonCallback
+	.addrsig_sym printf
+	.addrsig_sym fflush
+	.addrsig_sym glfwInit
+	.addrsig_sym glfwGetPrimaryMonitor
+	.addrsig_sym glfwGetVideoMode
+	.addrsig_sym glfwWindowHint
+	.addrsig_sym glfwCreateWindow
+	.addrsig_sym glfwTerminate
+	.addrsig_sym glfwMakeContextCurrent
+	.addrsig_sym glfwSwapInterval
+	.addrsig_sym glfwSetFramebufferSizeCallback
+	.addrsig_sym glfwSetKeyCallback
+	.addrsig_sym glfwSetMouseButtonCallback
+	.addrsig_sym glfwWindowShouldClose
+	.addrsig_sym glfwSwapBuffers
+	.addrsig_sym glfwPollEvents
+	.addrsig_sym free
+	.addrsig_sym gameIsRunning
+	.addrsig_sym updateFrameratePrint
+	.addrsig_sym playerDeathTime
+	.addrsig_sym lastUpdateTime
+	.addrsig_sym playerAcceleration
+	.addrsig_sym playerPosY
+	.addrsig_sym playerPosX
+	.addrsig_sym playerIsAlive
+	.addrsig_sym gravity
+	.addrsig_sym score
+	.addrsig_sym highScore
+	.addrsig_sym difficulty
+	.addrsig_sym mapX
+	.addrsig_sym grid
+	.addrsig_sym fontOrder
+	.addrsig_sym tileTexture3
+	.addrsig_sym difficultyValues
+	.addrsig_sym directionSurface
+	.addrsig_sym directionRoof
+	.addrsig_sym surfaceBlockY
+	.addrsig_sym roofBlockY
+	.addrsig_sym lastSurfaceBlockY
+	.addrsig_sym lastRoofBlockY
+	.addrsig_sym refreshRate
+	.addrsig_sym tileTexture2
+	.addrsig_sym tileTexture1
+	.addrsig_sym REAL_WINDOW_WIDTH
+	.addrsig_sym REAL_WINDOW_HEIGHT
+	.addrsig_sym texWidth1
+	.addrsig_sym texHeight1
+	.addrsig_sym texWidth2
+	.addrsig_sym texHeight2
+	.addrsig_sym texWidth3
+	.addrsig_sym texHeight3
