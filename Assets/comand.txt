@@ -1,0 +1,29 @@
+
+mingw compiler download: https://github.com/msys2/msys2-installer/releases/download/2024-12-08/msys2-x86_64-20241208.exe
+
+set up mingw:
+    than run (in mingw terminal): "pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain"
+    press enter to choose all
+    confirm with "Y"
+
+
+than set path variable: 
+    settings -> search "Edit environment variables for your account"
+    in user variables select PATH -> edit
+    select new -> add mingw folder (default: "C:\msys64\ucrt64\bin")
+    confirm twice
+    restart vs code
+
+
+
+
+windres resources.rc -o resources.o
+
+gcc main.c resources.o -o tunnelBird.exe `
+  -I"modules" `
+  -I"libraries" `
+  -I"libraries/glfw-3.4.bin.WIN64/include" `
+  -L"libraries/glfw-3.4.bin.WIN64/lib-mingw-w64" `
+  -lglfw3 -lopengl32 -lgdi32
+
+
