@@ -1,0 +1,194 @@
+set MinGW = C:\ProgramData\LLVM
+set console = 0
+set mybitness = i686
+
+set manifest = 0
+set manifestfile = enemy.manifest
+set includeres = 1
+set restype = BITMAP
+
+set resname1 = character.bmp
+set resname2 = blocks.bmp
+set resname3 = font.bmp
+
+
+set author = jfj_games
+set description = game_tunnelBird
+set filever = 1.0.0.0
+set filever2 = 1,0,0,0
+set internalname = tunnelBird
+set currentyear = 2025
+set productname = tunnelBird
+set productver = 1.0.0.0
+set productver2 = 1,0,0,0
+
+npe_console -- m-
+npp_console disable
+npe_console -- v+
+cmd.exe /c "for /f "tokens=1* delims==" %a in ('set ProgramFiles^(x86^) 2^>NUL') do @echo %b"
+set local $(CallResult) = $(OUTPUT)
+npe_console -- v-
+if "$(CallResult)" == "" then
+  set local $(Bitness) = 32
+else
+  if "$(CallResult)" == "$(SYS.ProgramFiles)" then
+    set local $(Bitness) = 32
+  else
+    set local $(Bitness) = 64
+  endif
+endif
+npp_console enable
+echo Notepad++  v.7.8.4  $(Bitness) bit
+
+npp_console disable
+npe_console -- v+
+cmd.exe /c "@echo off && $(MinGW)\bin\mingw32-c++.exe --version"
+set local $(CallResult) = $(OUTPUT)
+npe_console -- v-
+npp_console enable
+echo GNU Compiler GPP for Windows 32/64 bit with $(CallResult)
+
+cd $(CURRENT_DIRECTORY)
+echo Save $(FILE_NAME)...
+NPP_SAVE
+
+echo Bitness: i686, x86_64
+
+echo  
+echo ============= COMPILE ($(mybitness)) =============
+echo  
+
+npp_console disable
+set RESEXISTS = 0
+npe_console -- v+
+cmd /c if exist "$(NAME_PART).rc" echo Exists
+if "$(OUTPUT)" != "Exists" goto x1
+set RESEXISTS = 1
+:x1
+npe_console -- v-
+set ICOEXISTS = 0
+npe_console -- v+
+cmd /c if exist "$(NAME_PART).ico" echo Exists
+if "$(OUTPUT)" != "Exists" goto x2
+set ICOEXISTS = 1
+:x2
+npe_console -- v-
+set MANIFESTEXISTS = 0
+npe_console -- v+
+cmd /c if exist "$(manifestfile)" echo Exists
+if "$(OUTPUT)" != "Exists" goto x3
+set MANIFESTEXISTS = 1
+:x3
+npe_console -- v-
+npp_console enable
+
+if $(MANIFESTEXISTS) == 1 then
+  echo Found $(manifestfile).
+else
+  if $(manifest) == 1 then
+    npp_console disable
+    cmd /k echo ^<?xml version="1.0" encoding="UTF-8" standalone="yes"?^> >> $(manifestfile) && exit
+    cmd /k echo ^<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0"^> >> $(manifestfile) && exit
+    cmd /k echo     ^<trustInfo xmlns="urn:schemas-microsoft-com:asm.v3"^> >> $(manifestfile) && exit
+    cmd /k echo         ^<security^> >> $(manifestfile) && exit
+    cmd /k echo             ^<requestedPrivileges^> >> $(manifestfile) && exit
+    cmd /k echo                 ^<requestedExecutionLevel level="requireAdministrator" uiAccess="false"/^> >> $(manifestfile) && exit
+    cmd /k echo             ^</requestedPrivileges^> >> $(manifestfile) && exit
+    cmd /k echo         ^</security^> >> $(manifestfile) && exit
+    cmd /k echo     ^</trustInfo^> >> $(manifestfile) && exit
+    cmd /k echo ^</assembly^> >> $(manifestfile) && exit
+    npp_console enable
+    echo $(manifestfile) was emitted.
+  endif
+endif
+
+if $(RESEXISTS) == 1 then
+  echo  
+else
+  echo File $(NAME_PART).rc does not exist. 
+  echo Create $(NAME_PART).rc...
+  if $(ICOEXISTS) == 1 then
+    echo Icon $(NAME_PART).ico exist.
+    npp_console disable
+    cmd /k echo 101 ICON "$(NAME_PART).ico" > "$(NAME_PART)".rc && exit
+    cmd /k echo #ifdef _WIN32 >> "$(NAME_PART)".rc && exit
+  else
+    echo Icon $(NAME_PART).ico does not exist.
+    npp_console disable
+    cmd /k echo #ifdef _WIN32 > "$(NAME_PART)".rc && exit
+  endif
+  cmd /k echo     #include <windows.h> >> "$(NAME_PART)".rc && exit
+  cmd /k echo     #define VOS_NT_WINDOWS32    0x00040004L >> "$(NAME_PART)".rc && exit
+  cmd /k echo     #define VFT_APP             0x00000001L >> "$(NAME_PART)".rc && exit
+  cmd /k echo #else >> "$(NAME_PART)".rc && exit
+  cmd /k echo #endif >> "$(NAME_PART)".rc && exit
+  if $(includeres) == 1 then
+    cmd /k echo 12 $(restype) "$(resname1)" >> "$(NAME_PART)".rc && exit
+    cmd /k echo 13 $(restype) "$(resname2)" >> "$(NAME_PART)".rc && exit
+    cmd /k echo 14 $(restype) "$(resname3)" >> "$(NAME_PART)".rc && exit
+  endif
+  cmd /k echo 1 VERSIONINFO >> "$(NAME_PART)".rc && exit
+  cmd /k echo FILEVERSION $(filever2) >> "$(NAME_PART)".rc && exit
+  cmd /k echo PRODUCTVERSION $(productver2) >> "$(NAME_PART)".rc && exit
+  cmd /k echo FILEOS 0x40004 >> "$(NAME_PART)".rc && exit
+  cmd /k echo FILETYPE 0x2 >> "$(NAME_PART)".rc && exit
+  cmd /k echo { >> "$(NAME_PART)".rc && exit
+  cmd /k echo BLOCK "StringFileInfo" >> "$(NAME_PART)".rc && exit
+  cmd /k echo { >> "$(NAME_PART)".rc && exit
+  cmd /k echo     BLOCK "040904B0" >> "$(NAME_PART)".rc && exit
+  cmd /k echo 	{ >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "CompanyName", "$(author)" >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "FileDescription", "$(description)" >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "FileVersion", "$(filever2)" >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "InternalName", "$(internalname)" >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "LegalCopyright", "Copyright (c) $(currentyear) $(author)." >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "OriginalFilename", "$(NAME_PART).exe" >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "ProductName", "$(productname)" >> "$(NAME_PART)".rc && exit
+  cmd /k echo         VALUE "ProductVersion", "$(productver)" >> "$(NAME_PART)".rc && exit
+  cmd /k echo     } >> "$(NAME_PART)".rc && exit
+  cmd /k echo } >> "$(NAME_PART)".rc && exit
+  cmd /k echo BLOCK "VarFileInfo" >> "$(NAME_PART)".rc && exit
+  cmd /k echo { >> "$(NAME_PART)".rc && exit
+  cmd /k echo     VALUE "Translation", 0x0409, 1252 >> "$(NAME_PART)".rc && exit
+  cmd /k echo } >> "$(NAME_PART)".rc && exit
+  cmd /k echo } >> "$(NAME_PART)".rc && exit
+  npp_console enable
+  echo File $(NAME_PART).rc exist now.
+endif
+
+$(MinGW)\bin\$(mybitness)-w64-mingw32-windres "$(NAME_PART)".rc -O coff -o "$(NAME_PART)".res
+
+$(MinGW)\bin\$(mybitness)-w64-mingw32-gcc -Wall -S -o "$(NAME_PART)".s "$(NAME_PART)".c
+
+if $(EXITCODE) == 0 then
+  if $(console) == 1 then
+    echo  
+    echo ================ LINKING ===============
+    echo  
+    cmd /k $(MinGW)\bin\$(mybitness)-w64-mingw32-gcc -Wall -O2 -o "$(NAME_PART)".exe "$(NAME_PART)".c "$(NAME_PART)".res -Wall -D_GNU_SOURCE -pthread -lm -lglfw3 -lgdi32 -lopengl32 > nul && exit
+  else
+    echo  
+    echo ================ LINKING ===============
+    echo  
+    cmd /k $(MinGW)\bin\$(mybitness)-w64-mingw32-gcc -Wall -O2 -o "$(NAME_PART)".exe "$(NAME_PART)".c "$(NAME_PART)".res -Wall -D_GNU_SOURCE -pthread -mwindows -lm -lglfw3 -lgdi32 -lopengl32 > nul && exit
+  endif
+
+  if $(manifest) == 1 then
+    echo Add $(manifestfile)...
+    $(MinGW)\bin\rcedit-$(mybitness) "$(NAME_PART)".exe --application-manifest "$(manifestfile)"
+  endif
+
+  echo  
+  echo ================ EXECUTE ===============
+  echo  
+
+  "$(NAME_PART).exe"
+  
+else
+  echo  
+  echo ERROR.
+  echo  
+endif
+
+:end
+echo
