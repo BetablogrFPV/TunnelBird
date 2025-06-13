@@ -5,3 +5,5 @@ sometimes you get a rare skin. this is only for that round. after that round you
 threre are 3 colors: standart blue // rare red // super rare green.
 
 !!Your highscore will not be saved if you close the game!!
+
+!!right now there are some errors, but were working on it!!
