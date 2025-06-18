@@ -51,11 +51,11 @@ GLuint spritesheet_blocks;
 int REAL_WINDOW_WIDTH;
 int REAL_WINDOW_HEIGHT;
 
-int refreshRate;
+float currentRefreshRate;
 
 bool gameIsRunning = false;
 
-double updateFrameratePrint = 0.0;
+double lastUpdateFramerateToPrint = 0.0;
 double playerDeathTime = 0.0;
 
 double lastUpdateTime = 0.0;
@@ -525,7 +525,7 @@ void updateWorld() {
 			difficulty = 9;
 		}
 	}
-	float deltaTime = 1.0F / refreshRate;
+	float deltaTime = 1.0F / currentRefreshRate;
 	mapX -= 60 * deltaTime;
 }
 
@@ -582,7 +582,7 @@ bool proofCollision(float playerPosX2, float playerPosY2) {
 void updatePlayer() {
 
 	if (playerIsAlive == true) {
-		float deltaTime = 1.0f / (float)refreshRate;
+		float deltaTime = 1.0f / currentRefreshRate;
 		playerAcceleration += gravity * deltaTime;
 		float movementHeight = playerAcceleration * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
 
@@ -620,20 +620,20 @@ void resetGame() {
 	difficulty = 0;
 	playerIsAlive = true;
 
-	int randNum = (rand() % (100 - 0 + 1)) + 0;
-
-	if (randNum < 95) {
-		currentPlayerSprite = 0;
-	} else if (randNum < 100) {
-		currentPlayerSprite = 1;
-	} else {
-		currentPlayerSprite = 2;
-	}
-
 	if (score > highScore) {
 		highScore = score;
 	}
 	score = 0;
+
+	if (highScore > 1500) {
+		currentPlayerSprite = 3;
+	} else if (highScore > 1000) {
+		currentPlayerSprite = 2;
+	} else if (highScore > 500) {
+		currentPlayerSprite = 1;
+	} else {
+		currentPlayerSprite = 0;
+	}
 
 	for (int x = 0; x < gridWidth; x++) {
 		generateNewLineBackground(x);
@@ -698,9 +698,7 @@ int main(int argc, char* argv[], char* envp[]) {
 
 	int displayRefreshRate = mode->refreshRate;
 
-	glfwWindowHint(GLFW_REFRESH_RATE, refreshRate);
-
-	bool refreshRateGot = true;
+	glfwWindowHint(GLFW_REFRESH_RATE, displayRefreshRate);
 
 	window = glfwCreateWindow(REAL_WINDOW_WIDTH, REAL_WINDOW_HEIGHT, "tunnelBird", primaryMonitor, NULL);
 
@@ -728,37 +726,38 @@ int main(int argc, char* argv[], char* envp[]) {
 	resetGame();
 	
 	float currentFramerate = 0.0;
-	bool refreshRateTested = false;
+
+	float lastFrameRates[60];
+
+	for (int i = 0; i < 60; i++) {
+		lastFrameRates[i] = displayRefreshRate;
+	}
+
 
 	while (!glfwWindowShouldClose(window)) {
 
-		double currentTime = glfwGetTime();
-		if (currentTime - updateFrameratePrint >= 0.2) {
-			currentFramerate = 1.0F / (currentTime - lastUpdateTime);
-			updateFrameratePrint = currentTime;
+		for (int i = 59; i > 0; i--) {
+			lastFrameRates[i] = lastFrameRates[i-1];
 		}
+
+		double currentTime = glfwGetTime();
+		currentFramerate = 1.0f / (currentTime - lastUpdateTime);
 		lastUpdateTime = currentTime;
 
-		if (!refreshRateTested) {
-			if (currentFramerate - 5 > displayRefreshRate || currentFramerate + 5 < displayRefreshRate) {
-				refreshRateGot = false;
-			} else {
-				refreshRate = displayRefreshRate;
-			}
-			refreshRateTested = true;
-		}
+		lastFrameRates[0] = currentFramerate;
 
-		if (refreshRateGot != true) {
-			refreshRate = (int) currentFramerate;
-			drawString("CM", WINDOW_WIDTH - 90, WINDOW_HEIGHT - 14, 9, COLOR_RED);
+		float addFramerates = 0;
+		for (int i = 0; i < 60; i++) {
+			addFramerates += lastFrameRates[i];
 		}
+		currentRefreshRate = addFramerates / 60;
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		drawWorld();
 		drawPlayer();
 
-		drawNumber((int)currentFramerate, WINDOW_WIDTH - 62, WINDOW_HEIGHT - 14, 9, COLOR_WHITE);
+		drawNumber((int)round(currentRefreshRate), WINDOW_WIDTH - 62, WINDOW_HEIGHT - 14, 9, COLOR_WHITE);
 		drawString("FPS", WINDOW_WIDTH - 30, WINDOW_HEIGHT - 14, 9, COLOR_WHITE);
 
 		if (gameIsRunning && playerIsAlive) {
